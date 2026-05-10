@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MYTHOS — 그리스 신화 사전</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600;700&family=Noto+Serif+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #f4ecd8;
+    --parchment-dark: #e8dcc0;
+    --ink: #2a1f15;
+    --ink-soft: #5a4838;
+    --ink-faded: #8a7556;
+    --gold: #b8893d;
+    --gold-deep: #8b6420;
+    --crimson: #7a2e1f;
+    --bronze: #4a3520;
+    --line: rgba(74, 53, 32, 0.25);
+    --line-strong: rgba(74, 53, 32, 0.5);
+
+    --c-primordial: #6b5b47;
+    --c-titan: #a67934;
+    --c-olympian-1: #7a2e1f;
+    --c-olympian-2: #2d5645;
+    --c-special: #8b4567;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: 'Noto Serif KR', 'Cormorant Garamond', serif;
+    background: var(--parchment);
+    color: var(--ink);
+    background-image:
+      radial-gradient(ellipse at top, rgba(184, 137, 61, 0.08), transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(122, 46, 31, 0.06), transparent 60%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.12 0 0 0 0 0.08 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ============= APP SHELL ============= */
+  .app {
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* ============= HEADER ============= */
+  .header {
+    padding: 18px 24px 14px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(244, 236, 216, 0.92);
+    backdrop-filter: blur(8px);
+    z-index: 10;
+    flex-shrink: 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+    border: 1.5px solid var(--gold-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    color: var(--gold-deep);
+    font-size: 18px;
+    position: relative;
+  }
+  .brand-mark::before, .brand-mark::after {
+    content: '';
+    position: absolute;
+    background: var(--gold-deep);
+  }
+  .brand-mark::before {
+    width: 4px; height: 4px;
+    top: -2.5px; left: -2.5px;
+    box-shadow: 36px 0 0 var(--gold-deep), 0 36px 0 var(--gold-deep), 36px 36px 0 var(--gold-deep);
+  }
+  .brand-mark::after { display: none; }
+
+  .brand-text { line-height: 1.1; }
+  .brand-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    font-size: 17px;
+    color: var(--ink);
+  }
+  .brand-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-faded);
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+  }
+
+  .header-meta {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--ink-faded);
+    text-align: right;
+  }
+
+  /* ============= SEARCH BAR ============= */
+  .search-wrap {
+    padding: 14px 24px 0;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .search-box {
+    position: relative;
+    border-bottom: 1px solid var(--line-strong);
+    transition: border-color 0.2s ease;
+  }
+  .search-box:focus-within { border-color: var(--gold-deep); }
+
+  .search-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-faded);
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 10px 30px 10px 24px;
+    font-family: 'Noto Serif KR', 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+  .search-input::placeholder {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--ink-faded);
+    letter-spacing: 0.05em;
+  }
+
+  .search-clear {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-faded);
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px;
+    display: none;
+  }
+  .search-clear:hover { color: var(--ink); }
+  .search-box.has-value .search-clear { display: block; }
+
+  .search-meta {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--ink-faded);
+    margin-top: 6px;
+    text-transform: uppercase;
+    min-height: 13px;
+  }
+
+  /* ============= TAB FILTER ============= */
+  .filters {
+    padding: 12px 24px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+    scrollbar-width: none;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    padding: 7px 14px;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--ink-soft);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+  }
+  .filter-btn:hover {
+    border-color: var(--gold-deep);
+    color: var(--ink);
+  }
+  .filter-btn.active {
+    background: var(--ink);
+    color: var(--parchment);
+    border-color: var(--ink);
+  }
+
+  /* ============= VIEW SYSTEM ============= */
+  .view-stack {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .view {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.4s ease;
+  }
+
+  .view-tree { transform: translateX(0); }
+  .view-detail {
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .app[data-view="detail"] .view-tree {
+    transform: translateX(-30%);
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  .app[data-view="detail"] .view-detail {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ============= TREE VIEW ============= */
+  .tree-content {
+    padding: 28px 24px 60px;
+  }
+
+  .tier {
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .tier-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faded);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tier-label::before, .tier-label::after {
+    content: '';
+    height: 1px;
+    background: var(--line);
+    flex: 1;
+  }
+  .tier-label::before { max-width: 20px; }
+
+  .tier-greek {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-faded);
+    text-align: center;
+    margin-bottom: 18px;
+    letter-spacing: 0.05em;
+  }
+
+  .nodes {
+    display: grid;
+    gap: 12px;
+  }
+  .nodes.cols-1 { grid-template-columns: 1fr; max-width: 240px; margin: 0 auto; }
+  .nodes.cols-2 { grid-template-columns: repeat(2, 1fr); max-width: 480px; margin: 0 auto; }
+  .nodes.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .nodes.cols-4 { grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 600px) {
+    .nodes.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .god-card {
+    background: linear-gradient(135deg, rgba(255, 252, 240, 0.6), rgba(232, 220, 192, 0.4));
+    border: 1px solid var(--line);
+    padding: 14px 12px 12px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .god-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--accent, var(--gold-deep));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .god-card:hover {
+    border-color: var(--accent, var(--gold-deep));
+    transform: translateY(-2px);
+    background: rgba(255, 252, 240, 0.85);
+  }
+  .god-card:hover::before { transform: scaleX(1); }
+
+  .god-card[data-gen="primordial"] { --accent: var(--c-primordial); }
+  .god-card[data-gen="titan"] { --accent: var(--c-titan); }
+  .god-card[data-gen="olympian-1"] { --accent: var(--c-olympian-1); }
+  .god-card[data-gen="olympian-2"] { --accent: var(--c-olympian-2); }
+  .god-card[data-gen="special"] { --accent: var(--c-special); }
+
+  .app[data-filter]:not([data-filter="all"]) .god-card { opacity: 0.25; }
+  .app[data-filter="primordial"] .god-card[data-gen="primordial"],
+  .app[data-filter="titan"] .god-card[data-gen="titan"],
+  .app[data-filter="olympian-1"] .god-card[data-gen="olympian-1"],
+  .app[data-filter="olympian-2"] .god-card[data-gen="olympian-2"],
+  .app[data-filter="special"] .god-card[data-gen="special"] {
+    opacity: 1;
+  }
+
+  .god-name-kr {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+  .god-name-en {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faded);
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+  .god-roman {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--gold-deep);
+    margin-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .god-roman::before { content: '— '; opacity: 0.6; }
+  .god-roman::after { content: ' —'; opacity: 0.6; }
+
+  .god-domain {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  /* Search highlighting */
+  .god-card.match {
+    border-color: var(--accent, var(--gold-deep)) !important;
+    background: rgba(255, 252, 240, 0.95);
+    box-shadow: 0 2px 0 var(--accent, var(--gold-deep));
+  }
+  .god-card.match::before { transform: scaleX(1); }
+
+  .god-card mark {
+    background: rgba(184, 137, 61, 0.25);
+    color: inherit;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+
+  .app[data-search="active"] .god-card:not(.match) {
+    opacity: 0.2;
+    pointer-events: none;
+  }
+  .app[data-search="active"] .lineage,
+  .app[data-search="active"] .tier-greek {
+    opacity: 0.3;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    display: none;
+  }
+  .app[data-search="empty"] .empty-state { display: block; }
+  .app[data-search="empty"] .tier { display: none; }
+  .app[data-search="empty"] .lineage { display: none; }
+
+  .empty-omega {
+    font-family: 'Cinzel', serif;
+    font-size: 48px;
+    color: var(--gold);
+    opacity: 0.4;
+    margin-bottom: 20px;
+  }
+  .empty-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .empty-hint {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+  }
+
+  .lineage {
+    position: relative;
+    height: 28px;
+    margin: -6px 0;
+  }
+  .lineage::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--line-strong);
+  }
+  .lineage-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--parchment);
+    padding: 0 10px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--ink-faded);
+    letter-spacing: 0.05em;
+  }
+
+  /* ============= DETAIL VIEW ============= */
+  .detail-content {
+    padding: 0 0 60px;
+  }
+
+  .detail-back {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: rgba(244, 236, 216, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--ink-soft);
+    border: none;
+    width: 100%;
+    text-align: left;
+    text-transform: uppercase;
+  }
+  .detail-back:hover { color: var(--ink); }
+
+  .detail-hero {
+    padding: 40px 28px 32px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+
+  .detail-hero::before {
+    content: '※';
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: var(--gold);
+  }
+
+  .detail-tier {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    color: var(--accent, var(--gold-deep));
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .detail-name {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    font-size: 44px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .detail-greek {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+  }
+
+  .detail-roman {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faded);
+    margin-top: 14px;
+    text-transform: uppercase;
+  }
+
+  .detail-divider {
+    margin: 24px auto 0;
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    position: relative;
+  }
+  .detail-divider::before, .detail-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    background: var(--gold);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .detail-divider::before { left: -10px; }
+  .detail-divider::after { right: -10px; }
+
+  .detail-body {
+    padding: 32px 28px;
+  }
+
+  .detail-attributes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 32px;
+  }
+
+  .attr {
+    background: rgba(255, 252, 240, 0.5);
+    padding: 14px 16px;
+  }
+  .attr-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .attr-value {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .detail-section {
+    margin-bottom: 28px;
+  }
+  .detail-section:last-child { margin-bottom: 0; }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--ink);
+    text-transform: uppercase;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold-deep);
+    font-size: 14px;
+    letter-spacing: 0;
+  }
+
+  .detail-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    text-align: justify;
+  }
+  .detail-text strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .detail-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink);
+    padding: 16px 20px;
+    border-left: 2px solid var(--gold);
+    margin: 16px 0;
+    background: rgba(184, 137, 61, 0.06);
+  }
+
+  .relations {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .relation-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .relation-row:last-child { border-bottom: none; }
+  .relation-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    min-width: 70px;
+    flex-shrink: 0;
+  }
+  .relation-value {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    color: var(--ink);
+    flex: 1;
+  }
+  .relation-link {
+    color: var(--crimson);
+    cursor: pointer;
+    border-bottom: 1px dotted var(--crimson);
+    transition: all 0.2s;
+  }
+  .relation-link:hover {
+    color: var(--ink);
+    border-bottom-style: solid;
+  }
+
+  .ornament {
+    text-align: center;
+    margin: 32px 0 0;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold);
+    font-size: 14px;
+    letter-spacing: 0.5em;
+  }
+
+  /* ============= SCROLLBAR ============= */
+  .view::-webkit-scrollbar { width: 8px; }
+  .view::-webkit-scrollbar-track { background: transparent; }
+  .view::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 4px;
+  }
+
+  /* ============= RESPONSIVE ============= */
+  @media (max-width: 480px) {
+    .header { padding: 14px 18px 12px; }
+    .search-wrap { padding: 12px 18px 0; }
+    .filters { padding: 10px 18px; }
+    .tree-content { padding: 22px 18px 60px; }
+    .detail-hero { padding: 32px 22px 26px; }
+    .detail-name { font-size: 34px; }
+    .detail-greek { font-size: 18px; }
+    .detail-body { padding: 26px 22px; }
+    .brand-title { font-size: 14px; }
+    .brand-mark { width: 32px; height: 32px; font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app" id="app" data-view="tree" data-filter="all">
+
+  <header class="header">
+    <div class="brand" onclick="goHome()">
+      <div class="brand-mark">Ω</div>
+      <div class="brand-text">
+        <div class="brand-title">MYTHOS</div>
+        <div class="brand-sub">— a dictionary of greek gods —</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      VOL. I<br>
+      <span style="opacity: 0.6">Θεογονία</span>
+    </div>
+  </header>
+
+  <div class="search-wrap">
+    <div class="search-box" id="search-box">
+      <span class="search-icon">⚲</span>
+      <input
+        type="text"
+        class="search-input"
+        id="search-input"
+        placeholder="신의 이름을 찾으세요 — 제우스, Zeus, Iuppiter, 하늘…"
+        autocomplete="off"
+        spellcheck="false"
+      >
+      <button class="search-clear" id="search-clear" onclick="clearSearch()" aria-label="검색 지우기">×</button>
+    </div>
+    <div class="search-meta" id="search-meta"></div>
+  </div>
+
+  <nav class="filters">
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">ALL</button>
+    <button class="filter-btn" data-filter="primordial" onclick="setFilter('primordial')">PRIMORDIAL</button>
+    <button class="filter-btn" data-filter="titan" onclick="setFilter('titan')">TITANS</button>
+    <button class="filter-btn" data-filter="olympian-1" onclick="setFilter('olympian-1')">OLYMPIAN · I</button>
+    <button class="filter-btn" data-filter="olympian-2" onclick="setFilter('olympian-2')">OLYMPIAN · II</button>
+  </nav>
+
+  <div class="view-stack">
+
+    <!-- ============== TREE VIEW ============== -->
+    <main class="view view-tree" id="tree-view">
+      <div class="tree-content" id="tree-container"></div>
+      <div class="empty-state">
+        <div class="empty-omega">∅</div>
+        <div class="empty-text" id="empty-text">검색 결과가 없습니다</div>
+        <div class="empty-hint">try another name</div>
+      </div>
+    </main>
+
+    <!-- ============== DETAIL VIEW ============== -->
+    <section class="view view-detail" id="detail-view">
+      <button class="detail-back" onclick="goBack()">← 가계도로 돌아가기</button>
+      <div class="detail-content" id="detail-container"></div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+// ============= DATA =============
+const gods = {
+  '카오스': {
+    gen: 'primordial', tier: '태초의 신',
+    nameEn: 'CHAOS', greek: 'Χάος', roman: 'CHAOS',
+    domain: '태초의 심연', symbol: '공허, 벌어진 틈',
+    epithet: '맨 처음에 생겨난 자',
+    desc: '<strong>카오스</strong>는 우주가 시작되기 전부터 있었던 거대한 공허, 혹은 "벌어진 틈"이다. 흔히 "혼돈"으로 옮기지만, 본래 의미는 무질서가 아니라 만물이 솟아날 빈 공간에 가깝다. 그는 무엇을 행하는 신이 아니라, 모든 것이 시작되는 <strong>상태</strong> 자체다.',
+    story: '헤시오도스의 『신통기』는 우주의 첫 장면을 이렇게 노래한다 — "맨 처음에 카오스가 생겨났다. 그 다음에 가슴 넓은 가이아가, 안개 자욱한 타르타로스가, 그리고 가장 아름다운 에로스가 생겨났다." 카오스는 직접 자식 둘을 낳았으니, 어둠의 <strong>에레보스</strong>와 밤의 <strong>닉스</strong>다. 이 남매가 결합해 낮(헤메라)과 천공의 빛(아이테르)을 낳았다. 닉스는 홀로도 운명·죽음·잠·꿈·복수의 자식들을 낳았으니, 그리스 신화의 모든 어두운 힘이 결국 카오스로 거슬러 올라간다.',
+    relations: { '자식': ['에레보스', '닉스'], '동시 생성': ['가이아', '타르타로스', '에로스'] }
+  },
+  '가이아': {
+    gen: 'primordial', tier: '태초의 신',
+    nameEn: 'GAIA', greek: 'Γαῖα', roman: 'TERRA',
+    domain: '대지', symbol: '풍요로운 흙, 곡식',
+    epithet: '만물의 어머니',
+    desc: '<strong>가이아</strong>는 대지 그 자체이자 만물의 어머니다. 누구의 자식도 아니면서 홀로 하늘과 산과 바다를 낳았고, 자기가 낳은 하늘과 다시 결합해 신들의 두 번째 세대를 낳았다.',
+    story: '가이아는 짝 없이 <strong>우라노스(하늘)</strong>·<strong>폰토스(바다)</strong>·우레아(산)를 낳았다. 그 후 우라노스와 결합해 12 티탄과 외눈박이 키클롭스, 백수(百手)거인 헤카톤케이레스를 낳았다. 그러나 우라노스는 흉측한 자식들을 가이아의 몸속(타르타로스)에 가두었고, 이에 격노한 가이아는 거대한 낫을 만들어 막내 <strong>크로노스</strong>에게 건넸다. 크로노스는 어머니의 뜻대로 아버지를 거세했다. 가이아는 이후에도 여러 차례 하늘의 권력 교체에 개입하며, 신들의 가장 깊은 권위를 상징한다.',
+    relations: { '배우자': ['우라노스', '폰토스'], '자식': ['크로노스', '레아', '오케아노스', '히페리온'] }
+  },
+  '에로스': {
+    gen: 'primordial', tier: '태초의 신',
+    nameEn: 'EROS', greek: 'Ἔρως', roman: 'CUPIDO',
+    domain: '원초적 사랑', symbol: '활과 화살, 날개',
+    epithet: '사지를 풀어놓는 자',
+    desc: '<strong>에로스</strong>는 카오스 직후에 나타난 가장 오래된 신 중 하나다. 단순한 연애 감정이 아니라, 신과 신, 만물과 만물을 결합시키는 <strong>근원적 끌림의 힘</strong> 그 자체다. 우주가 분화되고 짝을 이루어 자식을 낳을 수 있게 된 모든 결합의 배후에 그가 있다.',
+    story: '후대의 신화에서는 에로스가 <strong>아프로디테</strong>와 아레스의 아들로 다시 그려진다. 황금 화살과 납 화살을 든 장난기 어린 소년이 되어, 황금에 맞으면 사랑에 빠지고 납에 맞으면 미움에 휩싸인다. 아폴론을 놀려 다프네에게 황금을, 다프네에게 납을 쏘아 그 유명한 비극을 만들어낸 것도 그였다. 인간 프시케와의 사랑 이야기에서는 보이지 않는 연인으로 등장해 시험과 재회의 길을 걷는다. 로마에서는 <strong>큐피드</strong>라는 이름으로 더 친숙해졌다.',
+    relations: { '근원': ['카오스 직후 생성'], '후대 부모': ['아프로디테', '아레스'] }
+  },
+  '우라노스': {
+    gen: 'primordial', tier: '태초의 신',
+    nameEn: 'OURANOS', greek: 'Οὐρανός', roman: 'CAELUS',
+    domain: '하늘', symbol: '별이 박힌 천공',
+    epithet: '별 가득한 자',
+    desc: '<strong>우라노스</strong>는 가이아가 홀로 낳은 하늘이며, 동시에 그녀의 남편이 되었다. 어머니이자 아내인 가이아 위에 매일 밤 내려와 자식을 낳게 했지만, 그 자식들을 사랑하지 않았다.',
+    story: '우라노스는 자신의 자식 중 흉측한 키클롭스와 헤카톤케이레스를 가이아의 자궁(타르타로스) 깊은 곳에 가두었다. 고통받던 가이아는 막내 <strong>크로노스</strong>에게 거대한 낫을 주며 복수를 청했다. 크로노스는 매복하고 있다가 아버지가 어머니에게 내려올 때 그를 거세해버렸다. 잘려나간 살에서 흐른 피가 대지에 떨어져 <strong>거인족(기간테스)</strong>과 복수의 여신 <strong>에리니에스</strong>가 태어났고, 바다에 떨어진 살의 거품에서는 미의 여신 <strong>아프로디테</strong>가 태어났다. 우라노스의 시대는 그렇게 끝났다.',
+    relations: { '배우자': ['가이아'], '자식': ['크로노스', '레아', '아프로디테 (간접)'] }
+  },
+  '크로노스': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'KRONOS', greek: 'Κρόνος', roman: 'SATURNUS',
+    domain: '시간과 농경', symbol: '낫, 모래시계',
+    epithet: '굽은 꾀의 자',
+    desc: '<strong>크로노스</strong>는 티탄의 막내이자 왕이었다. 어머니 가이아의 청을 받아 낫으로 아버지 우라노스를 거세하고 권좌를 차지했지만, 그 자신도 똑같이 자식에게 권좌를 빼앗긴다는 예언에 평생 떨었다.',
+    story: '크로노스는 누이 <strong>레아</strong>와 결혼해 자식을 얻을 때마다 즉시 삼켜버렸다. 헤스티아·데메테르·헤라·하데스·포세이돈이 모두 그렇게 아버지의 뱃속에 갇혔다. 여섯째 아이를 임신한 레아는 가이아에게 도움을 청했고, 크레타 섬에 숨어 막내 <strong>제우스</strong>를 낳았다. 크로노스에게는 강보에 싼 돌을 대신 건네 삼키게 했다. 장성한 제우스가 토하게 하는 약을 먹여 형제들을 모두 토해내게 했고, 크로노스와 티탄들은 새 세대 신들과 10년에 걸친 <strong>티타노마키아</strong>를 벌인 끝에 패해 타르타로스에 갇혔다.',
+    relations: { '부모': ['우라노스', '가이아'], '배우자': ['레아'], '자식': ['제우스', '헤라', '포세이돈', '하데스', '데메테르', '헤스티아'] }
+  },
+  '레아': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'RHEA', greek: 'Ῥέα', roman: 'OPS',
+    domain: '대지모신, 다산', symbol: '왕관, 사자가 끄는 수레',
+    epithet: '신들의 어머니',
+    desc: '<strong>레아</strong>는 크로노스의 누나이자 아내로, 올림포스 신들의 어머니다. 자식을 잃는 슬픔을 겪어본 만큼 막내 제우스를 살리기 위해 모든 지혜를 동원한 어머니의 화신이기도 하다.',
+    story: '다섯 자식을 차례로 남편에게 잃은 레아는 여섯째를 임신하자 크레타의 동굴로 도망쳐 비밀리에 <strong>제우스</strong>를 낳았다. 갓난아기는 님프 아말테이아의 보살핌을 받았고, 쿠레테스라 불리는 정령들이 방패를 두드려 아기 울음소리를 감추었다. 레아는 크로노스에게 강보에 싼 돌을 건넸고, 의심하지 않은 크로노스는 그것을 삼켰다. 훗날 제우스가 그 돌을 토해내게 했을 때, 그 돌은 델포이에 신성한 표석으로 모셔졌다.',
+    relations: { '부모': ['우라노스', '가이아'], '배우자': ['크로노스'], '자식': ['제우스', '헤라', '포세이돈', '하데스', '데메테르', '헤스티아'] }
+  },
+  '오케아노스': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'OKEANOS', greek: 'Ὠκεανός', roman: 'OCEANUS',
+    domain: '대양', symbol: '강물, 황소뿔',
+    epithet: '세상을 휘감는 강',
+    desc: '<strong>오케아노스</strong>는 세상의 끝을 둘러싼 거대한 강이다. 그리스인들에게 바다는 폰토스와 포세이돈의 영역이었지만, 그 너머 대지를 감싸는 무한한 흐름은 오케아노스였다.',
+    story: '오케아노스는 누이 테티스와 결합해 <strong>3,000명의 강의 신</strong>과 <strong>3,000명의 오케아니데스(바다 요정)</strong>를 낳았다. 세상 모든 강과 샘이 그의 자식이다. 티타노마키아가 일어났을 때 그는 형제들과 달리 <strong>중립을 지켰고</strong>, 그 덕에 처벌받지 않은 채 자기 영역에 남았다. 호메로스는 그를 "신들의 기원"이라 부르기도 했다.',
+    relations: { '부모': ['우라노스', '가이아'], '배우자': ['테티스'], '자식': ['강의 신들', '오케아니데스'] }
+  },
+  '히페리온': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'HYPERION', greek: 'Ὑπερίων', roman: 'HYPERION',
+    domain: '천공의 빛', symbol: '빛, 동쪽',
+    epithet: '높이 가는 자',
+    desc: '<strong>히페리온</strong>은 빛 그 자체의 티탄이다. 이름은 "높이 가는 자"라는 뜻으로, 하늘을 가로지르는 빛의 운행을 다스린다.',
+    story: '히페리온은 누이 <strong>테이아</strong>와 결합해 세 명의 빛나는 자식을 낳았다 — 태양의 신 <strong>헬리오스</strong>, 달의 여신 <strong>셀레네</strong>, 새벽의 여신 <strong>에오스</strong>가 그들이다. 티타노마키아 이후 히페리온의 직무는 점차 그의 손자 세대인 <strong>아폴론</strong>(태양)과 <strong>아르테미스</strong>(달)에게로 옮겨갔다. 셰익스피어는 햄릿에서 그를 "히페리온이 사티로스에 비할 바 없듯이"라며 고귀함의 상징으로 인용했다.',
+    relations: { '부모': ['우라노스', '가이아'], '배우자': ['테이아'], '자식': ['헬리오스', '셀레네', '에오스'] }
+  },
+  '제우스': {
+    gen: 'olympian-1', tier: '올림포스 1세대',
+    nameEn: 'ZEUS', greek: 'Ζεύς', roman: 'IUPPITER',
+    domain: '하늘과 번개, 신들의 왕', symbol: '번개, 독수리, 떡갈나무',
+    epithet: '구름을 모으는 자',
+    desc: '<strong>제우스</strong>는 올림포스의 최고신이며, 신들과 인간의 아버지다. 폭풍우와 번개를 무기로 삼아 우주의 질서를 지키지만, 그 자신은 끝없는 연애와 변신으로 신화에 가장 자주 등장하는 신이기도 하다.',
+    story: '아버지 크로노스의 입을 피해 크레타에서 자란 제우스는 장성하자 형제들을 구해내고 <strong>티타노마키아</strong>를 일으켰다. 키클롭스가 만들어준 <strong>번개</strong>를 무기로, 헤카톤케이레스의 백 개 손이 던지는 바위를 우군 삼아 10년 만에 티탄들을 무찔렀다. 형제들과 제비를 뽑아 <strong>하늘</strong>을 차지했고, 포세이돈은 바다, 하데스는 저승을 맡았다. 누나 헤라를 정실로 맞았으나 메티스·레토·세멜레·다나에 등 수많은 여신·여인과의 사이에서 아테나·아폴론·아르테미스·디오니소스·헤라클레스 등을 낳았다. 그의 변신은 황소(에우로페), 백조(레다), 황금비(다나에)에 이르기까지 다양했다.',
+    relations: { '부모': ['크로노스', '레아'], '배우자': ['헤라'], '자식': ['아테나', '아폴론', '아르테미스', '아레스', '헤르메스', '디오니소스', '헤라클레스'] }
+  },
+  '헤라': {
+    gen: 'olympian-1', tier: '올림포스 1세대',
+    nameEn: 'HERA', greek: 'Ἥρα', roman: 'IUNO',
+    domain: '결혼과 가정, 여왕', symbol: '공작, 석류, 왕홀',
+    epithet: '하얀 팔의',
+    desc: '<strong>헤라</strong>는 올림포스의 여왕이며, 결혼과 가정의 수호자다. 그러나 남편의 끝없는 외도 앞에서 그녀는 자비롭기보다 무서운 복수의 여신이 된다.',
+    story: '헤라는 제우스의 누이이자 정실 부인이지만, 그 결혼은 평탄할 수 없었다. 제우스의 외도 상대와 그 자식들에게 헤라는 가차 없었다. <strong>헤라클레스</strong>를 평생 괴롭혀 그를 미치게 만들어 자식을 죽이게 했고, 12과업도 그녀의 사주로 시작되었다. <strong>레토</strong>가 아폴론·아르테미스를 낳을 때는 어떤 땅도 그녀를 받지 못하게 했고, 결국 떠다니는 섬 델로스에서야 출산할 수 있었다. <strong>이오</strong>는 흰 암소로 변하게 만들어 백 개의 눈을 가진 아르고스에게 감시시켰다. 그러나 그녀는 영웅 이아손과 아르고호 원정대에게는 든든한 후원자가 되어주기도 했다.',
+    relations: { '부모': ['크로노스', '레아'], '배우자': ['제우스'], '자식': ['아레스', '헤파이스토스', '헤베'] }
+  },
+  '포세이돈': {
+    gen: 'olympian-1', tier: '올림포스 1세대',
+    nameEn: 'POSEIDON', greek: 'Ποσειδῶν', roman: 'NEPTUNUS',
+    domain: '바다, 지진, 말', symbol: '삼지창, 말, 돌고래',
+    epithet: '대지를 흔드는 자',
+    desc: '<strong>포세이돈</strong>은 바다의 통치자이자 지진의 신이다. 삼지창을 휘둘러 폭풍을 부르고 대지를 진동시키며, 말의 창조자이기도 하다.',
+    story: '제비뽑기로 바다를 차지한 포세이돈은 <strong>아테네의 수호신 자리</strong>를 두고 아테나와 다투었다. 그는 아크로폴리스에 삼지창을 꽂아 짠물 샘을 만들어 보였고, 아테나는 올리브 나무를 심었다. 시민들은 올리브를 택했고, 분노한 포세이돈은 아테네 평원에 홍수를 보냈다. <strong>오디세우스</strong>가 그의 아들 키클롭스 폴리페모스의 눈을 멀게 한 뒤로는 그의 귀향을 10년이나 방해했다. 그러나 트로이의 왕 라오메돈에게 속은 일에는 거대한 바다 괴물을 보내 도시를 위협하기도 했다. 인간 메두사가 그의 아이를 낳을 때 <strong>페가수스</strong>와 크리사오르가 태어났다.',
+    relations: { '부모': ['크로노스', '레아'], '배우자': ['암피트리테'], '자식': ['트리톤', '폴리페모스', '페가수스 (간접)'] }
+  },
+  '하데스': {
+    gen: 'olympian-1', tier: '올림포스 1세대',
+    nameEn: 'HADES', greek: 'Ἅιδης', roman: 'PLUTO',
+    domain: '저승과 부', symbol: '키클롭스의 투구, 케르베로스',
+    epithet: '보이지 않는 자',
+    desc: '<strong>하데스</strong>는 죽은 자들의 세계를 다스리는 냉정하고 엄격한 신이다. 악신은 아니지만 죽음 그 자체를 의미해 사람들이 함부로 이름 부르길 꺼렸고, "부유한 자(플루톤)"라는 별칭으로 에둘러 불렀다.',
+    story: '하데스의 가장 유명한 일화는 <strong>페르세포네</strong> 납치다. 데메테르의 어린 딸 페르세포네가 들판에서 꽃을 꺾을 때 땅이 갈라지며 그가 검은 말이 끄는 전차로 끌고 갔다. 어머니 데메테르가 슬픔에 잠겨 곡식을 자라지 못하게 하자 세상이 굶주렸고, 제우스는 페르세포네를 돌려보내라 명했다. 그러나 하데스는 그녀에게 <strong>석류 알 여섯 개</strong>를 먹였고, 저승의 음식을 먹은 자는 완전히 떠날 수 없었기에 그녀는 매년 절반은 지상에서, 절반은 저승에서 보내게 되었다 — 이것이 사계절의 기원이다. 오르페우스가 죽은 아내 에우리디케를 찾으러 왔을 때, 하데스는 그의 노래에 감동해 단 하나의 조건만 두고 아내를 돌려주었다.',
+    relations: { '부모': ['크로노스', '레아'], '배우자': ['페르세포네'], '거처': ['저승'] }
+  },
+  '데메테르': {
+    gen: 'olympian-1', tier: '올림포스 1세대',
+    nameEn: 'DEMETER', greek: 'Δημήτηρ', roman: 'CERES',
+    domain: '곡물과 수확, 대지의 풍요', symbol: '밀 이삭, 횃불',
+    epithet: '풍요를 가져오는 자',
+    desc: '<strong>데메테르</strong>는 농경과 곡물의 여신이다. 그녀의 기쁨과 슬픔이 그대로 대지의 풍요와 황폐로 나타나며, 사계절의 순환은 그녀의 어머니로서의 사랑에서 비롯되었다.',
+    story: '딸 <strong>페르세포네</strong>가 하데스에게 납치당한 뒤, 데메테르는 횃불을 들고 9일 밤낮을 헤맸다. 마침내 헬리오스에게서 진실을 듣고 분노한 그녀는 올림포스를 떠나 인간의 모습으로 엘레우시스에 머물렀고, 그 동안 대지는 곡식을 내지 않았다. 인류가 굶어 죽기 시작하자 제우스가 중재했고, 페르세포네는 1년의 일부를 어머니와 보낼 수 있게 되었다. 페르세포네가 지상으로 올라오는 동안은 봄·여름이, 저승으로 내려가는 동안은 가을·겨울이 된다. 엘레우시스에서 그녀가 인간들에게 가르친 것이 그 유명한 <strong>엘레우시스 비의(密儀)</strong>다.',
+    relations: { '부모': ['크로노스', '레아'], '연인': ['제우스'], '자식': ['페르세포네'] }
+  },
+  '헤스티아': {
+    gen: 'olympian-1', tier: '올림포스 1세대',
+    nameEn: 'HESTIA', greek: 'Ἑστία', roman: 'VESTA',
+    domain: '화로와 가정', symbol: '화로의 불, 베일',
+    epithet: '모든 가정의 중심',
+    desc: '<strong>헤스티아</strong>는 크로노스와 레아의 첫째 딸이자 가장 자비로운 여신이다. 가정의 화로를 지키며, 모든 그리스 도시의 중앙 화로(프리타네이온)에서 그녀의 불이 꺼지지 않게 보존되었다.',
+    story: '아폴론과 포세이돈이 동시에 그녀에게 청혼했을 때, 헤스티아는 제우스의 머리를 만지며 <strong>영원한 처녀</strong>로 남기를 맹세했다. 제우스는 그 답례로 그녀에게 모든 신전과 모든 가정에서 가장 먼저 제물을 받을 권리를 주었다. 어떤 의식도 그녀에 대한 봉헌으로 시작되고 끝났다. 후대 일부 전승에서는 디오니소스가 올림포스 12신에 들어올 때 그녀가 자리를 양보해 화로 곁으로 물러났다고 전해진다 — 분쟁을 피하는 그녀다운 선택이었다.',
+    relations: { '부모': ['크로노스', '레아'], '맹세': ['영원한 처녀'] }
+  },
+  '아테나': {
+    gen: 'olympian-2', tier: '올림포스 2세대',
+    nameEn: 'ATHENA', greek: 'Ἀθηνᾶ', roman: 'MINERVA',
+    domain: '지혜, 전략, 공예', symbol: '올빼미, 투구와 창, 올리브',
+    epithet: '회색 눈의',
+    desc: '<strong>아테나</strong>는 무력보다 <strong>지혜와 전략</strong>으로 싸우는 전쟁의 여신이다. 도시 아테네의 수호자이며, 처녀신으로 남았다.',
+    story: '제우스는 첫 아내 메티스가 자신을 능가할 자식을 낳을 것이라는 예언을 듣고 임신한 그녀를 통째로 삼켜버렸다. 곧 끔찍한 두통에 시달린 제우스가 헤파이스토스에게 머리를 가르게 하자, 완전무장한 채 함성을 지르며 <strong>아테나</strong>가 튀어나왔다. 그녀는 아테네의 수호신 자리를 두고 포세이돈과 경쟁할 때 <strong>올리브 나무</strong>를 선물해 시민들의 선택을 받았다. 직조 솜씨를 자랑하던 인간 <strong>아라크네</strong>가 그녀에게 도전하자, 아테나는 그녀를 거미로 만들어 영원히 실을 잣게 했다. <strong>오디세우스</strong>의 든든한 후원자였고, <strong>페르세우스</strong>에게 메두사를 비추어 볼 청동 방패를 빌려준 것도 그녀였다.',
+    relations: { '아버지': ['제우스'], '어머니': ['메티스'], '맹세': ['영원한 처녀'] }
+  },
+  '아폴론': {
+    gen: 'olympian-2', tier: '올림포스 2세대',
+    nameEn: 'APOLLO', greek: 'Ἀπόλλων', roman: 'APOLLO',
+    domain: '태양, 음악, 예언, 의술', symbol: '리라, 월계관, 활',
+    epithet: '멀리서 쏘는 자',
+    desc: '<strong>아폴론</strong>은 제우스와 레토의 아들로, 빛과 이성과 예술의 신이다. 델포이의 신탁을 통해 인간에게 운명을 알려주지만, 그 자존심은 신들 가운데서도 손꼽힐 만큼 강하다.',
+    story: '레토가 헤라의 박해를 피해 <strong>델로스 섬</strong>에서 아폴론과 아르테미스를 낳았다. 아폴론은 태어난 지 며칠 만에 활로 거대한 뱀 <strong>피톤</strong>을 죽이고 그 자리에 <strong>델포이 신탁소</strong>를 세웠다. 사티로스 마르시아스가 음악으로 도전했을 때 아폴론은 그를 이긴 뒤 산 채로 가죽을 벗겨버렸다. 그가 사랑한 다프네는 에로스의 화살에 맞아 그를 거부했고, 도망치다 월계수가 되었다 — 이후 월계관은 아폴론의 상징이 되었다. 아들 <strong>아스클레피오스</strong>는 의술이 너무 뛰어나 죽은 자를 살려낸 죄로 제우스의 번개에 맞아 죽었다.',
+    relations: { '부모': ['제우스', '레토'], '쌍둥이': ['아르테미스'], '자식': ['오르페우스', '아스클레피오스'] }
+  },
+  '아르테미스': {
+    gen: 'olympian-2', tier: '올림포스 2세대',
+    nameEn: 'ARTEMIS', greek: 'Ἄρτεμις', roman: 'DIANA',
+    domain: '달, 사냥, 야생, 처녀성', symbol: '활과 화살, 사슴, 초승달',
+    epithet: '들짐승의 여주인',
+    desc: '<strong>아르테미스</strong>는 아폴론의 쌍둥이 누이이자, 야생의 자유로움 자체다. 처녀신으로 남기를 맹세했으며, 그 맹세를 어기거나 위협하는 자에게는 가차 없다.',
+    story: '사냥꾼 <strong>악타이온</strong>이 우연히 그녀가 목욕하는 모습을 보았을 때, 그녀는 그를 사슴으로 변하게 했고, 그는 자기 사냥개들에게 갈가리 찢겼다. 그녀의 시녀 <strong>칼리스토</strong>가 제우스에게 유혹당해 임신했을 때, 아르테미스는 그녀를 무리에서 쫓아냈다(혹은 곰으로 변하게 했다는 전승). 거인 사냥꾼 <strong>오리온</strong>은 그녀가 사랑한 유일한 남자였으나, 오빠 아폴론의 계략으로 그녀의 화살에 죽고 만다 — 슬퍼한 그녀가 그를 별자리로 올렸다. 트로이 전쟁 직전, 아가멤논이 그녀의 사슴을 쏜 죄로 그녀는 아르고스 함대의 바람을 멈춰 그의 딸 <strong>이피게네이아</strong>를 제물로 요구했다.',
+    relations: { '부모': ['제우스', '레토'], '쌍둥이': ['아폴론'], '맹세': ['영원한 처녀'] }
+  },
+  '아레스': {
+    gen: 'olympian-2', tier: '올림포스 2세대',
+    nameEn: 'ARES', greek: 'Ἄρης', roman: 'MARS',
+    domain: '전쟁, 폭력, 학살', symbol: '창, 투구, 독수리',
+    epithet: '도시를 약탈하는 자',
+    desc: '<strong>아레스</strong>는 무분별한 폭력과 살육의 화신이다. 그리스인들에게는 별로 사랑받지 못한 신이지만, 로마에서는 마르스로서 건국 영웅이자 농경의 수호자로 매우 존경받았다.',
+    story: '아레스는 <strong>아프로디테</strong>와 비밀스레 사랑을 나누었다. 그녀의 남편 <strong>헤파이스토스</strong>가 이를 알고는 보이지 않을 만큼 가는 황금 그물을 침대 위에 쳐놓았다. 두 사람이 함께 누운 순간 그물이 떨어졌고, 헤파이스토스는 모든 올림포스 신을 불러모아 그 망신스러운 광경을 구경시켰다. 트로이 전쟁에서는 아프로디테 편을 들어 트로이를 지원했지만, 인간 영웅 <strong>디오메데스</strong>가 아테나의 도움을 받아 그를 창으로 찔러 부상을 입혔다 — 신이 인간에게 패한 드문 장면이었다. 비명을 지르며 올림포스로 도망친 그를 제우스는 차갑게 꾸짖었다, "너는 내 자식 중에 가장 미운 놈이다."',
+    relations: { '부모': ['제우스', '헤라'], '연인': ['아프로디테'] }
+  },
+  '헤르메스': {
+    gen: 'olympian-2', tier: '올림포스 2세대',
+    nameEn: 'HERMES', greek: 'Ἑρμῆς', roman: 'MERCURIUS',
+    domain: '전령, 여행, 상업, 도둑', symbol: '날개 달린 샌들, 카두케우스',
+    epithet: '아르고스를 죽인 자',
+    desc: '<strong>헤르메스</strong>는 신들의 전령이자 영혼의 안내자다. 영리하고 재빠르며, 경계를 자유로이 넘나든다 — 올림포스와 지상, 산 자와 죽은 자의 세계를 모두.',
+    story: '헤르메스는 태어난 첫날부터 사고뭉치였다. 요람에서 빠져나와 거북이 등껍질로 <strong>리라</strong>를 만들었고, 그날 저녁에는 형 <strong>아폴론의 소 떼</strong>를 훔쳤다. 아폴론이 추궁하자 천연덕스럽게 시치미를 떼다가, 결국 들킨 뒤에는 자신이 만든 리라를 선물로 주어 형의 마음을 풀었다 — 그렇게 아폴론의 상징인 리라가 사실 헤르메스의 발명품이 되었다. 그는 죽은 자의 영혼을 저승으로 이끄는 <strong>프시코폼포스</strong>의 역할도 한다. 페르세우스에게 날개 달린 샌들을 빌려주었고, 오디세우스에게 마녀 키르케의 마법을 풀 약초를 가져다준 것도 그였다.',
+    relations: { '부모': ['제우스', '마이아'], '자식': ['판', '헤르마프로디토스'] }
+  },
+  '헤파이스토스': {
+    gen: 'olympian-2', tier: '올림포스 2세대',
+    nameEn: 'HEPHAISTOS', greek: 'Ἥφαιστος', roman: 'VULCANUS',
+    domain: '대장간, 불, 공예', symbol: '망치, 모루, 집게',
+    epithet: '저는 다리의 명장',
+    desc: '<strong>헤파이스토스</strong>는 신들 가운데 유일하게 못생기고 다리를 절며, 노동하는 신이다. 그러나 그의 손에서 신들의 모든 무기와 보물이 태어났다.',
+    story: '태어났을 때 너무 못생겨서 <strong>헤라가 직접 올림포스에서 던져버렸다</strong>는 전승이 있다. 그는 바다에 떨어져 테티스에게 양육되었고, 그 충격으로 다리를 절게 되었다. 어머니에게 복수하기 위해 황금 옥좌를 만들어 보냈는데, 헤라가 앉자 보이지 않는 사슬이 그녀를 묶어버렸다. 신들 누구도 풀지 못했고, 결국 디오니소스가 그를 술에 취하게 해 올림포스로 데려와야 했다. 그가 만든 작품은 신화 곳곳에 박혀 있다 — <strong>제우스의 번개</strong>, <strong>아킬레우스의 방패</strong>, 헬리오스의 황금 마차, 최초의 여인 <strong>판도라</strong>까지. 그의 아내는 가장 아름다운 여신 <strong>아프로디테</strong>였지만, 그녀는 아레스와 바람을 피웠고 그는 황금 그물로 그 장면을 잡아 모두에게 보였다.',
+    relations: { '부모': ['제우스', '헤라'], '배우자': ['아프로디테'] }
+  },
+  '디오니소스': {
+    gen: 'olympian-2', tier: '올림포스 2세대',
+    nameEn: 'DIONYSOS', greek: 'Διόνυσος', roman: 'BACCHUS',
+    domain: '포도주, 축제, 광기', symbol: '포도 덩굴, 표범, 티르소스',
+    epithet: '두 번 태어난 자',
+    desc: '<strong>디오니소스</strong>는 인간이었던 어머니 <strong>세멜레</strong>에게서 태어난 유일한 올림포스 신이다. 그는 광기와 해방, 포도주와 황홀경을 가져온다 — 문명을 잠시 무너뜨리는 신성한 도취다.',
+    story: '제우스의 아이를 임신한 세멜레는 헤라의 꾐에 빠져 제우스에게 "본모습을 보여달라"고 요구했다. 약속에 묶인 제우스가 번개의 모습으로 나타나자 세멜레는 그 자리에서 타 죽었다. 제우스는 그녀의 뱃속에서 태아를 꺼내 <strong>자기 허벅지에 꿰매 넣었고</strong>, 거기서 디오니소스가 다시 태어났다 — 그래서 그는 "두 번 태어난 자"다. 자라난 그는 추종자들(마이나데스)과 함께 세상을 떠돌며 <strong>포도주 만드는 법</strong>을 가르쳤다. 그를 거부한 테베의 왕 <strong>펜테우스</strong>는 자기 어머니에게 산 채로 찢겨 죽었다. 크레타에서 테세우스에게 버림받은 <strong>아리아드네</strong>를 발견해 아내로 삼았고, 그녀가 죽자 그녀의 결혼 화관을 별자리로 올려 영원히 빛나게 했다.',
+    relations: { '아버지': ['제우스'], '어머니': ['세멜레 (인간)'], '배우자': ['아리아드네'] }
+  },
+  '아프로디테': {
+    gen: 'special', tier: '특수 출생',
+    nameEn: 'APHRODITE', greek: 'Ἀφροδίτη', roman: 'VENUS',
+    domain: '미와 사랑, 욕망', symbol: '비둘기, 장미, 조개',
+    epithet: '거품에서 태어난',
+    desc: '<strong>아프로디테</strong>는 우라노스가 거세될 때 바다에 떨어진 살의 거품(아프로스)에서 태어났다. 그녀는 다른 신들보다 한 세대 앞선 존재이지만, 미와 사랑의 화신으로 올림포스 12신에 든다.',
+    story: '키프로스 섬 해안의 거품에서 떠오른 그녀는 <strong>호라이</strong>(계절의 여신들)에게 환영받으며 올림포스로 인도되었다. 신들은 그녀의 아름다움에 매혹되어 다투었고, 제우스는 분쟁을 막기 위해 그녀를 가장 못생긴 신 <strong>헤파이스토스</strong>와 결혼시켰다. 그러나 그녀의 마음은 전쟁의 신 <strong>아레스</strong>에게 있었다. 한편 그녀가 사랑한 인간 <strong>아도니스</strong>는 사냥 중 멧돼지에 받혀 죽었고, 그가 흘린 피에서 아네모네 꽃이 피었다. <strong>황금 사과</strong> 사건에서 그녀는 헤라·아테나와 미모를 다투다 트로이의 왕자 파리스를 매수해 <strong>헬레네</strong>를 그에게 약속했고, 이것이 <strong>트로이 전쟁</strong>의 발단이 되었다.',
+    relations: { '근원': ['우라노스의 거품'], '배우자': ['헤파이스토스'], '연인': ['아레스', '아도니스'], '자식': ['에로스'] }
+  }
+};
+
+// ============= TREE STRUCTURE =============
+const treeStructure = [
+  {
+    tier: '태초의 신',
+    greek: 'Πρωτογενοί — Protogenoi',
+    cols: 1,
+    nodes: ['카오스']
+  },
+  { lineage: '카오스에서' },
+  {
+    tier: '하늘과 대지',
+    greek: 'Οὐρανός · Γαῖα',
+    cols: 3,
+    nodes: ['가이아', '에로스', '우라노스']
+  },
+  { lineage: '가이아 × 우라노스' },
+  {
+    tier: '티탄',
+    greek: 'Τιτᾶνες — Titans',
+    cols: 4,
+    nodes: ['크로노스', '레아', '오케아노스', '히페리온']
+  },
+  { lineage: '크로노스 × 레아' },
+  {
+    tier: '올림포스 1세대',
+    greek: 'Ὀλύμπιοι · γενεὰ α´',
+    cols: 3,
+    nodes: ['제우스', '헤라', '포세이돈', '하데스', '데메테르', '헤스티아']
+  },
+  { lineage: '제우스의 자녀들' },
+  {
+    tier: '올림포스 2세대',
+    greek: 'Ὀλύμπιοι · γενεὰ β´',
+    cols: 3,
+    nodes: ['아테나', '아폴론', '아르테미스', '아레스', '헤르메스', '헤파이스토스', '디오니소스']
+  },
+  { lineage: '바다의 거품에서' },
+  {
+    tier: '특수 출생',
+    greek: 'Ἀναδυομένη',
+    cols: 1,
+    nodes: ['아프로디테']
+  }
+];
+
+// ============= RENDER =============
+function renderTree() {
+  const c = document.getElementById('tree-container');
+  let html = '';
+
+  treeStructure.forEach(item => {
+    if (item.lineage) {
+      html += `<div class="lineage"><span class="lineage-label">${item.lineage}</span></div>`;
+    } else {
+      html += `<div class="tier">
+        <div class="tier-label">${item.tier}</div>
+        <div class="tier-greek">${item.greek}</div>
+        <div class="nodes cols-${item.cols}">`;
+      item.nodes.forEach(name => {
+        const g = gods[name];
+        if (!g) return;
+        html += `<button class="god-card" data-name="${name}" data-gen="${g.gen}" onclick="showGod('${name}')">
+          <div class="god-name-kr">${name}</div>
+          <div class="god-name-en">${g.nameEn}</div>
+          <div class="god-roman">${g.roman}</div>
+          <div class="god-domain">${g.domain.split(',')[0]}</div>
+        </button>`;
+      });
+      html += `</div></div>`;
+    }
+  });
+
+  c.innerHTML = html;
+}
+
+function showGod(name) {
+  const g = gods[name];
+  if (!g) return;
+
+  const accentMap = {
+    'primordial': 'var(--c-primordial)',
+    'titan': 'var(--c-titan)',
+    'olympian-1': 'var(--c-olympian-1)',
+    'olympian-2': 'var(--c-olympian-2)',
+    'special': 'var(--c-special)'
+  };
+
+  let relationsHtml = '';
+  for (const [label, items] of Object.entries(g.relations)) {
+    const itemsHtml = items.map(item => {
+      const cleanName = item.split(' (')[0];
+      if (gods[cleanName]) {
+        return `<span class="relation-link" onclick="showGod('${cleanName}')">${item}</span>`;
+      }
+      return item;
+    }).join(' · ');
+    relationsHtml += `<div class="relation-row">
+      <div class="relation-label">${label}</div>
+      <div class="relation-value">${itemsHtml}</div>
+    </div>`;
+  }
+
+  document.getElementById('detail-container').innerHTML = `
+    <div class="detail-hero" style="--accent: ${accentMap[g.gen]}">
+      <div class="detail-tier">${g.tier}</div>
+      <h1 class="detail-name">${name}</h1>
+      <div class="detail-greek">${g.greek} · ${g.epithet}</div>
+      <div class="detail-roman">Roman · ${g.roman}</div>
+      <div class="detail-divider"></div>
+    </div>
+
+    <div class="detail-body">
+      <div class="detail-attributes">
+        <div class="attr">
+          <div class="attr-label">Domain</div>
+          <div class="attr-value">${g.domain}</div>
+        </div>
+        <div class="attr">
+          <div class="attr-label">Symbol</div>
+          <div class="attr-value">${g.symbol}</div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-title"><span class="section-num">I.</span> 본질 — De Natura</div>
+        <p class="detail-text">${g.desc}</p>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-title"><span class="section-num">II.</span> 신화 — Mythos</div>
+        <p class="detail-text">${g.story}</p>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-title"><span class="section-num">III.</span> 가족 관계 — Genealogia</div>
+        <div class="relations">${relationsHtml}</div>
+      </div>
+
+      <div class="ornament">❦ ❦ ❦</div>
+    </div>
+  `;
+
+  const view = document.getElementById('detail-view');
+  view.scrollTop = 0;
+  document.getElementById('app').dataset.view = 'detail';
+}
+
+function goBack() {
+  document.getElementById('app').dataset.view = 'tree';
+}
+
+function goHome() {
+  goBack();
+  setFilter('all');
+  if (typeof clearSearch === 'function') clearSearch();
+}
+
+function setFilter(filter) {
+  document.getElementById('app').dataset.filter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === filter);
+  });
+}
+
+// ============= SEARCH =============
+const searchInput = document.getElementById('search-input');
+const searchBox = document.getElementById('search-box');
+const searchMeta = document.getElementById('search-meta');
+const emptyText = document.getElementById('empty-text');
+
+function normalize(str) {
+  return (str || '').toString().toLowerCase().trim();
+}
+
+function highlightMatch(text, query) {
+  if (!query) return text;
+  const q = normalize(query);
+  const lower = text.toLowerCase();
+  const idx = lower.indexOf(q);
+  if (idx === -1) return text;
+  return text.slice(0, idx) +
+    '<mark>' + text.slice(idx, idx + q.length) + '</mark>' +
+    text.slice(idx + q.length);
+}
+
+function searchGods(query) {
+  const q = normalize(query);
+  const app = document.getElementById('app');
+
+  // Reset all cards first
+  document.querySelectorAll('.god-card').forEach(card => {
+    card.classList.remove('match');
+    const name = card.dataset.name;
+    const g = gods[name];
+    if (!g) return;
+    // Reset to original text
+    card.querySelector('.god-name-kr').innerHTML = name;
+    card.querySelector('.god-name-en').innerHTML = g.nameEn;
+    card.querySelector('.god-roman').innerHTML = g.roman;
+    card.querySelector('.god-domain').innerHTML = g.domain.split(',')[0];
+  });
+
+  if (!q) {
+    app.removeAttribute('data-search');
+    searchBox.classList.remove('has-value');
+    searchMeta.textContent = '';
+    return;
+  }
+
+  searchBox.classList.add('has-value');
+
+  // Find matches across multiple fields
+  let matchCount = 0;
+  document.querySelectorAll('.god-card').forEach(card => {
+    const name = card.dataset.name;
+    const g = gods[name];
+    if (!g) return;
+
+    const fields = {
+      kr: name,
+      en: g.nameEn,
+      roman: g.roman,
+      greek: g.greek,
+      domain: g.domain,
+      epithet: g.epithet
+    };
+
+    const matched = Object.values(fields).some(f =>
+      normalize(f).includes(q)
+    );
+
+    if (matched) {
+      card.classList.add('match');
+      matchCount++;
+      // Highlight in visible fields
+      if (normalize(name).includes(q)) {
+        card.querySelector('.god-name-kr').innerHTML = highlightMatch(name, q);
+      }
+      if (normalize(g.nameEn).includes(q)) {
+        card.querySelector('.god-name-en').innerHTML = highlightMatch(g.nameEn, q);
+      }
+      if (normalize(g.roman).includes(q)) {
+        card.querySelector('.god-roman').innerHTML = highlightMatch(g.roman, q);
+      }
+      const domainShort = g.domain.split(',')[0];
+      if (normalize(domainShort).includes(q)) {
+        card.querySelector('.god-domain').innerHTML = highlightMatch(domainShort, q);
+      }
+    }
+  });
+
+  if (matchCount === 0) {
+    app.dataset.search = 'empty';
+    emptyText.textContent = `"${query}"에 대한 결과가 없습니다`;
+    searchMeta.textContent = 'no result';
+  } else {
+    app.dataset.search = 'active';
+    searchMeta.textContent = `${matchCount} ${matchCount === 1 ? 'match' : 'matches'} found`;
+  }
+}
+
+function clearSearch() {
+  searchInput.value = '';
+  searchGods('');
+  searchInput.focus();
+}
+
+searchInput.addEventListener('input', e => searchGods(e.target.value));
+
+// ESC to clear
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    clearSearch();
+    searchInput.blur();
+  }
+});
+
+renderTree();
+</script>
+
+</body>
+</html>
