@@ -20,6 +20,7 @@
     --bronze: #4a3520;
     --line: rgba(74, 53, 32, 0.25);
     --line-strong: rgba(74, 53, 32, 0.5);
+    --pottery-black: #1a1410;
 
     --c-primordial: #6b5b47;
     --c-titan: #a67934;
@@ -104,15 +105,15 @@
   .brand-text { line-height: 1.1; }
   .brand-title {
     font-family: 'Cinzel', serif;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.18em;
-    font-size: 17px;
+    font-size: 19px;
     color: var(--ink);
   }
   .brand-sub {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 12px;
+    font-size: 13px;
     color: var(--ink-faded);
     letter-spacing: 0.05em;
     margin-top: 2px;
@@ -120,7 +121,8 @@
 
   .header-meta {
     font-family: 'Cinzel', serif;
-    font-size: 10px;
+    font-weight: 600;
+    font-size: 11px;
     letter-spacing: 0.25em;
     color: var(--ink-faded);
     text-align: right;
@@ -155,9 +157,9 @@
     background: transparent;
     border: none;
     outline: none;
-    padding: 10px 30px 10px 24px;
+    padding: 12px 30px 12px 26px;
     font-family: 'Noto Serif KR', 'Cormorant Garamond', serif;
-    font-size: 15px;
+    font-size: 16px;
     color: var(--ink);
     letter-spacing: 0.02em;
   }
@@ -166,6 +168,7 @@
     font-style: italic;
     color: var(--ink-faded);
     letter-spacing: 0.05em;
+    font-size: 15px;
   }
 
   .search-clear {
@@ -177,7 +180,7 @@
     border: none;
     cursor: pointer;
     color: var(--ink-faded);
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1;
     padding: 4px;
     display: none;
@@ -187,12 +190,13 @@
 
   .search-meta {
     font-family: 'Cinzel', serif;
-    font-size: 9px;
+    font-weight: 600;
+    font-size: 10px;
     letter-spacing: 0.25em;
     color: var(--ink-faded);
     margin-top: 6px;
     text-transform: uppercase;
-    min-height: 13px;
+    min-height: 14px;
   }
 
   /* ============= TAB FILTER ============= */
@@ -210,9 +214,10 @@
   .filter-btn {
     background: transparent;
     border: 1px solid var(--line);
-    padding: 7px 14px;
+    padding: 8px 16px;
     font-family: 'Cinzel', serif;
-    font-size: 10px;
+    font-weight: 600;
+    font-size: 11px;
     letter-spacing: 0.18em;
     color: var(--ink-soft);
     cursor: pointer;
@@ -242,23 +247,25 @@
     inset: 0;
     overflow-y: auto;
     transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.4s ease;
+    background: var(--parchment);
+    background-image:
+      radial-gradient(ellipse at top, rgba(184, 137, 61, 0.08), transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(122, 46, 31, 0.06), transparent 60%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.12 0 0 0 0 0.08 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   .view-tree { transform: translateX(0); }
   .view-detail {
     transform: translateX(100%);
-    opacity: 0;
     pointer-events: none;
   }
 
   .app[data-view="detail"] .view-tree {
     transform: translateX(-30%);
-    opacity: 0.3;
     pointer-events: none;
   }
   .app[data-view="detail"] .view-detail {
     transform: translateX(0);
-    opacity: 1;
     pointer-events: auto;
   }
 
@@ -274,7 +281,8 @@
 
   .tier-label {
     font-family: 'Cinzel', serif;
-    font-size: 10px;
+    font-weight: 700;
+    font-size: 11px;
     letter-spacing: 0.3em;
     color: var(--ink-faded);
     margin-bottom: 4px;
@@ -294,7 +302,7 @@
   .tier-greek {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 13px;
+    font-size: 15px;
     color: var(--ink-faded);
     text-align: center;
     margin-bottom: 18px;
@@ -316,12 +324,24 @@
   .god-card {
     background: linear-gradient(135deg, rgba(255, 252, 240, 0.6), rgba(232, 220, 192, 0.4));
     border: 1px solid var(--line);
-    padding: 14px 12px 12px;
+    padding: 18px 12px 14px;
     cursor: pointer;
     position: relative;
     transition: all 0.3s ease;
     text-align: center;
     overflow: hidden;
+  }
+
+  .symbol-icon {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 10px;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .god-card:hover .symbol-icon {
+    transform: scale(1.08);
   }
 
   .god-card::before {
@@ -361,24 +381,26 @@
   .god-name-kr {
     font-family: 'Noto Serif KR', serif;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 18px;
     color: var(--ink);
     letter-spacing: 0.02em;
   }
   .god-name-en {
     font-family: 'Cinzel', serif;
-    font-size: 9px;
+    font-weight: 600;
+    font-size: 11px;
     letter-spacing: 0.2em;
-    color: var(--ink-faded);
-    margin-top: 4px;
+    color: var(--ink-soft);
+    margin-top: 5px;
     text-transform: uppercase;
   }
   .god-roman {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 11px;
+    font-weight: 600;
+    font-size: 13px;
     color: var(--gold-deep);
-    margin-top: 2px;
+    margin-top: 3px;
     letter-spacing: 0.05em;
   }
   .god-roman::before { content: '— '; opacity: 0.6; }
@@ -387,9 +409,9 @@
   .god-domain {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 13px;
+    font-size: 15px;
     color: var(--ink-soft);
-    margin-top: 6px;
+    margin-top: 8px;
   }
 
   /* Search highlighting */
@@ -435,13 +457,14 @@
   .empty-text {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 18px;
+    font-size: 20px;
     color: var(--ink-soft);
     margin-bottom: 8px;
   }
   .empty-hint {
     font-family: 'Cinzel', serif;
-    font-size: 10px;
+    font-weight: 600;
+    font-size: 11px;
     letter-spacing: 0.25em;
     color: var(--ink-faded);
     text-transform: uppercase;
@@ -470,7 +493,7 @@
     padding: 0 10px;
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 11px;
+    font-size: 13px;
     color: var(--ink-faded);
     letter-spacing: 0.05em;
   }
@@ -480,20 +503,98 @@
     padding: 0 0 60px;
   }
 
+  /* God portrait image - shown only if image exists */
+  .god-portrait {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 32px 28px 8px;
+    display: none;
+  }
+  .god-portrait.has-image { display: block; }
+
+  .portrait-frame {
+    position: relative;
+    width: 100%;
+    padding: 14px;
+    background:
+      linear-gradient(135deg, rgba(255, 252, 240, 0.5), rgba(232, 220, 192, 0.3));
+    border: 1px solid var(--gold-deep);
+    box-shadow:
+      0 0 0 1px rgba(244, 236, 216, 0.8),
+      0 0 0 3px var(--gold),
+      0 0 0 4px rgba(139, 100, 32, 0.4),
+      0 4px 20px rgba(74, 53, 32, 0.15);
+  }
+
+  .portrait-frame::before, .portrait-frame::after {
+    content: '';
+    position: absolute;
+    left: 8px; right: 8px;
+    height: 8px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--gold-deep) 0, var(--gold-deep) 1px,
+      transparent 1px, transparent 3px,
+      var(--gold-deep) 3px, var(--gold-deep) 4px,
+      transparent 4px, transparent 8px
+    );
+    opacity: 0.5;
+  }
+  .portrait-frame::before { top: 3px; }
+  .portrait-frame::after { bottom: 3px; }
+
+  .portrait-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    position: relative;
+  }
+
+  /* Corner ornaments */
+  .portrait-corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--gold-deep);
+  }
+  .portrait-corner.tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .portrait-corner.tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+  .portrait-corner.bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+  .portrait-corner.br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  .portrait-caption {
+    text-align: center;
+    margin-top: 16px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-faded);
+    letter-spacing: 0.05em;
+  }
+  .portrait-caption::before, .portrait-caption::after {
+    content: '※';
+    color: var(--gold);
+    font-style: normal;
+    margin: 0 8px;
+    opacity: 0.6;
+  }
+
   .detail-back {
     position: sticky;
     top: 0;
     z-index: 5;
     background: rgba(244, 236, 216, 0.95);
     backdrop-filter: blur(8px);
-    padding: 14px 24px;
+    padding: 16px 24px;
     border-bottom: 1px solid var(--line);
     display: flex;
     align-items: center;
     gap: 8px;
     cursor: pointer;
     font-family: 'Cinzel', serif;
-    font-size: 10px;
+    font-weight: 600;
+    font-size: 11px;
     letter-spacing: 0.25em;
     color: var(--ink-soft);
     border: none;
@@ -522,7 +623,8 @@
 
   .detail-tier {
     font-family: 'Cinzel', serif;
-    font-size: 9px;
+    font-weight: 700;
+    font-size: 10px;
     letter-spacing: 0.35em;
     color: var(--accent, var(--gold-deep));
     text-transform: uppercase;
@@ -532,7 +634,7 @@
   .detail-name {
     font-family: 'Noto Serif KR', serif;
     font-weight: 700;
-    font-size: 44px;
+    font-size: 48px;
     color: var(--ink);
     letter-spacing: -0.01em;
     line-height: 1;
@@ -541,18 +643,19 @@
   .detail-greek {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-weight: 400;
-    font-size: 22px;
+    font-weight: 500;
+    font-size: 24px;
     color: var(--ink-soft);
-    margin-top: 10px;
+    margin-top: 12px;
   }
 
   .detail-roman {
     font-family: 'Cinzel', serif;
-    font-size: 11px;
+    font-weight: 600;
+    font-size: 12px;
     letter-spacing: 0.3em;
     color: var(--ink-faded);
-    margin-top: 14px;
+    margin-top: 16px;
     text-transform: uppercase;
   }
 
@@ -594,7 +697,8 @@
   }
   .attr-label {
     font-family: 'Cinzel', serif;
-    font-size: 9px;
+    font-weight: 600;
+    font-size: 10px;
     letter-spacing: 0.25em;
     color: var(--ink-faded);
     text-transform: uppercase;
@@ -602,7 +706,7 @@
   }
   .attr-value {
     font-family: 'Noto Serif KR', serif;
-    font-size: 14px;
+    font-size: 15px;
     color: var(--ink);
     line-height: 1.5;
   }
@@ -614,7 +718,8 @@
 
   .section-title {
     font-family: 'Cinzel', serif;
-    font-size: 11px;
+    font-weight: 700;
+    font-size: 12px;
     letter-spacing: 0.3em;
     color: var(--ink);
     text-transform: uppercase;
@@ -628,16 +733,16 @@
   .section-num {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-weight: 400;
+    font-weight: 500;
     color: var(--gold-deep);
-    font-size: 14px;
+    font-size: 16px;
     letter-spacing: 0;
   }
 
   .detail-text {
     font-family: 'Noto Serif KR', serif;
-    font-size: 15px;
-    line-height: 1.85;
+    font-size: 16px;
+    line-height: 1.9;
     color: var(--ink-soft);
     text-align: justify;
   }
@@ -673,16 +778,17 @@
   .relation-row:last-child { border-bottom: none; }
   .relation-label {
     font-family: 'Cinzel', serif;
-    font-size: 9px;
+    font-weight: 600;
+    font-size: 10px;
     letter-spacing: 0.2em;
     color: var(--ink-faded);
     text-transform: uppercase;
-    min-width: 70px;
+    min-width: 80px;
     flex-shrink: 0;
   }
   .relation-value {
     font-family: 'Noto Serif KR', serif;
-    font-size: 14px;
+    font-size: 15px;
     color: var(--ink);
     flex: 1;
   }
@@ -721,11 +827,14 @@
     .filters { padding: 10px 18px; }
     .tree-content { padding: 22px 18px 60px; }
     .detail-hero { padding: 32px 22px 26px; }
-    .detail-name { font-size: 34px; }
-    .detail-greek { font-size: 18px; }
+    .detail-name { font-size: 38px; }
+    .detail-greek { font-size: 20px; }
+    .detail-text { font-size: 15px; }
     .detail-body { padding: 26px 22px; }
-    .brand-title { font-size: 14px; }
-    .brand-mark { width: 32px; height: 32px; font-size: 15px; }
+    .brand-title { font-size: 16px; }
+    .brand-mark { width: 34px; height: 34px; font-size: 16px; }
+    .god-name-kr { font-size: 17px; }
+    .god-domain { font-size: 14px; }
   }
 </style>
 </head>
@@ -794,6 +903,41 @@
 
 <script>
 // ============= DATA =============
+// Symbol SVG paths for each god (rendered inside a circular seal)
+const symbols = {
+  '카오스': '<circle cx="24" cy="24" r="6" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="24" cy="24" r="11" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.6"/><circle cx="24" cy="24" r="2" fill="currentColor"/>',
+  '가이아': '<path d="M 12 32 Q 24 18 36 32 L 36 38 L 12 38 Z" fill="currentColor"/><path d="M 18 32 Q 20 26 22 32 M 26 32 Q 28 24 30 32" fill="none" stroke="#f4ecd8" stroke-width="1"/>',
+  '에로스': '<path d="M 24 14 Q 28 10 32 14 Q 34 18 30 22 L 24 28 L 18 22 Q 14 18 16 14 Q 20 10 24 14 Z" fill="currentColor"/><path d="M 14 32 L 34 32 M 30 28 L 34 32 L 30 36" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/>',
+  '우라노스': '<circle cx="24" cy="14" r="2.5" fill="currentColor"/><circle cx="14" cy="22" r="1.5" fill="currentColor"/><circle cx="34" cy="22" r="1.5" fill="currentColor"/><circle cx="18" cy="32" r="1.5" fill="currentColor"/><circle cx="30" cy="32" r="1.5" fill="currentColor"/><circle cx="24" cy="36" r="1.5" fill="currentColor"/><path d="M 24 14 L 14 22 L 18 32 L 24 36 L 30 32 L 34 22 Z" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.5"/>',
+  '크로노스': '<path d="M 14 12 Q 28 12 32 24 Q 30 32 22 34 L 18 32 L 16 28 L 14 24 Z" fill="currentColor"/><path d="M 22 34 L 24 38 L 22 38 Z" fill="currentColor"/>',
+  '레아': '<path d="M 16 28 Q 16 18 24 16 Q 32 18 32 28 L 30 30 L 18 30 Z" fill="currentColor"/><path d="M 20 32 L 28 32 M 21 35 L 27 35" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="24" cy="12" r="1.5" fill="currentColor"/>',
+  '오케아노스': '<path d="M 10 20 Q 16 16 22 20 Q 28 24 34 20 Q 38 18 38 18" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M 10 26 Q 16 22 22 26 Q 28 30 34 26 Q 38 24 38 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M 10 32 Q 16 28 22 32 Q 28 36 34 32 Q 38 30 38 30" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>',
+  '히페리온': '<circle cx="24" cy="24" r="6" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="24" y1="10" x2="24" y2="14"/><line x1="24" y1="34" x2="24" y2="38"/><line x1="10" y1="24" x2="14" y2="24"/><line x1="34" y1="24" x2="38" y2="24"/><line x1="14" y1="14" x2="17" y2="17"/><line x1="31" y1="31" x2="34" y2="34"/><line x1="34" y1="14" x2="31" y2="17"/><line x1="17" y1="31" x2="14" y2="34"/></g>',
+  '제우스': '<path d="M 28 10 L 19 26 L 25 26 L 17 38 L 30 22 L 24 22 L 30 10 Z" fill="currentColor"/>',
+  '헤라': '<path d="M 24 10 Q 32 12 32 22 Q 32 30 24 32 Q 16 30 16 22 Q 16 12 24 10 Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M 24 14 Q 28 16 28 22 Q 28 26 24 28 Q 20 26 20 22 Q 20 16 24 14 Z" fill="currentColor"/><circle cx="24" cy="36" r="1.5" fill="currentColor"/>',
+  '포세이돈': '<path d="M 14 12 L 14 18 L 18 14 L 18 22" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M 24 8 L 24 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M 34 12 L 34 18 L 30 14 L 30 22" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="14" y1="22" x2="34" y2="22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="24" y1="22" x2="24" y2="40" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+  '하데스': '<path d="M 14 22 Q 14 14 24 12 Q 34 14 34 22 L 34 32 L 30 36 L 18 36 L 14 32 Z" fill="currentColor"/><circle cx="20" cy="22" r="1.5" fill="#f4ecd8"/><circle cx="28" cy="22" r="1.5" fill="#f4ecd8"/><path d="M 20 30 L 28 30" stroke="#f4ecd8" stroke-width="1" stroke-linecap="round"/>',
+  '데메테르': '<path d="M 24 10 L 24 38" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M 24 14 L 20 12 M 24 14 L 28 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M 24 20 L 18 16 M 24 20 L 30 16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M 24 26 L 16 22 M 24 26 L 32 22" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M 24 32 L 16 28 M 24 32 L 32 28" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>',
+  '헤스티아': '<path d="M 16 36 L 16 26 L 24 18 L 32 26 L 32 36 Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M 22 36 L 22 28 Q 24 24 26 28 L 26 36 Z" fill="currentColor"/><path d="M 24 14 Q 22 10 24 8 Q 26 10 24 14 Z" fill="currentColor"/>',
+  '아테나': '<ellipse cx="24" cy="28" rx="11" ry="13" fill="currentColor"/><circle cx="19" cy="24" r="4" fill="#f4ecd8"/><circle cx="29" cy="24" r="4" fill="#f4ecd8"/><circle cx="19" cy="24" r="1.8" fill="currentColor"/><circle cx="29" cy="24" r="1.8" fill="currentColor"/><path d="M 21 30 L 24 33 L 27 30 Z" fill="#f4ecd8"/>',
+  '아폴론': '<path d="M 16 14 Q 12 18 14 26 Q 16 34 20 36" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M 32 14 Q 36 18 34 26 Q 32 34 28 36" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="16" y1="14" x2="32" y2="14" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="36" x2="28" y2="36" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="16" x2="20" y2="34" stroke="currentColor" stroke-width="0.8"/><line x1="24" y1="16" x2="24" y2="34" stroke="currentColor" stroke-width="0.8"/><line x1="28" y1="16" x2="28" y2="34" stroke="currentColor" stroke-width="0.8"/>',
+  '아르테미스': '<path d="M 14 10 Q 36 24 14 38" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="14" y1="10" x2="14" y2="38" stroke="currentColor" stroke-width="1.2"/><line x1="16" y1="24" x2="36" y2="24" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M 32 21 L 36 24 L 32 27" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/>',
+  '아레스': '<circle cx="20" cy="28" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="26" y1="22" x2="36" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M 32 10 L 38 10 L 38 16" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>',
+  '헤르메스': '<line x1="24" y1="10" x2="24" y2="40" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M 18 14 Q 14 16 16 10 Q 22 10 24 14" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M 30 14 Q 34 16 32 10 Q 26 10 24 14" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M 18 20 Q 30 23 18 26 Q 30 29 18 32" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M 30 20 Q 18 23 30 26 Q 18 29 30 32" stroke="currentColor" stroke-width="1.2" fill="none"/>',
+  '헤파이스토스': '<path d="M 10 30 L 22 18 L 26 22 L 14 34 Z" fill="currentColor"/><rect x="24" y="14" width="14" height="8" rx="1" fill="currentColor"/><path d="M 20 24 L 28 16" stroke="#f4ecd8" stroke-width="1"/>',
+  '디오니소스': '<circle cx="20" cy="20" r="3" fill="currentColor"/><circle cx="28" cy="20" r="3" fill="currentColor"/><circle cx="16" cy="26" r="3" fill="currentColor"/><circle cx="24" cy="26" r="3" fill="currentColor"/><circle cx="32" cy="26" r="3" fill="currentColor"/><circle cx="20" cy="32" r="3" fill="currentColor"/><circle cx="28" cy="32" r="3" fill="currentColor"/><path d="M 24 14 Q 22 10 18 12 Q 20 16 22 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>',
+  '아프로디테': '<path d="M 10 26 Q 14 18 24 18 Q 32 18 34 22 L 40 18 L 38 26 L 42 28 L 36 30 Q 32 36 24 36 Q 14 36 10 30 Q 8 28 10 26 Z" fill="currentColor"/><circle cx="34" cy="22" r="1" fill="#f4ecd8"/>'
+};
+
+function makeSeal(name, colorVar) {
+  const symbol = symbols[name] || '';
+  return `<svg class="symbol-icon" viewBox="0 0 48 48" style="color: ${colorVar};">
+    <circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="1.2"/>
+    <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.4"/>
+    ${symbol}
+  </svg>`;
+}
+
 const gods = {
   '카오스': {
     gen: 'primordial', tier: '태초의 신',
@@ -1056,7 +1200,15 @@ function renderTree() {
       item.nodes.forEach(name => {
         const g = gods[name];
         if (!g) return;
+        const sealColorMap = {
+          'primordial': 'var(--c-primordial)',
+          'titan': 'var(--c-titan)',
+          'olympian-1': 'var(--c-olympian-1)',
+          'olympian-2': 'var(--c-olympian-2)',
+          'special': 'var(--c-special)'
+        };
         html += `<button class="god-card" data-name="${name}" data-gen="${g.gen}" onclick="showGod('${name}')">
+          ${makeSeal(name, sealColorMap[g.gen])}
           <div class="god-name-kr">${name}</div>
           <div class="god-name-en">${g.nameEn}</div>
           <div class="god-roman">${g.roman}</div>
@@ -1098,6 +1250,22 @@ function showGod(name) {
   }
 
   document.getElementById('detail-container').innerHTML = `
+    <div class="god-portrait" id="portrait-${name}">
+      <div class="portrait-frame">
+        <span class="portrait-corner tl"></span>
+        <span class="portrait-corner tr"></span>
+        <span class="portrait-corner bl"></span>
+        <span class="portrait-corner br"></span>
+        <img
+          src="images/${name}.png"
+          alt="${name}"
+          onload="this.closest('.god-portrait').classList.add('has-image')"
+          onerror="this.closest('.god-portrait').remove()"
+        >
+      </div>
+      <div class="portrait-caption">${g.epithet}</div>
+    </div>
+
     <div class="detail-hero" style="--accent: ${accentMap[g.gen]}">
       <div class="detail-tier">${g.tier}</div>
       <h1 class="detail-name">${name}</h1>
