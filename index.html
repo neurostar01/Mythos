@@ -1223,10 +1223,10 @@ function renderTree() {
 }
 
 function handleImageError(img, nameEn) {
-  // Try .jpg as fallback in case file was uploaded as jpg
+  // Try .png as fallback in case file was uploaded as png
   if (!img.dataset.fallbackTried) {
     img.dataset.fallbackTried = '1';
-    img.src = 'images/' + nameEn + '.jpg';
+    img.src = 'images/' + nameEn + '.png';
     return;
   }
   // Both failed - hide silently
@@ -1269,7 +1269,7 @@ function showGod(name) {
         <span class="portrait-corner bl"></span>
         <span class="portrait-corner br"></span>
         <img
-          src="images/${g.nameEn}.png"
+          src="images/${g.nameEn}.jpg"
           alt="${name}"
           onload="this.closest('.god-portrait').classList.add('has-image')"
           onerror="handleImageError(this, '${g.nameEn}')"
