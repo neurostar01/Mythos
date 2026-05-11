@@ -1222,6 +1222,18 @@ function renderTree() {
   c.innerHTML = html;
 }
 
+function handleImageError(img, nameEn) {
+  // Try .jpg as fallback in case file was uploaded as jpg
+  if (!img.dataset.fallbackTried) {
+    img.dataset.fallbackTried = '1';
+    img.src = 'images/' + nameEn + '.jpg';
+    return;
+  }
+  // Both failed - hide silently
+  const portrait = img.closest('.god-portrait');
+  if (portrait) portrait.remove();
+}
+
 function showGod(name) {
   const g = gods[name];
   if (!g) return;
@@ -1257,10 +1269,10 @@ function showGod(name) {
         <span class="portrait-corner bl"></span>
         <span class="portrait-corner br"></span>
         <img
-          src="images/${name}.png"
+          src="images/${g.nameEn}.png"
           alt="${name}"
           onload="this.closest('.god-portrait').classList.add('has-image')"
-          onerror="this.closest('.god-portrait').remove()"
+          onerror="handleImageError(this, '${g.nameEn}')"
         >
       </div>
       <div class="portrait-caption">${g.epithet}</div>
