@@ -322,15 +322,44 @@
   }
 
   .god-card {
-    background: linear-gradient(135deg, rgba(255, 252, 240, 0.6), rgba(232, 220, 192, 0.4));
-    border: 1px solid var(--line);
-    padding: 18px 12px 14px;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(120, 92, 64, 0.5), transparent 55%),
+      radial-gradient(ellipse at 70% 85%, rgba(40, 30, 20, 0.6), transparent 50%),
+      linear-gradient(135deg, #4f3d2c 0%, #2a2018 100%);
+    border-top: 1px solid rgba(255, 220, 160, 0.4);
+    border-left: 1px solid rgba(255, 220, 160, 0.25);
+    border-right: 1px solid rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+    padding: 20px 12px 16px;
     cursor: pointer;
     position: relative;
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
     text-align: center;
     overflow: hidden;
+    box-shadow:
+      /* Top-left highlight inside */
+      inset 1px 1px 0 rgba(255, 220, 160, 0.3),
+      inset 2px 2px 4px rgba(255, 220, 160, 0.08),
+      /* Bottom-right shadow inside */
+      inset -1px -1px 0 rgba(0, 0, 0, 0.4),
+      inset -2px -2px 6px rgba(0, 0, 0, 0.4),
+      /* Outer drop shadow */
+      0 4px 8px rgba(0, 0, 0, 0.35),
+      0 6px 14px rgba(0, 0, 0, 0.25),
+      0 1px 0 rgba(0, 0, 0, 0.3);
   }
+
+  /* Marble texture overlay */
+  .god-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.65 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.7;
+    z-index: 0;
+  }
+  .god-card > * { position: relative; z-index: 1; }
 
   .symbol-icon {
     width: 44px;
@@ -338,30 +367,47 @@
     margin: 0 auto 10px;
     display: block;
     transition: transform 0.3s ease;
+    filter: drop-shadow(0 0 6px rgba(255, 200, 120, 0.3));
   }
 
   .god-card:hover .symbol-icon {
     transform: scale(1.08);
   }
 
+  /* Color accent strip on top */
   .god-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0;
     width: 100%;
     height: 3px;
-    background: var(--accent, var(--gold-deep));
+    background: var(--accent, var(--gold));
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.3s ease;
+    z-index: 2;
   }
 
   .god-card:hover {
-    border-color: var(--accent, var(--gold-deep));
-    transform: translateY(-2px);
-    background: rgba(255, 252, 240, 0.85);
+    transform: translateY(-4px);
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 220, 160, 0.4),
+      inset 2px 2px 4px rgba(255, 220, 160, 0.12),
+      inset -1px -1px 0 rgba(0, 0, 0, 0.4),
+      inset -2px -2px 6px rgba(0, 0, 0, 0.4),
+      0 10px 20px rgba(0, 0, 0, 0.45),
+      0 14px 28px rgba(0, 0, 0, 0.3),
+      0 0 0 1px var(--accent, var(--gold));
   }
   .god-card:hover::before { transform: scaleX(1); }
+
+  .god-card:active {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 220, 160, 0.2),
+      inset -1px -1px 0 rgba(0, 0, 0, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.3);
+  }
 
   .god-card[data-gen="primordial"] { --accent: var(--c-primordial); }
   .god-card[data-gen="titan"] { --accent: var(--c-titan); }
@@ -382,7 +428,7 @@
     font-family: 'Noto Serif KR', serif;
     font-weight: 600;
     font-size: 18px;
-    color: var(--ink);
+    color: #e8d9b8;
     letter-spacing: 0.02em;
   }
   .god-name-en {
@@ -390,7 +436,7 @@
     font-weight: 600;
     font-size: 11px;
     letter-spacing: 0.2em;
-    color: var(--ink-soft);
+    color: rgba(232, 217, 184, 0.7);
     margin-top: 5px;
     text-transform: uppercase;
   }
@@ -399,7 +445,7 @@
     font-style: italic;
     font-weight: 600;
     font-size: 13px;
-    color: var(--gold-deep);
+    color: var(--gold);
     margin-top: 3px;
     letter-spacing: 0.05em;
   }
@@ -410,8 +456,19 @@
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 15px;
-    color: var(--ink-soft);
+    color: rgba(232, 217, 184, 0.75);
     margin-top: 8px;
+  }
+
+  .god-mother {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--gold);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(255, 220, 160, 0.2);
+    letter-spacing: 0.03em;
   }
 
   /* Search highlighting */
@@ -812,6 +869,216 @@
     letter-spacing: 0.5em;
   }
 
+  /* ============= GALLERY ============= */
+  .detail-gallery {
+    padding: 0 28px;
+    margin-top: 32px;
+  }
+
+  .gallery-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .gallery-header .section-title {
+    justify-content: center;
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 6px;
+  }
+  .gallery-header .gallery-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-faded);
+    letter-spacing: 0.05em;
+  }
+  .gallery-header .gallery-divider {
+    margin: 14px auto 0;
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    position: relative;
+  }
+  .gallery-header .gallery-divider::before,
+  .gallery-header .gallery-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    background: var(--gold);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .gallery-header .gallery-divider::before { left: -10px; }
+  .gallery-header .gallery-divider::after { right: -10px; }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .gallery-grid.cols-1 { grid-template-columns: minmax(260px, 360px); justify-content: center; }
+  .gallery-grid.cols-2 { grid-template-columns: repeat(2, 1fr); max-width: 520px; margin: 0 auto; }
+
+  .artwork {
+    background: rgba(255, 252, 240, 0.5);
+    border: 1px solid var(--line);
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  .artwork:hover {
+    border-color: var(--gold-deep);
+    background: rgba(255, 252, 240, 0.95);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 53, 32, 0.1);
+  }
+
+  .artwork-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: var(--parchment-dark);
+    overflow: hidden;
+    border: 1px solid var(--gold-deep);
+    box-shadow: inset 0 0 0 1px rgba(244, 236, 216, 0.6);
+  }
+  .artwork-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .artwork:hover .artwork-image img {
+    transform: scale(1.05);
+  }
+
+  .artwork-info {
+    padding: 12px 4px 4px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .artwork-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .artwork-title-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+  }
+  .artwork-meta {
+    margin-top: auto;
+    padding-top: 10px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  /* ============= LIGHTBOX ============= */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 20, 16, 0.92);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    cursor: zoom-out;
+    overflow-y: auto;
+  }
+  .lightbox.active { display: flex; }
+
+  .lightbox-content {
+    max-width: 90vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: default;
+    margin: auto;
+  }
+
+  .lightbox img {
+    max-width: 100%;
+    max-height: 70vh;
+    border: 2px solid var(--gold);
+    background: var(--parchment);
+  }
+
+  .lightbox-caption {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--parchment);
+    max-width: 600px;
+  }
+  .lightbox-caption .title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .lightbox-caption .title-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: rgba(244, 236, 216, 0.7);
+    margin-top: 4px;
+  }
+  .lightbox-caption .meta {
+    margin-top: 10px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .lightbox-caption .desc {
+    margin-top: 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(244, 236, 216, 0.85);
+  }
+
+  .lightbox-close {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 1001;
+  }
+  .lightbox-close:hover {
+    background: var(--gold);
+    color: var(--ink);
+  }
+
   /* ============= SCROLLBAR ============= */
   .view::-webkit-scrollbar { width: 8px; }
   .view::-webkit-scrollbar-track { background: transparent; }
@@ -901,12 +1168,26 @@
   </div>
 </div>
 
+<!-- ============== LIGHTBOX ============== -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox(null, true)">CLOSE ×</button>
+  <div class="lightbox-content" onclick="event.stopPropagation()">
+    <img id="lb-img" src="" alt="">
+    <div class="lightbox-caption">
+      <div class="title" id="lb-title"></div>
+      <div class="title-en" id="lb-title-en"></div>
+      <div class="meta" id="lb-meta"></div>
+      <div class="desc" id="lb-desc"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ============= DATA =============
 // Symbol SVG paths for each god (rendered inside a circular seal)
 const symbols = {
   '카오스': '<circle cx="24" cy="24" r="6" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="24" cy="24" r="11" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.6"/><circle cx="24" cy="24" r="2" fill="currentColor"/>',
-  '가이아': '<path d="M 12 32 Q 24 18 36 32 L 36 38 L 12 38 Z" fill="currentColor"/><path d="M 18 32 Q 20 26 22 32 M 26 32 Q 28 24 30 32" fill="none" stroke="#f4ecd8" stroke-width="1"/>',
+  '가이아': '<path d="M 12 32 Q 24 18 36 32 L 36 38 L 12 38 Z" fill="currentColor"/><path d="M 18 32 Q 20 26 22 32 M 26 32 Q 28 24 30 32" fill="none" stroke="#2e2419" stroke-width="1"/>',
   '에로스': '<path d="M 24 14 Q 28 10 32 14 Q 34 18 30 22 L 24 28 L 18 22 Q 14 18 16 14 Q 20 10 24 14 Z" fill="currentColor"/><path d="M 14 32 L 34 32 M 30 28 L 34 32 L 30 36" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/>',
   '우라노스': '<circle cx="24" cy="14" r="2.5" fill="currentColor"/><circle cx="14" cy="22" r="1.5" fill="currentColor"/><circle cx="34" cy="22" r="1.5" fill="currentColor"/><circle cx="18" cy="32" r="1.5" fill="currentColor"/><circle cx="30" cy="32" r="1.5" fill="currentColor"/><circle cx="24" cy="36" r="1.5" fill="currentColor"/><path d="M 24 14 L 14 22 L 18 32 L 24 36 L 30 32 L 34 22 Z" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.5"/>',
   '크로노스': '<path d="M 14 12 Q 28 12 32 24 Q 30 32 22 34 L 18 32 L 16 28 L 14 24 Z" fill="currentColor"/><path d="M 22 34 L 24 38 L 22 38 Z" fill="currentColor"/>',
@@ -916,17 +1197,17 @@ const symbols = {
   '제우스': '<path d="M 28 10 L 19 26 L 25 26 L 17 38 L 30 22 L 24 22 L 30 10 Z" fill="currentColor"/>',
   '헤라': '<path d="M 24 10 Q 32 12 32 22 Q 32 30 24 32 Q 16 30 16 22 Q 16 12 24 10 Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M 24 14 Q 28 16 28 22 Q 28 26 24 28 Q 20 26 20 22 Q 20 16 24 14 Z" fill="currentColor"/><circle cx="24" cy="36" r="1.5" fill="currentColor"/>',
   '포세이돈': '<path d="M 14 12 L 14 18 L 18 14 L 18 22" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M 24 8 L 24 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M 34 12 L 34 18 L 30 14 L 30 22" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="14" y1="22" x2="34" y2="22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="24" y1="22" x2="24" y2="40" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-  '하데스': '<path d="M 14 22 Q 14 14 24 12 Q 34 14 34 22 L 34 32 L 30 36 L 18 36 L 14 32 Z" fill="currentColor"/><circle cx="20" cy="22" r="1.5" fill="#f4ecd8"/><circle cx="28" cy="22" r="1.5" fill="#f4ecd8"/><path d="M 20 30 L 28 30" stroke="#f4ecd8" stroke-width="1" stroke-linecap="round"/>',
+  '하데스': '<path d="M 14 22 Q 14 14 24 12 Q 34 14 34 22 L 34 32 L 30 36 L 18 36 L 14 32 Z" fill="currentColor"/><circle cx="20" cy="22" r="1.5" fill="#2e2419"/><circle cx="28" cy="22" r="1.5" fill="#2e2419"/><path d="M 20 30 L 28 30" stroke="#2e2419" stroke-width="1" stroke-linecap="round"/>',
   '데메테르': '<path d="M 24 10 L 24 38" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M 24 14 L 20 12 M 24 14 L 28 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M 24 20 L 18 16 M 24 20 L 30 16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M 24 26 L 16 22 M 24 26 L 32 22" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M 24 32 L 16 28 M 24 32 L 32 28" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>',
   '헤스티아': '<path d="M 16 36 L 16 26 L 24 18 L 32 26 L 32 36 Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M 22 36 L 22 28 Q 24 24 26 28 L 26 36 Z" fill="currentColor"/><path d="M 24 14 Q 22 10 24 8 Q 26 10 24 14 Z" fill="currentColor"/>',
-  '아테나': '<ellipse cx="24" cy="28" rx="11" ry="13" fill="currentColor"/><circle cx="19" cy="24" r="4" fill="#f4ecd8"/><circle cx="29" cy="24" r="4" fill="#f4ecd8"/><circle cx="19" cy="24" r="1.8" fill="currentColor"/><circle cx="29" cy="24" r="1.8" fill="currentColor"/><path d="M 21 30 L 24 33 L 27 30 Z" fill="#f4ecd8"/>',
+  '아테나': '<ellipse cx="24" cy="28" rx="11" ry="13" fill="currentColor"/><circle cx="19" cy="24" r="4" fill="#2e2419"/><circle cx="29" cy="24" r="4" fill="#2e2419"/><circle cx="19" cy="24" r="1.8" fill="currentColor"/><circle cx="29" cy="24" r="1.8" fill="currentColor"/><path d="M 21 30 L 24 33 L 27 30 Z" fill="#2e2419"/>',
   '아폴론': '<path d="M 16 14 Q 12 18 14 26 Q 16 34 20 36" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M 32 14 Q 36 18 34 26 Q 32 34 28 36" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="16" y1="14" x2="32" y2="14" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="36" x2="28" y2="36" stroke="currentColor" stroke-width="1.5"/><line x1="20" y1="16" x2="20" y2="34" stroke="currentColor" stroke-width="0.8"/><line x1="24" y1="16" x2="24" y2="34" stroke="currentColor" stroke-width="0.8"/><line x1="28" y1="16" x2="28" y2="34" stroke="currentColor" stroke-width="0.8"/>',
   '아르테미스': '<path d="M 14 10 Q 36 24 14 38" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="14" y1="10" x2="14" y2="38" stroke="currentColor" stroke-width="1.2"/><line x1="16" y1="24" x2="36" y2="24" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M 32 21 L 36 24 L 32 27" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/>',
   '아레스': '<circle cx="20" cy="28" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="26" y1="22" x2="36" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M 32 10 L 38 10 L 38 16" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>',
   '헤르메스': '<line x1="24" y1="10" x2="24" y2="40" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M 18 14 Q 14 16 16 10 Q 22 10 24 14" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M 30 14 Q 34 16 32 10 Q 26 10 24 14" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M 18 20 Q 30 23 18 26 Q 30 29 18 32" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M 30 20 Q 18 23 30 26 Q 18 29 30 32" stroke="currentColor" stroke-width="1.2" fill="none"/>',
-  '헤파이스토스': '<path d="M 10 30 L 22 18 L 26 22 L 14 34 Z" fill="currentColor"/><rect x="24" y="14" width="14" height="8" rx="1" fill="currentColor"/><path d="M 20 24 L 28 16" stroke="#f4ecd8" stroke-width="1"/>',
+  '헤파이스토스': '<path d="M 10 30 L 22 18 L 26 22 L 14 34 Z" fill="currentColor"/><rect x="24" y="14" width="14" height="8" rx="1" fill="currentColor"/><path d="M 20 24 L 28 16" stroke="#2e2419" stroke-width="1"/>',
   '디오니소스': '<circle cx="20" cy="20" r="3" fill="currentColor"/><circle cx="28" cy="20" r="3" fill="currentColor"/><circle cx="16" cy="26" r="3" fill="currentColor"/><circle cx="24" cy="26" r="3" fill="currentColor"/><circle cx="32" cy="26" r="3" fill="currentColor"/><circle cx="20" cy="32" r="3" fill="currentColor"/><circle cx="28" cy="32" r="3" fill="currentColor"/><path d="M 24 14 Q 22 10 18 12 Q 20 16 22 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>',
-  '아프로디테': '<path d="M 10 26 Q 14 18 24 18 Q 32 18 34 22 L 40 18 L 38 26 L 42 28 L 36 30 Q 32 36 24 36 Q 14 36 10 30 Q 8 28 10 26 Z" fill="currentColor"/><circle cx="34" cy="22" r="1" fill="#f4ecd8"/>'
+  '아프로디테': '<path d="M 10 26 Q 14 18 24 18 Q 32 18 34 22 L 40 18 L 38 26 L 42 28 L 36 30 Q 32 36 24 36 Q 14 36 10 30 Q 8 28 10 26 Z" fill="currentColor"/><circle cx="34" cy="22" r="1" fill="#2e2419"/>'
 };
 
 function makeSeal(name, colorVar) {
@@ -937,6 +1218,400 @@ function makeSeal(name, colorVar) {
     ${symbol}
   </svg>`;
 }
+
+// ============= GALLERY DATA =============
+// Each god has artworks from Wikimedia Commons (Public Domain)
+const galleries = {
+  '카오스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/4/45/George_Frederic_Watts_-_Chaos_-_N01647_-_National_Gallery.jpg',
+      title: '카오스', titleEn: 'Chaos',
+      meta: 'G.F. 와츠 · 1875 · 테이트',
+      desc: '빅토리아 시대 화가 와츠가 그린 우주의 시원적 혼돈. 거인들의 거대한 형상으로 만물의 시작을 표현했다.'
+    }
+  ],
+
+  '가이아': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/1/13/Anselm_Feuerbach_-_Gaea.jpg',
+      title: '가이아', titleEn: 'Gaea',
+      meta: '안젤름 포이어바흐 · 1875 · 빈 미술관 천장화',
+      desc: '대지의 어머니로서 가이아를 그린 독일 신고전주의 작품. 그녀를 둘러싼 풍요와 만물의 어머니로서의 위엄이 표현되어 있다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Mosaic_Gaia_Philadelphia_Archaeological_Museum.jpg',
+      title: '가이아 모자이크', titleEn: 'Gaia Mosaic',
+      meta: '비잔틴 시대 · 6세기 · 필라델피아 박물관',
+      desc: '풍요로운 대지의 여신을 표현한 비잔틴 모자이크. 곡식과 과일이 함께 묘사되어 다산의 어머니라는 그녀의 본성을 보여준다.'
+    }
+  ],
+
+  '에로스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/8/82/Fran%C3%A7ois_G%C3%A9rard_-_Psyche_et_l%27Amour.jpg',
+      title: '프시케와 에로스', titleEn: 'Psyche and Cupid',
+      meta: '프랑수아 제라르 · 1798 · 루브르',
+      desc: '신고전주의 거장 제라르의 대표작. 인간 처녀 프시케와 사랑에 빠진 에로스가 입맞춤하는 결정적 순간을 우아하게 포착했다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Antonio_Canova-Cupid_and_Psyche-Louvre.jpg',
+      title: '에로스의 입맞춤으로 깨어나는 프시케', titleEn: 'Psyche Revived by Cupid',
+      meta: '안토니오 카노바 · 1793 · 루브르',
+      desc: '신고전주의 조각의 최고봉. 죽음에서 깨어나는 프시케를 안아 올리는 에로스의 모습이 대리석으로 표현되었다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/6/64/William-Adolphe_Bouguereau_%281825-1905%29_-_The_Abduction_of_Psyche_%281895%29.jpg',
+      title: '프시케의 납치', titleEn: 'The Abduction of Psyche',
+      meta: '윌리엄 부그로 · 1895',
+      desc: '날개 달린 에로스가 잠든 프시케를 하늘로 들어 올리는 장면. 부그로의 아카데미즘 양식이 빛난다.'
+    }
+  ],
+
+  '우라노스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Giorgio_Vasari_-_The_Mutilation_of_Uranus_by_Saturn.jpg',
+      title: '크로노스에 의한 우라노스의 거세', titleEn: 'The Mutilation of Uranus by Saturn',
+      meta: '조르조 바사리 · 1560 · 베키오 궁',
+      desc: '르네상스 거장 바사리가 그린 신화의 첫 권력 교체. 가이아의 청을 받은 크로노스가 낫을 들고 아버지를 거세하는 충격적 순간.'
+    }
+  ],
+
+  '크로노스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/8/82/Francisco_de_Goya%2C_Saturno_devorando_a_su_hijo_%281819-1823%29.jpg',
+      title: '자식을 삼키는 사투르누스', titleEn: 'Saturn Devouring His Son',
+      meta: '프란시스코 고야 · 1823 · 프라도',
+      desc: '고야의 "검은 그림" 연작 중 가장 충격적인 작품. 자식을 삼키는 크로노스의 광기를 적나라하게 그렸다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Peter_Paul_Rubens_-_Saturn%2C_Jupiter%27s_father%2C_devours_one_of_his_sons%2C_Neptune.jpg',
+      title: '아들을 삼키는 사투르누스', titleEn: 'Saturn Devouring His Son',
+      meta: '루벤스 · 1636 · 프라도',
+      desc: '같은 주제를 루벤스가 바로크 양식으로 그린 작품. 고야의 광기와는 달리 위엄 있는 노인의 모습으로 표현되었다.'
+    }
+  ],
+
+  '레아': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/8/87/Rhea_presenting_a_stone_to_Cronus.jpg',
+      title: '크로노스에게 돌을 건네는 레아', titleEn: 'Rhea Presenting a Stone to Cronus',
+      meta: '카를 프리드리히 슈인켈 · 19세기',
+      desc: '아기 제우스 대신 강보에 싼 돌을 건네는 결정적 순간. 레아의 지혜로운 어머니로서의 면모가 잘 드러난다.'
+    }
+  ],
+
+  '오케아노스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Mosaic_Oceanus_BM_GR1859.12-26.60.jpg',
+      title: '오케아노스 모자이크', titleEn: 'Oceanus Mosaic',
+      meta: '로마 시대 · 2세기 · 대영박물관',
+      desc: '세상을 둘러싼 거대한 강의 신을 묘사한 로마 모자이크. 게의 집게발이 머리에서 솟아나오는 독특한 도상이 특징.'
+    }
+  ],
+
+  '히페리온': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/4/40/Hyperion%2C_Helios%2C_God_of_Sun_-_panoramio.jpg',
+      title: '태양신', titleEn: 'God of the Sun',
+      meta: '고대 그리스 양식 · 부조',
+      desc: '히페리온은 직접 묘사가 드물고 주로 그의 아들 헬리오스를 통해 표현된다. 태양 마차를 모는 도상이 후대 아폴론으로 이어졌다.'
+    }
+  ],
+
+  '제우스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Statue_of_Zeus.jpg',
+      title: '올림피아의 제우스상', titleEn: 'Statue of Zeus at Olympia',
+      meta: '피디아스 원작 · 기원전 435년',
+      desc: '세계 7대 불가사의 중 하나. 높이 12m의 거대한 좌상이었다. 5세기경 화재로 소실되어 동시대 동전과 후대 묘사로만 알 수 있다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/d/d6/Jean_Auguste_Dominique_Ingres_-_Jupiter_and_Thetis_-_Google_Art_Project.jpg',
+      title: '유피테르와 테티스', titleEn: 'Jupiter and Thetis',
+      meta: '앵그르 · 1811 · 그라네 미술관',
+      desc: '바다 요정 테티스가 아들 아킬레우스를 위해 제우스에게 청을 올리는 장면. 신고전주의 거장 앵그르의 대표작.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/5/55/Cornelis_van_Haarlem_-_The_Fall_of_the_Titans_-_Google_Art_Project.jpg',
+      title: '티탄족의 추락', titleEn: 'The Fall of the Titans',
+      meta: '코르넬리스 판 하를럼 · 1588 · SMK',
+      desc: '제우스가 형제들을 구한 뒤 티탄들과 벌인 10년 전쟁(티타노마키아)의 결말. 패배한 티탄들이 타르타로스로 추락하는 장면.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Peter_Paul_Rubens_-_The_Rape_of_Europa.jpg',
+      title: '에우로페의 납치', titleEn: 'The Rape of Europa',
+      meta: '루벤스 · 1632 · 프라도',
+      desc: '페니키아 공주 에우로페에게 반한 제우스가 흰 황소로 변신해 그녀를 크레타로 데려가는 장면. "유럽"이라는 지명의 유래.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Zeus_Otricoli_Pio-Clementino_Inv257.jpg',
+      title: '오트리콜리 제우스 두상', titleEn: 'Zeus of Otricoli',
+      meta: '로마 시대 모각 · 바티칸',
+      desc: '제우스 도상의 표준이 된 가장 유명한 두상. 위엄 있는 수염과 사자 갈기 같은 머리가 이후 모든 제우스상의 모델이 되었다.'
+    }
+  ],
+
+  '헤라': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Jacques_Louis_Dubois_-_Jupiter_und_Juno_auf_dem_Berge_Ida.jpg',
+      title: '이다 산의 유피테르와 유노', titleEn: 'Jupiter and Juno on Mount Ida',
+      meta: '자크 루이 뒤부아 · 19세기',
+      desc: '트로이 전쟁 중 헤라가 제우스를 유혹해 잠들게 하는 장면. 그녀의 정치적 지능과 미모가 한꺼번에 드러나는 일화.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Hera_Campana_Louvre_Ma2283.jpg',
+      title: '캄파나 헤라상', titleEn: 'Hera Campana',
+      meta: '로마 시대 · 2세기 · 루브르',
+      desc: '그리스 원작을 모방한 로마 시대 대리석상. 왕홀을 든 위엄 있는 자세로 결혼과 가정의 수호 여신을 표현했다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/7/77/Peter_Paul_Rubens_-_Juno_and_Argus_-_WGA20299.jpg',
+      title: '유노와 아르고스', titleEn: 'Juno and Argus',
+      meta: '루벤스 · 1611 · 발라프 리하르츠 미술관',
+      desc: '제우스의 외도 상대 이오를 감시하던 백 개의 눈을 가진 거인 아르고스. 헤라가 그의 눈을 공작의 꼬리에 옮겨 박은 일화.'
+    }
+  ],
+
+  '포세이돈': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/8/84/0036MAN_Poseidon.jpg',
+      title: '아르테미시온의 청동상', titleEn: 'Artemision Bronze',
+      meta: '고대 그리스 · 기원전 460년 · 아테네 국립박물관',
+      desc: '바다에서 인양된 거대한 청동상. 포세이돈인지 제우스인지 학계에서 논쟁이 있지만, 가장 유명한 신상 중 하나다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/c/c0/Walter_Crane_-_Neptune%27s_Horses.jpg',
+      title: '넵튠의 말들', titleEn: "Neptune's Horses",
+      meta: '월터 크레인 · 1893',
+      desc: '파도가 곧 포세이돈의 백마들이 되어 달려가는 환상적 장면. 영국 라파엘전파의 유려한 곡선이 돋보인다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/8/85/Triumph_of_Neptune_Sousse.jpg',
+      title: '포세이돈의 개선', titleEn: 'Triumph of Neptune',
+      meta: '로마 모자이크 · 3세기 · 수스 박물관',
+      desc: '돌고래가 끄는 전차를 탄 포세이돈의 위풍당당한 모습. 로마 시대 모자이크의 걸작.'
+    }
+  ],
+
+  '하데스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/4/4d/The_Rape_of_Proserpina_by_Gian_Lorenzo_Bernini_-_Galleria_Borghese_-_Roma_2021.jpg',
+      title: '페르세포네의 납치', titleEn: 'The Rape of Proserpina',
+      meta: '베르니니 · 1622 · 보르게세 미술관',
+      desc: '바로크 조각의 최고봉. 하데스의 손가락이 페르세포네의 허벅지를 누르는 부분에서 대리석이 진짜 살처럼 패이는 마법이 일어난다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/9/94/Pluto_-_Caravaggio.jpg',
+      title: '플루토', titleEn: 'Pluto',
+      meta: '아고스티노 카라치 · 16세기',
+      desc: '저승의 왕 하데스를 그린 르네상스 후기 작품. 충견 케르베로스가 그의 곁에 있다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Heinrich_Friedrich_F%C3%BCger_-_Orpheus_und_Eurydike.jpg',
+      title: '오르페우스와 에우리디케 그리고 하데스', titleEn: 'Orpheus and Eurydice before Hades',
+      meta: '하인리히 퓌거 · 1806',
+      desc: '죽은 아내를 찾아 저승에 내려간 오르페우스가 하데스와 페르세포네 앞에서 노래하는 장면.'
+    }
+  ],
+
+  '데메테르': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Frederic_Leighton_-_The_Return_of_Persephone_%281891%29.jpg',
+      title: '페르세포네의 귀환', titleEn: 'The Return of Persephone',
+      meta: '프레더릭 레이턴 · 1891 · 리즈 아트 갤러리',
+      desc: '봄이 되어 지상으로 올라온 페르세포네를 데메테르가 두 팔 벌려 맞이하는 감동적 장면. 라파엘전파 양식의 절정.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/5/55/Demeter_Altemps_Inv8546.jpg',
+      title: '데메테르 알템프스상', titleEn: 'Demeter Altemps',
+      meta: '로마 시대 · 1세기 · 로마 국립박물관',
+      desc: '그리스 원작을 모방한 로마 시대 좌상. 풍요의 뿔과 곡식 다발을 든 곡물 여신의 전형적 도상.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/0/02/Dante_Gabriel_Rossetti_-_Proserpine_-_Google_Art_Project.jpg',
+      title: '페르세포네', titleEn: 'Proserpine',
+      meta: '단테 가브리엘 로세티 · 1874 · 테이트',
+      desc: '석류 한 알을 든 페르세포네. 이 석류가 그녀를 영원히 저승과 연결시켰고, 어머니 데메테르의 비극의 시작이었다.'
+    }
+  ],
+
+  '헤스티아': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/2/26/Hestia_Giustiniani.jpg',
+      title: '주스티니아니의 헤스티아', titleEn: 'Hestia Giustiniani',
+      meta: '그리스 원작 모각 · 토르를로니아 박물관',
+      desc: '베일을 쓴 헤스티아의 가장 유명한 조각상. 그녀의 처녀성과 신성한 분위기가 베일을 통해 표현된다.'
+    }
+  ],
+
+  '아테나': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/9/9e/Mattei_Athena_Louvre_Ma530_n2.jpg',
+      title: '마테이 아테나', titleEn: 'Mattei Athena',
+      meta: '그리스 원작 모각 · 루브르',
+      desc: '평화로운 자세의 아테나. 무력보다 지혜를 상징하는 도상으로, 창과 방패를 든 호전적 모습과는 대조적이다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/0/05/Gustav_Klimt_-_Pallas_Athene_-_Google_Art_Project.jpg',
+      title: '팔라스 아테나', titleEn: 'Pallas Athena',
+      meta: '구스타프 클림트 · 1898 · 빈 미술관',
+      desc: '클림트의 황금기 직전 작품. 메두사 머리가 그려진 아이기스 갑옷과 황금빛 투구로 빈 분리파의 상징이 되었다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/3/31/Rene-Antoine_Houasse_-_Minerva_Teaching_Weaving_to_a_Young_Girl.jpg',
+      title: '아테나와 아라크네', titleEn: 'Minerva and Arachne',
+      meta: '르네앙투안 우아스 · 1706 · 베르사유',
+      desc: '직조 솜씨를 자랑하던 아라크네가 아테나에게 도전했다가 거미로 변하게 되는 신화의 한 장면.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/5/57/Birth_of_Athena.jpg',
+      title: '아테나의 탄생', titleEn: 'Birth of Athena',
+      meta: '그리스 도자기화 · 기원전 540년',
+      desc: '제우스의 머리에서 완전무장한 채 튀어나오는 아테나. 헤파이스토스가 도끼로 머리를 가르는 결정적 순간.'
+    }
+  ],
+
+  '아폴론': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/Apollo_of_the_Belvedere.jpg',
+      title: '벨베데레의 아폴론', titleEn: 'Apollo Belvedere',
+      meta: '그리스 원작 모각 · 바티칸',
+      desc: '서양 미술사상 가장 영향력 있는 조각상 중 하나. 르네상스부터 신고전주의까지 모든 화가가 이상적 남성미의 기준으로 삼았다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/Apollo_and_Daphne_%28Bernini%29_Galleria_Borghese_n2.jpg',
+      title: '아폴론과 다프네', titleEn: 'Apollo and Daphne',
+      meta: '베르니니 · 1625 · 보르게세 미술관',
+      desc: '월계수로 변하는 다프네의 손가락이 잎으로 바뀌는 찰나의 마법. 바로크 조각의 기적이라 불리는 작품.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/6/68/Eug%C3%A8ne_Delacroix_-_Apollo_Slays_Python.jpg',
+      title: '피톤을 죽이는 아폴론', titleEn: 'Apollo Slays Python',
+      meta: '들라크루아 · 1851 · 루브르 천장화',
+      desc: '들라크루아가 루브르의 갤러리 천장에 그린 거대한 작품. 빛(아폴론)이 어둠(피톤)을 무찌르는 우주적 알레고리.'
+    }
+  ],
+
+  '아르테미스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/0/0a/Diane_de_Versailles_Leochares.jpg',
+      title: '베르사유의 디아나', titleEn: 'Diana of Versailles',
+      meta: '레오카레스 추정 · 기원전 4세기 · 루브르',
+      desc: '사슴과 함께 활을 잡는 아르테미스. 그녀의 도상을 결정지은 가장 유명한 조각상.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/Titian_-_Diana_and_Actaeon_-_1556-1559.jpg',
+      title: '디아나와 악타이온', titleEn: 'Diana and Actaeon',
+      meta: '티치아노 · 1559 · 스코틀랜드 국립미술관',
+      desc: '목욕하는 아르테미스를 우연히 본 사냥꾼 악타이온이 사슴으로 변해 자기 사냥개에게 찢겨 죽는 비극의 시작.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/c/c8/Statue_of_Artemis_of_Ephesus.jpg',
+      title: '에페소스의 아르테미스', titleEn: 'Artemis of Ephesus',
+      meta: '로마 시대 · 1세기 · 에페소스 박물관',
+      desc: '소아시아의 다산 신앙이 결합된 독특한 도상. 가슴에 여러 개의 유방(또는 황소 고환)이 달려 있어 풍요의 여신으로 숭배받았다.'
+    }
+  ],
+
+  '아레스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/4/49/Ares_Ludovisi_Altemps_Inv8602_n3.jpg',
+      title: '루도비시 아레스', titleEn: 'Ludovisi Ares',
+      meta: '리시포스 원작 모각 · 알템프스 궁',
+      desc: '앉아서 쉬고 있는 전쟁의 신. 발치에 에로스가 그를 올려다보는데, 아프로디테와의 사랑을 암시한다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/3/32/Sandro_Botticelli_-_Venus_and_Mars_-_National_Gallery%2C_London.jpg',
+      title: '비너스와 마르스', titleEn: 'Venus and Mars',
+      meta: '보티첼리 · 1485 · 런던 국립미술관',
+      desc: '비너스(아프로디테) 앞에서 잠든 마르스(아레스). 사랑이 전쟁을 잠재운다는 르네상스의 알레고리.'
+    }
+  ],
+
+  '헤르메스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/0/0c/Hermes_di_Prassitele%2C_at_Olimpia%2C_Greece.jpg',
+      title: '디오니소스를 안은 헤르메스', titleEn: 'Hermes and the Infant Dionysus',
+      meta: '프락시텔레스 · 기원전 4세기 · 올림피아 박물관',
+      desc: '프락시텔레스의 유일하게 현존하는 원작으로 추정되는 걸작. 아기 디오니소스를 안고 살짝 미소 짓는 헤르메스.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Mercure_attachant_ses_talonni%C3%A8res%2C_dit_Mercure_de_Pigalle_Louvre_LP_45.jpg',
+      title: '날개 신발을 매는 메르쿠리우스', titleEn: 'Mercury Attaching His Wings',
+      meta: '장 바티스트 피갈 · 1744 · 루브르',
+      desc: '여행을 떠나기 직전, 날개 달린 샌들을 매는 헤르메스의 순간을 포착했다. 18세기 프랑스 조각의 대표작.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/8/80/Giambologna_mercury.jpg',
+      title: '비행하는 메르쿠리우스', titleEn: 'Flying Mercury',
+      meta: '잠볼로냐 · 1580 · 바르젤로 박물관',
+      desc: '한 발끝으로 균형을 잡으며 하늘로 날아오르는 헤르메스. 매너리즘 조각의 절정으로 평가된다.'
+    }
+  ],
+
+  '헤파이스토스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/3/3c/Diego_Vel%C3%A1zquez_-_The_Forge_of_Vulcan_-_Google_Art_Project.jpg',
+      title: '불카누스의 대장간', titleEn: 'The Forge of Vulcan',
+      meta: '벨라스케스 · 1630 · 프라도',
+      desc: '아폴론이 헤파이스토스에게 아내 아프로디테와 아레스의 불륜을 알려주는 순간. 대장장이들의 충격이 그대로 드러난다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/c/c9/Forge_of_Vulcan_-_Vasari.jpg',
+      title: '불카누스의 대장간', titleEn: 'The Forge of Vulcan',
+      meta: '조르조 바사리 · 1565 · 우피치',
+      desc: '바사리가 그린 신들의 무기 제작소. 아테나·헤르메스 등 다른 신들도 함께 등장한다.'
+    }
+  ],
+
+  '디오니소스': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/Titian_Bacchus_and_Ariadne.jpg',
+      title: '바쿠스와 아리아드네', titleEn: 'Bacchus and Ariadne',
+      meta: '티치아노 · 1523 · 런던 국립미술관',
+      desc: '낙소스 섬에서 버려진 아리아드네에게 첫눈에 반한 디오니소스가 표범 마차에서 뛰어내리는 결정적 순간.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Michelangelo_Bacchus.jpg',
+      title: '바쿠스', titleEn: 'Bacchus',
+      meta: '미켈란젤로 · 1497 · 바르젤로',
+      desc: '미켈란젤로 초기의 걸작. 술에 취해 비틀거리는 디오니소스의 모습이 매우 사실적이다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Caravaggio_-_Bacco_adolescente_-_Google_Art_Project.jpg',
+      title: '바쿠스', titleEn: 'Bacchus',
+      meta: '카라바조 · 1596 · 우피치',
+      desc: '관능적이고 도발적인 카라바조의 바쿠스. 포도주잔을 든 그의 시선이 화면 너머의 관객을 직시한다.'
+    }
+  ],
+
+  '아프로디테': [
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg',
+      title: '비너스의 탄생', titleEn: 'The Birth of Venus',
+      meta: '보티첼리 · 1485 · 우피치',
+      desc: '서양 미술사상 가장 유명한 작품 중 하나. 바다의 거품에서 태어난 비너스가 조개를 타고 키프로스 해안에 도착하는 장면.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/V%C3%A9nus_de_Milo.jpg',
+      title: '밀로의 비너스', titleEn: 'Venus de Milo',
+      meta: '기원전 2세기 · 루브르',
+      desc: '두 팔이 없는 채로 발견된 헬레니즘 시대 걸작. 미의 여신의 영원한 상징이 되었다.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/William-Adolphe_Bouguereau_%281825-1905%29_-_The_Birth_of_Venus_%281879%29.jpg',
+      title: '비너스의 탄생', titleEn: 'The Birth of Venus',
+      meta: '윌리엄 부그로 · 1879 · 오르세',
+      desc: '보티첼리의 같은 주제를 19세기 아카데미즘 양식으로 다시 그린 작품. 신화적 우아함의 극치.'
+    },
+    {
+      img: 'https://upload.wikimedia.org/wikipedia/commons/8/89/Titian%2C_Venus_of_Urbino%2C_1538.jpg',
+      title: '우르비노의 비너스', titleEn: 'Venus of Urbino',
+      meta: '티치아노 · 1538 · 우피치',
+      desc: '르네상스 누드의 정점. 침대에 누운 비너스의 우아한 자세는 이후 마네의 〈올랭피아〉까지 수많은 작품의 모델이 되었다.'
+    }
+  ]
+};
 
 const gods = {
   '카오스': {
@@ -1070,6 +1745,7 @@ const gods = {
     nameEn: 'ATHENA', greek: 'Ἀθηνᾶ', roman: 'MINERVA',
     domain: '지혜, 전략, 공예', symbol: '올빼미, 투구와 창, 올리브',
     epithet: '회색 눈의',
+    mother: '메티스',
     desc: '<strong>아테나</strong>는 무력보다 <strong>지혜와 전략</strong>으로 싸우는 전쟁의 여신이다. 도시 아테네의 수호자이며, 처녀신으로 남았다.',
     story: '제우스는 첫 아내 메티스가 자신을 능가할 자식을 낳을 것이라는 예언을 듣고 임신한 그녀를 통째로 삼켜버렸다. 곧 끔찍한 두통에 시달린 제우스가 헤파이스토스에게 머리를 가르게 하자, 완전무장한 채 함성을 지르며 <strong>아테나</strong>가 튀어나왔다. 그녀는 아테네의 수호신 자리를 두고 포세이돈과 경쟁할 때 <strong>올리브 나무</strong>를 선물해 시민들의 선택을 받았다. 직조 솜씨를 자랑하던 인간 <strong>아라크네</strong>가 그녀에게 도전하자, 아테나는 그녀를 거미로 만들어 영원히 실을 잣게 했다. <strong>오디세우스</strong>의 든든한 후원자였고, <strong>페르세우스</strong>에게 메두사를 비추어 볼 청동 방패를 빌려준 것도 그녀였다.',
     relations: { '아버지': ['제우스'], '어머니': ['메티스'], '맹세': ['영원한 처녀'] }
@@ -1079,6 +1755,7 @@ const gods = {
     nameEn: 'APOLLO', greek: 'Ἀπόλλων', roman: 'APOLLO',
     domain: '태양, 음악, 예언, 의술', symbol: '리라, 월계관, 활',
     epithet: '멀리서 쏘는 자',
+    mother: '레토',
     desc: '<strong>아폴론</strong>은 제우스와 레토의 아들로, 빛과 이성과 예술의 신이다. 델포이의 신탁을 통해 인간에게 운명을 알려주지만, 그 자존심은 신들 가운데서도 손꼽힐 만큼 강하다.',
     story: '레토가 헤라의 박해를 피해 <strong>델로스 섬</strong>에서 아폴론과 아르테미스를 낳았다. 아폴론은 태어난 지 며칠 만에 활로 거대한 뱀 <strong>피톤</strong>을 죽이고 그 자리에 <strong>델포이 신탁소</strong>를 세웠다. 사티로스 마르시아스가 음악으로 도전했을 때 아폴론은 그를 이긴 뒤 산 채로 가죽을 벗겨버렸다. 그가 사랑한 다프네는 에로스의 화살에 맞아 그를 거부했고, 도망치다 월계수가 되었다 — 이후 월계관은 아폴론의 상징이 되었다. 아들 <strong>아스클레피오스</strong>는 의술이 너무 뛰어나 죽은 자를 살려낸 죄로 제우스의 번개에 맞아 죽었다.',
     relations: { '부모': ['제우스', '레토'], '쌍둥이': ['아르테미스'], '자식': ['오르페우스', '아스클레피오스'] }
@@ -1088,6 +1765,7 @@ const gods = {
     nameEn: 'ARTEMIS', greek: 'Ἄρτεμις', roman: 'DIANA',
     domain: '달, 사냥, 야생, 처녀성', symbol: '활과 화살, 사슴, 초승달',
     epithet: '들짐승의 여주인',
+    mother: '레토',
     desc: '<strong>아르테미스</strong>는 아폴론의 쌍둥이 누이이자, 야생의 자유로움 자체다. 처녀신으로 남기를 맹세했으며, 그 맹세를 어기거나 위협하는 자에게는 가차 없다.',
     story: '사냥꾼 <strong>악타이온</strong>이 우연히 그녀가 목욕하는 모습을 보았을 때, 그녀는 그를 사슴으로 변하게 했고, 그는 자기 사냥개들에게 갈가리 찢겼다. 그녀의 시녀 <strong>칼리스토</strong>가 제우스에게 유혹당해 임신했을 때, 아르테미스는 그녀를 무리에서 쫓아냈다(혹은 곰으로 변하게 했다는 전승). 거인 사냥꾼 <strong>오리온</strong>은 그녀가 사랑한 유일한 남자였으나, 오빠 아폴론의 계략으로 그녀의 화살에 죽고 만다 — 슬퍼한 그녀가 그를 별자리로 올렸다. 트로이 전쟁 직전, 아가멤논이 그녀의 사슴을 쏜 죄로 그녀는 아르고스 함대의 바람을 멈춰 그의 딸 <strong>이피게네이아</strong>를 제물로 요구했다.',
     relations: { '부모': ['제우스', '레토'], '쌍둥이': ['아폴론'], '맹세': ['영원한 처녀'] }
@@ -1097,6 +1775,7 @@ const gods = {
     nameEn: 'ARES', greek: 'Ἄρης', roman: 'MARS',
     domain: '전쟁, 폭력, 학살', symbol: '창, 투구, 독수리',
     epithet: '도시를 약탈하는 자',
+    mother: '헤라',
     desc: '<strong>아레스</strong>는 무분별한 폭력과 살육의 화신이다. 그리스인들에게는 별로 사랑받지 못한 신이지만, 로마에서는 마르스로서 건국 영웅이자 농경의 수호자로 매우 존경받았다.',
     story: '아레스는 <strong>아프로디테</strong>와 비밀스레 사랑을 나누었다. 그녀의 남편 <strong>헤파이스토스</strong>가 이를 알고는 보이지 않을 만큼 가는 황금 그물을 침대 위에 쳐놓았다. 두 사람이 함께 누운 순간 그물이 떨어졌고, 헤파이스토스는 모든 올림포스 신을 불러모아 그 망신스러운 광경을 구경시켰다. 트로이 전쟁에서는 아프로디테 편을 들어 트로이를 지원했지만, 인간 영웅 <strong>디오메데스</strong>가 아테나의 도움을 받아 그를 창으로 찔러 부상을 입혔다 — 신이 인간에게 패한 드문 장면이었다. 비명을 지르며 올림포스로 도망친 그를 제우스는 차갑게 꾸짖었다, "너는 내 자식 중에 가장 미운 놈이다."',
     relations: { '부모': ['제우스', '헤라'], '연인': ['아프로디테'] }
@@ -1106,6 +1785,7 @@ const gods = {
     nameEn: 'HERMES', greek: 'Ἑρμῆς', roman: 'MERCURIUS',
     domain: '전령, 여행, 상업, 도둑', symbol: '날개 달린 샌들, 카두케우스',
     epithet: '아르고스를 죽인 자',
+    mother: '마이아',
     desc: '<strong>헤르메스</strong>는 신들의 전령이자 영혼의 안내자다. 영리하고 재빠르며, 경계를 자유로이 넘나든다 — 올림포스와 지상, 산 자와 죽은 자의 세계를 모두.',
     story: '헤르메스는 태어난 첫날부터 사고뭉치였다. 요람에서 빠져나와 거북이 등껍질로 <strong>리라</strong>를 만들었고, 그날 저녁에는 형 <strong>아폴론의 소 떼</strong>를 훔쳤다. 아폴론이 추궁하자 천연덕스럽게 시치미를 떼다가, 결국 들킨 뒤에는 자신이 만든 리라를 선물로 주어 형의 마음을 풀었다 — 그렇게 아폴론의 상징인 리라가 사실 헤르메스의 발명품이 되었다. 그는 죽은 자의 영혼을 저승으로 이끄는 <strong>프시코폼포스</strong>의 역할도 한다. 페르세우스에게 날개 달린 샌들을 빌려주었고, 오디세우스에게 마녀 키르케의 마법을 풀 약초를 가져다준 것도 그였다.',
     relations: { '부모': ['제우스', '마이아'], '자식': ['판', '헤르마프로디토스'] }
@@ -1115,6 +1795,7 @@ const gods = {
     nameEn: 'HEPHAISTOS', greek: 'Ἥφαιστος', roman: 'VULCANUS',
     domain: '대장간, 불, 공예', symbol: '망치, 모루, 집게',
     epithet: '저는 다리의 명장',
+    mother: '헤라',
     desc: '<strong>헤파이스토스</strong>는 신들 가운데 유일하게 못생기고 다리를 절며, 노동하는 신이다. 그러나 그의 손에서 신들의 모든 무기와 보물이 태어났다.',
     story: '태어났을 때 너무 못생겨서 <strong>헤라가 직접 올림포스에서 던져버렸다</strong>는 전승이 있다. 그는 바다에 떨어져 테티스에게 양육되었고, 그 충격으로 다리를 절게 되었다. 어머니에게 복수하기 위해 황금 옥좌를 만들어 보냈는데, 헤라가 앉자 보이지 않는 사슬이 그녀를 묶어버렸다. 신들 누구도 풀지 못했고, 결국 디오니소스가 그를 술에 취하게 해 올림포스로 데려와야 했다. 그가 만든 작품은 신화 곳곳에 박혀 있다 — <strong>제우스의 번개</strong>, <strong>아킬레우스의 방패</strong>, 헬리오스의 황금 마차, 최초의 여인 <strong>판도라</strong>까지. 그의 아내는 가장 아름다운 여신 <strong>아프로디테</strong>였지만, 그녀는 아레스와 바람을 피웠고 그는 황금 그물로 그 장면을 잡아 모두에게 보였다.',
     relations: { '부모': ['제우스', '헤라'], '배우자': ['아프로디테'] }
@@ -1124,6 +1805,7 @@ const gods = {
     nameEn: 'DIONYSOS', greek: 'Διόνυσος', roman: 'BACCHUS',
     domain: '포도주, 축제, 광기', symbol: '포도 덩굴, 표범, 티르소스',
     epithet: '두 번 태어난 자',
+    mother: '세멜레',
     desc: '<strong>디오니소스</strong>는 인간이었던 어머니 <strong>세멜레</strong>에게서 태어난 유일한 올림포스 신이다. 그는 광기와 해방, 포도주와 황홀경을 가져온다 — 문명을 잠시 무너뜨리는 신성한 도취다.',
     story: '제우스의 아이를 임신한 세멜레는 헤라의 꾐에 빠져 제우스에게 "본모습을 보여달라"고 요구했다. 약속에 묶인 제우스가 번개의 모습으로 나타나자 세멜레는 그 자리에서 타 죽었다. 제우스는 그녀의 뱃속에서 태아를 꺼내 <strong>자기 허벅지에 꿰매 넣었고</strong>, 거기서 디오니소스가 다시 태어났다 — 그래서 그는 "두 번 태어난 자"다. 자라난 그는 추종자들(마이나데스)과 함께 세상을 떠돌며 <strong>포도주 만드는 법</strong>을 가르쳤다. 그를 거부한 테베의 왕 <strong>펜테우스</strong>는 자기 어머니에게 산 채로 찢겨 죽었다. 크레타에서 테세우스에게 버림받은 <strong>아리아드네</strong>를 발견해 아내로 삼았고, 그녀가 죽자 그녀의 결혼 화관을 별자리로 올려 영원히 빛나게 했다.',
     relations: { '아버지': ['제우스'], '어머니': ['세멜레 (인간)'], '배우자': ['아리아드네'] }
@@ -1168,7 +1850,7 @@ const treeStructure = [
     cols: 3,
     nodes: ['제우스', '헤라', '포세이돈', '하데스', '데메테르', '헤스티아']
   },
-  { lineage: '제우스의 자녀들' },
+  { lineage: '제우스와 여러 여신·인간의 자녀들' },
   {
     tier: '올림포스 2세대',
     greek: 'Ὀλύμπιοι · γενεὰ β´',
@@ -1200,19 +1882,24 @@ function renderTree() {
       item.nodes.forEach(name => {
         const g = gods[name];
         if (!g) return;
+        // Lighter accent colors for dark marble background
         const sealColorMap = {
-          'primordial': 'var(--c-primordial)',
-          'titan': 'var(--c-titan)',
-          'olympian-1': 'var(--c-olympian-1)',
-          'olympian-2': 'var(--c-olympian-2)',
-          'special': 'var(--c-special)'
+          'primordial': '#c4a888',   // warm light beige
+          'titan': '#e0b864',         // amber gold
+          'olympian-1': '#d4a548',    // bright gold
+          'olympian-2': '#b8d8c4',    // soft mint (Athena's color)
+          'special': '#e8a8c4'        // soft pink (Aphrodite)
         };
-        html += `<button class="god-card" data-name="${name}" data-gen="${g.gen}" onclick="showGod('${name}')">
+        const motherHtml = g.mother
+          ? `<div class="god-mother">어머니 · ${g.mother}</div>`
+          : '';
+        html += `<button class="god-card" data-name="${name}" data-gen="${g.gen}" style="--accent: ${sealColorMap[g.gen]}" onclick="showGod('${name}')">
           ${makeSeal(name, sealColorMap[g.gen])}
           <div class="god-name-kr">${name}</div>
           <div class="god-name-en">${g.nameEn}</div>
           <div class="god-roman">${g.roman}</div>
           <div class="god-domain">${g.domain.split(',')[0]}</div>
+          ${motherHtml}
         </button>`;
       });
       html += `</div></div>`;
@@ -1233,6 +1920,71 @@ function handleImageError(img, nameEn) {
   const portrait = img.closest('.god-portrait');
   if (portrait) portrait.remove();
 }
+
+function renderGallery(name) {
+  const works = galleries[name];
+  if (!works || works.length === 0) return '';
+
+  const colClass = works.length === 1 ? 'cols-1' : works.length === 2 ? 'cols-2' : '';
+
+  const itemsHtml = works.map((w, idx) => `
+    <button class="artwork" onclick="openLightbox('${name}', ${idx})">
+      <div class="artwork-image">
+        <img src="${w.img}" alt="${w.title}" loading="lazy"
+             onerror="this.closest('.artwork').style.display='none'">
+      </div>
+      <div class="artwork-info">
+        <div class="artwork-title">${w.title}</div>
+        <div class="artwork-title-en">${w.titleEn}</div>
+        <div class="artwork-meta">
+          <span>${w.meta.split(' · ')[0] || ''}</span>
+          <span>${w.meta.split(' · ')[1] || ''}</span>
+        </div>
+      </div>
+    </button>
+  `).join('');
+
+  return `
+    <div class="detail-section detail-gallery">
+      <div class="gallery-header">
+        <div class="section-title" style="border-bottom: none; padding-bottom: 0; margin-bottom: 6px; justify-content: center;">
+          <span class="section-num">IV.</span> 명작 갤러리 — In Arte
+        </div>
+        <div class="gallery-sub">${name}을(를) 그린 역대 명작</div>
+        <div class="gallery-divider"></div>
+      </div>
+      <div class="gallery-grid ${colClass}">
+        ${itemsHtml}
+      </div>
+    </div>
+  `;
+}
+
+function openLightbox(godName, idx) {
+  const work = galleries[godName][idx];
+  if (!work) return;
+  document.getElementById('lb-img').src = work.img;
+  document.getElementById('lb-title').textContent = work.title;
+  document.getElementById('lb-title-en').textContent = work.titleEn;
+  document.getElementById('lb-meta').textContent = work.meta;
+  document.getElementById('lb-desc').textContent = work.desc;
+  document.getElementById('lightbox').classList.add('active');
+}
+
+function closeLightbox(event, force) {
+  if (force || !event || event.target.id === 'lightbox') {
+    document.getElementById('lightbox').classList.remove('active');
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const lb = document.getElementById('lightbox');
+    if (lb && lb.classList.contains('active')) {
+      lb.classList.remove('active');
+    }
+  }
+});
 
 function showGod(name) {
   const g = gods[name];
@@ -1313,6 +2065,8 @@ function showGod(name) {
         <div class="relations">${relationsHtml}</div>
       </div>
 
+      ${renderGallery(name)}
+
       <div class="ornament">❦ ❦ ❦</div>
     </div>
   `;
@@ -1375,6 +2129,10 @@ function searchGods(query) {
     card.querySelector('.god-name-en').innerHTML = g.nameEn;
     card.querySelector('.god-roman').innerHTML = g.roman;
     card.querySelector('.god-domain').innerHTML = g.domain.split(',')[0];
+    const motherEl = card.querySelector('.god-mother');
+    if (motherEl && g.mother) {
+      motherEl.innerHTML = '어머니 · ' + g.mother;
+    }
   });
 
   if (!q) {
@@ -1399,7 +2157,8 @@ function searchGods(query) {
       roman: g.roman,
       greek: g.greek,
       domain: g.domain,
-      epithet: g.epithet
+      epithet: g.epithet,
+      mother: g.mother || ''
     };
 
     const matched = Object.values(fields).some(f =>
@@ -1422,6 +2181,12 @@ function searchGods(query) {
       const domainShort = g.domain.split(',')[0];
       if (normalize(domainShort).includes(q)) {
         card.querySelector('.god-domain').innerHTML = highlightMatch(domainShort, q);
+      }
+      if (g.mother && normalize(g.mother).includes(q)) {
+        const motherEl = card.querySelector('.god-mother');
+        if (motherEl) {
+          motherEl.innerHTML = '어머니 · ' + highlightMatch(g.mother, q);
+        }
       }
     }
   });
