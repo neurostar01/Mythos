@@ -1885,6 +1885,314 @@
     gap: 8px;
   }
 
+  /* ============= BOUGUEREAU SERIES LINK & MODAL ============= */
+  .bouguereau-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    margin-top: 28px;
+    padding: 18px 22px;
+    background: linear-gradient(135deg, rgba(184, 137, 61, 0.12), rgba(184, 137, 61, 0.04));
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: left;
+    color: var(--ink);
+    font-family: inherit;
+    position: relative;
+  }
+  .bouguereau-link::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(184, 137, 61, 0.25);
+    border-radius: 1px;
+    pointer-events: none;
+  }
+  .bouguereau-link:hover {
+    background: linear-gradient(135deg, rgba(184, 137, 61, 0.2), rgba(184, 137, 61, 0.08));
+    transform: translateX(2px);
+  }
+  .bouguereau-link-icon {
+    width: 44px;
+    height: 44px;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+  .bouguereau-link-icon svg { width: 100%; height: 100%; }
+  .bouguereau-link-text { flex: 1; }
+  .bouguereau-link-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+  }
+  .bouguereau-link-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-faded);
+    letter-spacing: 0.03em;
+  }
+  .bouguereau-link-arrow {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--gold);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  .bouguereau-link:hover .bouguereau-link-arrow {
+    transform: translateX(4px);
+  }
+
+  /* The 4-part series modal */
+  .bouguereau-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 20, 16, 0.94);
+    z-index: 1100;
+    display: none;
+    overflow-y: auto;
+  }
+  .bouguereau-modal.active { display: block; }
+  .bouguereau-modal-close {
+    position: fixed;
+    top: 18px;
+    right: 22px;
+    z-index: 1110;
+    background: rgba(244, 236, 216, 0.95);
+    border: 1px solid var(--line);
+    padding: 8px 16px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .bouguereau-modal-close:hover {
+    border-color: var(--gold);
+    background: var(--parchment);
+  }
+
+  .bouguereau-modal-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+
+  .bouguereau-modal-header {
+    text-align: center;
+    margin-bottom: 50px;
+    color: var(--parchment);
+  }
+  .bouguereau-modal-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .bouguereau-modal-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: 0.3em;
+    color: var(--parchment);
+    padding-left: 0.3em;
+  }
+  .bouguereau-modal-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: rgba(244, 236, 216, 0.7);
+    margin-top: 10px;
+    letter-spacing: 0.05em;
+  }
+  .bouguereau-modal-divider {
+    margin: 22px auto 0;
+    width: 100px;
+    height: 1px;
+    background: var(--gold);
+    position: relative;
+  }
+  .bouguereau-modal-divider::before, .bouguereau-modal-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    background: var(--gold);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .bouguereau-modal-divider::before { left: -14px; }
+  .bouguereau-modal-divider::after { right: -14px; }
+  .bouguereau-modal-intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(244, 236, 216, 0.85);
+    margin-top: 28px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .bouguereau-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .bouguereau-work {
+    background: linear-gradient(135deg, #f4ecd8, #e8dcc0);
+    padding: 12px 12px 16px;
+    border: 1px solid var(--gold);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    cursor: default;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+  .bouguereau-work.available {
+    cursor: pointer;
+  }
+  .bouguereau-work.available:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+  }
+  .bouguereau-work-image {
+    background: #2a1f15;
+    padding: 6px;
+    border: 1px solid rgba(184, 137, 61, 0.6);
+    position: relative;
+    margin-bottom: 14px;
+  }
+  .bouguereau-work-image::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border: 1px solid rgba(184, 137, 61, 0.4);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .bouguereau-work-image img {
+    width: 100%;
+    aspect-ratio: 2 / 4;
+    object-fit: cover;
+    display: block;
+    background: #1a1208;
+  }
+  .bouguereau-work-year {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: var(--gold-deep);
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .bouguereau-work-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--ink);
+    text-align: center;
+    margin-bottom: 2px;
+  }
+  .bouguereau-work-title-ko {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .bouguereau-work-god {
+    text-align: center;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+  }
+  .bouguereau-work-god-label {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+  }
+  .bouguereau-work-god-name {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    margin-top: 4px;
+  }
+  .bouguereau-work.available .bouguereau-work-god-name {
+    color: var(--gold-deep);
+    text-decoration: underline;
+    text-decoration-color: rgba(184, 137, 61, 0.4);
+    text-underline-offset: 3px;
+  }
+  .bouguereau-work-pending-tag {
+    display: inline-block;
+    margin-top: 4px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--ink-faded);
+    padding: 2px 8px;
+    border: 1px solid var(--line);
+  }
+  .bouguereau-work-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    padding: 0 4px;
+  }
+  .bouguereau-work-desc strong {
+    color: var(--ink);
+    font-weight: 600;
+    font-style: normal;
+  }
+  .bouguereau-work-location {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--gold-deep);
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 900px) {
+    .bouguereau-modal-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 500px) {
+    .bouguereau-modal-grid { grid-template-columns: 1fr; gap: 18px; }
+    .bouguereau-modal-content { padding: 50px 16px 60px; }
+    .bouguereau-modal-title { font-size: 24px; letter-spacing: 0.2em; }
+    .bouguereau-link { padding: 14px 16px; gap: 12px; }
+    .bouguereau-link-icon { width: 36px; height: 36px; }
+    .bouguereau-link-title { font-size: 14px; }
+    .bouguereau-link-sub { font-size: 12px; }
+  }
+
   /* ============= LIGHTBOX ============= */
   .lightbox {
     position: fixed;
@@ -2172,6 +2480,27 @@
   </div>
 </div>
 
+<!-- ============== BOUGUEREAU SERIES MODAL ============== -->
+<div class="bouguereau-modal" id="bouguereau-modal" onclick="closeBouguereauSeries(event)">
+  <button class="bouguereau-modal-close" onclick="closeBouguereauSeries(null, true)">CLOSE ×</button>
+  <div class="bouguereau-modal-content" onclick="event.stopPropagation()">
+    <div class="bouguereau-modal-header">
+      <div class="bouguereau-modal-eyebrow">William-Adolphe Bouguereau · 1881–1884</div>
+      <h2 class="bouguereau-modal-title">하루의 네 시간</h2>
+      <div class="bouguereau-modal-subtitle">Les Quatre Temps du Jour · The Four Times of Day</div>
+      <div class="bouguereau-modal-divider"></div>
+      <p class="bouguereau-modal-intro">
+        프랑스 아카데미 회화의 거장 부그로가 1881년부터 1884년까지 4년에 걸쳐 그린 연작.
+        새벽·황혼·밤·낮이 각각 그리스 신화의 신으로 형상화되었다.
+        시대순으로 감상해 보세요.
+      </p>
+    </div>
+    <div class="bouguereau-modal-grid" id="bouguereau-modal-grid">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+</div>
+
 <script>
 // ============= DATA =============
 // Symbol SVG paths for each god (rendered inside a circular seal)
@@ -2241,6 +2570,55 @@ function makeSeal(name, colorVar) {
     ${symbol}
   </svg>`;
 }
+
+// ============= BOUGUEREAU 4-PART SERIES =============
+// 부그로의 〈하루의 네 시간〉 4부작 — 시대순
+const bouguereauSeries = [
+  {
+    year: 1881,
+    title: 'L\'Aurore',
+    titleKo: '새벽',
+    god: '에오스',
+    godStatus: 'pending', // 추후 작업 예정
+    img: 'https://commons.wikimedia.org/wiki/Special:FilePath/William-Adolphe_Bouguereau_(1825-1905)_-_Dawn_(1881).jpg?width=800',
+    location: '버밍엄 미술관, 미국',
+    desc: '백합을 든 새벽의 정령이 막 깨어나는 모습. 4부작의 첫 작품. 그리스 신화의 새벽의 여신 <strong>에오스(Eos)</strong>를 형상화했다. 에오스는 티탄 히페리온과 테이아의 딸로, 헬리오스(태양)와 셀레네(달)의 누이다.'
+  },
+  {
+    year: 1882,
+    title: 'Le Crépuscule',
+    titleKo: '황혼',
+    god: '헤스페로스',
+    godStatus: 'pending',
+    img: 'https://commons.wikimedia.org/wiki/Special:FilePath/William-Adolphe_Bouguereau_(1825-1905)_-_Dusk_(1882).jpg?width=800',
+    location: '하바나 국립 미술관, 쿠바',
+    desc: '해가 저문 후 별들이 떠오르는 시간. 4부작의 두 번째 작품. 그리스 신화의 저녁별의 신 <strong>헤스페로스(Hesperos)</strong>를 떠올리게 한다. 헤스페로스의 자매들 헤스페리데스가 황금 사과의 정원을 지킨다.'
+  },
+  {
+    year: 1883,
+    title: 'La Nuit',
+    titleKo: '밤',
+    god: '닉스',
+    godStatus: 'available',
+    img: 'https://commons.wikimedia.org/wiki/Special:FilePath/William-Adolphe_Bouguereau_(1825-1905)_-_La_Nuit_(1883).jpg?width=800',
+    location: '힐우드 박물관, 미국',
+    desc: '4부작의 세 번째 작품이자 가장 유명한 작품. 어둠 속에서 두 마리 부엉이를 거느린 채 검은 베일을 두르고 떠오르는 <strong>닉스(Nyx)</strong>. 2미터가 넘는 거대한 화폭에 담긴 신비롭고 압도적인 분위기.'
+  },
+  {
+    year: 1884,
+    title: 'Le Jour',
+    titleKo: '낮',
+    god: '헤메라',
+    godStatus: 'available',
+    img: 'https://commons.wikimedia.org/wiki/Special:FilePath/William-Adolphe_Bouguereau_(1825-1905)_-_Day_(1884).jpg?width=800',
+    location: '개인 소장',
+    desc: '4부작의 마지막 작품. 어머니 닉스와 정반대로 빛 속에서 떠오르는 <strong>헤메라(Hemera)</strong>. 화면 가득한 황금빛이 어둠을 몰아내는 순간을 포착했다. 〈La Nuit(밤)〉과 정확히 대를 이루는 자매 작품.'
+  }
+];
+
+// 4부작에 해당하는 신 목록 (갤러리에서 바로가기 버튼 표시용)
+const bouguereauSeriesGods = ['닉스', '헤메라', '에오스', '헤스페로스'];
+
 
 // ============= GALLERY DATA =============
 // All artwork URLs use verified Wikimedia Special:FilePath format
@@ -2326,12 +2704,6 @@ const galleries = {
       title: '낮', titleEn: 'Le Jour',
       meta: '윌리엄-아돌프 부그로 · 1884 · 개인 소장',
       desc: '부그로 〈하루의 네 시간〉 4부작의 마지막 작품. 1883년에 그린 〈밤(La Nuit, 닉스)〉의 자매 작품으로, 어머니 닉스와 정반대 빛 속에서 떠오르는 헤메라를 그렸다. 화면 가득한 황금빛이 어둠을 몰아내는 순간을 포착했다.'
-    },
-    {
-      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/William-Adolphe_Bouguereau_(1825-1905)_-_Dawn_(1881).jpg?width=800',
-      title: '새벽 (4부작의 첫 작품)', titleEn: "L'Aurore",
-      meta: '윌리엄-아돌프 부그로 · 1881 · 버밍엄 미술관',
-      desc: '부그로의 4부작 〈하루의 네 시간〉 첫 작품. 백합을 든 새벽의 정령이 막 깨어나는 모습. 헤메라(낮)가 도래하기 직전의 순간이라는 점에서 헤메라 신화의 연장선상에서 감상할 수 있다.'
     }
   ],
 
@@ -3316,7 +3688,7 @@ function renderGallery(name) {
     <div class="detail-section detail-gallery">
       <div class="gallery-header">
         <div class="section-title" style="border-bottom: none; padding-bottom: 0; margin-bottom: 6px; justify-content: center;">
-          <span class="section-num">IV.</span> 명작 갤러리 — In Arte
+          <span class="section-num">V.</span> 명작 갤러리 — In Arte
         </div>
         <div class="gallery-sub">${name}을(를) 그린 역대 명작</div>
         <div class="gallery-divider"></div>
@@ -3324,6 +3696,23 @@ function renderGallery(name) {
       <div class="gallery-grid ${colClass}">
         ${itemsHtml}
       </div>
+      ${bouguereauSeriesGods.includes(name) ? `
+        <button class="bouguereau-link" onclick="openBouguereauSeries('${name}')">
+          <div class="bouguereau-link-icon">
+            <svg viewBox="0 0 48 48" fill="none">
+              <rect x="6" y="8" width="8" height="32" rx="0.5" fill="currentColor" opacity="0.85"/>
+              <rect x="17" y="8" width="8" height="32" rx="0.5" fill="currentColor" opacity="0.6"/>
+              <rect x="28" y="8" width="8" height="32" rx="0.5" fill="currentColor" opacity="0.85"/>
+              <rect x="39" y="8" width="5" height="32" rx="0.5" fill="currentColor" opacity="0.6"/>
+            </svg>
+          </div>
+          <div class="bouguereau-link-text">
+            <div class="bouguereau-link-title">부그로 〈하루의 네 시간〉 4부작 보기</div>
+            <div class="bouguereau-link-sub">William-Adolphe Bouguereau · Les Quatre Temps du Jour · 1881–1884</div>
+          </div>
+          <div class="bouguereau-link-arrow">→</div>
+        </button>
+      ` : ''}
     </div>
   `;
 }
@@ -3342,6 +3731,51 @@ function openLightbox(godName, idx) {
 function closeLightbox(event, force) {
   if (force || !event || event.target.id === 'lightbox') {
     document.getElementById('lightbox').classList.remove('active');
+  }
+}
+
+// ============= BOUGUEREAU SERIES MODAL =============
+function openBouguereauSeries(fromGod) {
+  const grid = document.getElementById('bouguereau-modal-grid');
+  if (!grid) return;
+  grid.innerHTML = bouguereauSeries.map(work => {
+    const isFromHere = work.god === fromGod;
+    const isAvailable = work.godStatus === 'available' && gods[work.god];
+    return `
+      <div class="bouguereau-work ${isAvailable ? 'available' : ''}"
+           ${isAvailable ? `onclick="openBouguereauWork('${work.god}')"` : ''}>
+        <div class="bouguereau-work-image">
+          <img src="${work.img}" alt="${work.title}" loading="lazy"
+               onerror="this.style.opacity=0.3">
+        </div>
+        <div class="bouguereau-work-year">${work.year}</div>
+        <div class="bouguereau-work-title">${work.title}</div>
+        <div class="bouguereau-work-title-ko">${work.titleKo}</div>
+        <div class="bouguereau-work-god">
+          <div class="bouguereau-work-god-label">해당 신</div>
+          <div class="bouguereau-work-god-name">${work.god}${isFromHere ? ' (현재)' : ''}</div>
+          ${work.godStatus === 'pending' ? '<div class="bouguereau-work-pending-tag">자료 준비중</div>' : ''}
+        </div>
+        <div class="bouguereau-work-desc">${work.desc}</div>
+        <div class="bouguereau-work-location">${work.location}</div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('bouguereau-modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function openBouguereauWork(godName) {
+  closeBouguereauSeries(null, true);
+  if (gods[godName]) {
+    showGod(godName);
+  }
+}
+
+function closeBouguereauSeries(event, force) {
+  if (force || !event || event.target.id === 'bouguereau-modal') {
+    document.getElementById('bouguereau-modal').classList.remove('active');
+    document.body.style.overflow = '';
   }
 }
 
