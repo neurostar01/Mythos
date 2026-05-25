@@ -208,8 +208,39 @@
     border-bottom: 1px solid var(--line);
     flex-shrink: 0;
     scrollbar-width: none;
+    transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.2s ease;
+    max-height: 60px;
   }
   .filters::-webkit-scrollbar { display: none; }
+
+  /* Hide search and filters except on tree-view (where they apply) */
+  /* On home/categories/cat-detail/detail: hide search and filters */
+  .app[data-view="home"] .search-wrap,
+  .app[data-view="home"] .filters,
+  .app[data-view="categories"] .search-wrap,
+  .app[data-view="categories"] .filters,
+  .app[data-view="cat-detail"] .search-wrap,
+  .app[data-view="cat-detail"] .filters,
+  .app[data-view="detail"] .search-wrap,
+  .app[data-view="detail"] .filters {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-bottom-color: transparent;
+  }
+  .app[data-view="home"] .search-wrap,
+  .app[data-view="categories"] .search-wrap,
+  .app[data-view="cat-detail"] .search-wrap,
+  .app[data-view="detail"] .search-wrap {
+    margin: 0;
+  }
+  .search-wrap {
+    transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.2s ease;
+    max-height: 80px;
+  }
 
   .filter-btn {
     background: transparent;
@@ -254,19 +285,818 @@
       url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.12 0 0 0 0 0.08 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  .view-tree { transform: translateX(0); }
-  .view-detail {
+  /* Default: all views hidden offscreen to the right */
+  .view-home, .view-categories, .view-cat-detail, .view-tree, .view-detail {
     transform: translateX(100%);
     pointer-events: none;
   }
 
-  .app[data-view="detail"] .view-tree {
-    transform: translateX(-30%);
-    pointer-events: none;
-  }
+  /* Active view */
+  .app[data-view="home"] .view-home,
+  .app[data-view="categories"] .view-categories,
+  .app[data-view="cat-detail"] .view-cat-detail,
+  .app[data-view="tree"] .view-tree,
   .app[data-view="detail"] .view-detail {
     transform: translateX(0);
     pointer-events: auto;
+  }
+
+  /* Previous views slide left when on detail view (for parallax effect) */
+  .app[data-view="detail"] .view-home,
+  .app[data-view="detail"] .view-categories,
+  .app[data-view="detail"] .view-cat-detail,
+  .app[data-view="detail"] .view-tree {
+    transform: translateX(-30%);
+  }
+
+  /* On cat-detail, categories view stays slid left */
+  .app[data-view="cat-detail"] .view-categories {
+    transform: translateX(-30%);
+  }
+
+  /* ============= COMMON: View back button ============= */
+  .view-back {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: 14px 0 0 18px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    padding: 6px 14px;
+    background: rgba(244, 236, 216, 0.92);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    backdrop-filter: blur(4px);
+  }
+  .view-back:hover {
+    border-color: var(--gold);
+    color: var(--ink);
+  }
+
+  /* ============= HOME VIEW ============= */
+  .home-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 50px 20px 80px;
+    text-align: center;
+  }
+
+  .home-hero {
+    margin-bottom: 50px;
+  }
+
+  .home-ornament {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold);
+    font-size: 18px;
+    letter-spacing: 1em;
+    margin-bottom: 18px;
+  }
+
+  .home-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 52px;
+    letter-spacing: 0.4em;
+    color: var(--ink);
+    padding-left: 0.4em;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+  }
+
+  .home-greek {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--gold-deep);
+    margin-top: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .home-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  .home-divider {
+    margin: 22px auto 0;
+    width: 120px;
+    height: 1px;
+    background: var(--gold);
+    position: relative;
+  }
+  .home-divider::before, .home-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .home-divider::before { left: -16px; }
+  .home-divider::after { right: -16px; }
+
+  .home-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-faded);
+    margin-top: 28px;
+    line-height: 1.6;
+  }
+
+  .home-modes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .home-mode-card {
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(180, 140, 95, 0.55), transparent 55%),
+      radial-gradient(ellipse at 70% 85%, rgba(80, 58, 40, 0.5), transparent 50%),
+      linear-gradient(135deg, #7d6448 0%, #4d3a2a 100%);
+    border-top: 1px solid rgba(255, 230, 180, 0.55);
+    border-left: 1px solid rgba(255, 230, 180, 0.35);
+    border-right: 1px solid rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    padding: 36px 24px 30px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 230, 180, 0.35),
+      inset 2px 2px 4px rgba(255, 230, 180, 0.1),
+      inset -1px -1px 0 rgba(0, 0, 0, 0.4),
+      inset -2px -2px 6px rgba(0, 0, 0, 0.35),
+      0 6px 14px rgba(0, 0, 0, 0.3),
+      0 10px 24px rgba(0, 0, 0, 0.22);
+  }
+  .home-mode-card::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(184, 137, 61, 0.3);
+    pointer-events: none;
+  }
+  .home-mode-card > * { position: relative; z-index: 1; }
+  .home-mode-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .home-mode-illustration {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 18px;
+    color: #e8be60;
+  }
+
+  .home-mode-roman {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(248, 235, 200, 0.65);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .home-mode-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 21px;
+    color: #f8ebc8;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .home-mode-title-en {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: #e8be60;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+
+  .home-mode-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: rgba(248, 235, 200, 0.8);
+    line-height: 1.6;
+    padding: 0 6px;
+  }
+
+  .home-mode-enter {
+    display: inline-block;
+    margin-top: 20px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 8px 20px;
+    transition: all 0.2s ease;
+  }
+  .home-mode-card:hover .home-mode-enter {
+    background: var(--gold);
+    color: var(--ink);
+  }
+
+  .home-footer {
+    margin-top: 50px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-faded);
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 600px) {
+    .home-title { font-size: 36px; letter-spacing: 0.3em; }
+    .home-modes { grid-template-columns: 1fr; gap: 16px; }
+    .home-mode-card { padding: 26px 20px 24px; }
+    .home-mode-illustration { width: 70px; height: 70px; }
+    .home-mode-title { font-size: 18px; }
+    .home-mode-desc { font-size: 14px; }
+    .home-content { padding: 30px 16px 60px; }
+  }
+
+  /* ============= CATEGORIES VIEW ============= */
+  .categories-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px 80px;
+  }
+
+  .cat-intro {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .cat-intro-roman {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--gold-deep);
+    letter-spacing: 0.1em;
+  }
+
+  .cat-intro-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: 0.3em;
+    margin-top: 8px;
+  }
+
+  .cat-intro-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-faded);
+    margin-top: 10px;
+  }
+
+  .cat-intro-divider {
+    margin: 22px auto 0;
+    width: 100px;
+    height: 1px;
+    background: var(--gold);
+    position: relative;
+  }
+  .cat-intro-divider::before, .cat-intro-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    background: var(--gold);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .cat-intro-divider::before { left: -14px; }
+  .cat-intro-divider::after { right: -14px; }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+  }
+
+  .category-card {
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(180, 140, 95, 0.55), transparent 55%),
+      radial-gradient(ellipse at 70% 85%, rgba(80, 58, 40, 0.5), transparent 50%),
+      linear-gradient(135deg, #7d6448 0%, #4d3a2a 100%);
+    border-top: 1px solid rgba(255, 230, 180, 0.55);
+    border-left: 1px solid rgba(255, 230, 180, 0.35);
+    border-right: 1px solid rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    padding: 22px 18px 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 230, 180, 0.35),
+      inset -2px -2px 6px rgba(0, 0, 0, 0.35),
+      0 4px 8px rgba(0, 0, 0, 0.3),
+      0 6px 14px rgba(0, 0, 0, 0.22);
+  }
+  .category-card::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgba(184, 137, 61, 0.2);
+    pointer-events: none;
+  }
+  .category-card > * { position: relative; z-index: 1; }
+  .category-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 230, 180, 0.45),
+      inset -2px -2px 6px rgba(0, 0, 0, 0.35),
+      0 10px 20px rgba(0, 0, 0, 0.4),
+      0 0 0 1px var(--gold);
+  }
+
+  .category-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 14px;
+    color: var(--accent, #e8be60);
+  }
+
+  .category-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(248, 235, 200, 0.65);
+    margin-bottom: 4px;
+  }
+
+  .category-name {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: #f8ebc8;
+    letter-spacing: 0.03em;
+    margin-bottom: 4px;
+  }
+
+  .category-greek {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--accent, #e8be60);
+    margin-bottom: 14px;
+  }
+
+  .category-count {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: rgba(248, 235, 200, 0.7);
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 230, 180, 0.3);
+    display: inline-block;
+    margin-top: 4px;
+  }
+
+  .category-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(248, 235, 200, 0.75);
+    line-height: 1.5;
+    margin-top: 10px;
+    padding: 0 6px;
+  }
+
+  @media (max-width: 600px) {
+    .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .category-card { padding: 18px 12px 14px; }
+    .category-icon { width: 42px; height: 42px; margin-bottom: 10px; }
+    .category-name { font-size: 14px; }
+    .category-desc { font-size: 12px; }
+    .categories-content { padding: 20px 12px 60px; }
+  }
+
+  /* ============= CATEGORY DETAIL VIEW ============= */
+  .cat-detail-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px 80px;
+  }
+
+  .cat-detail-intro {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .cat-detail-intro .roman {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--gold-deep);
+    letter-spacing: 0.1em;
+  }
+  .cat-detail-intro h2 {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: 0.3em;
+    margin-top: 8px;
+  }
+  .cat-detail-intro .greek-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-faded);
+    margin-top: 6px;
+    letter-spacing: 0.1em;
+  }
+  .cat-detail-intro p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin-top: 14px;
+    line-height: 1.7;
+    max-width: 580px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cat-detail-intro .divider {
+    margin: 20px auto 0;
+    width: 80px;
+    height: 1px;
+    background: var(--gold);
+    position: relative;
+  }
+  .cat-detail-intro .divider::before, .cat-detail-intro .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .cat-detail-intro .divider::before { left: -12px; }
+  .cat-detail-intro .divider::after { right: -12px; }
+
+  .cat-gods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  /* Smaller cards for minor gods grid (Nyx's children etc.) */
+  .cat-gods-grid.minor-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .cat-gods-grid.minor-grid .god-card {
+    padding: 12px 6px 10px;
+  }
+  .cat-gods-grid.minor-grid .symbol-icon {
+    width: 32px !important;
+    height: 32px !important;
+    margin-bottom: 6px !important;
+  }
+  .cat-gods-grid.minor-grid .god-name-kr {
+    font-size: 13px !important;
+  }
+  .cat-gods-grid.minor-grid .god-name-en {
+    font-size: 8px !important;
+    margin-top: 2px !important;
+  }
+  .cat-gods-grid.minor-grid .god-roman {
+    font-size: 10px !important;
+    margin-top: 2px !important;
+  }
+  .cat-gods-grid.minor-grid .god-domain {
+    font-size: 11px !important;
+    margin-top: 4px !important;
+  }
+  @media (max-width: 600px) {
+    .cat-gods-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .cat-gods-grid.minor-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .cat-detail-content { padding: 20px 12px 60px; }
+    .cat-detail-intro h2 { font-size: 22px; }
+  }
+
+  /* ============= TREE CANVAS VIEW ============= */
+  .tree-canvas-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    cursor: grab;
+  }
+  .tree-canvas-wrap.grabbing { cursor: grabbing; }
+
+  .tree-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2400px;
+    height: 2400px;
+    transform-origin: 0 0;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .tree-canvas.no-transition { transition: none; }
+
+  .tree-zoom-controls {
+    position: absolute;
+    top: 60px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 5;
+  }
+  .tree-zoom-btn {
+    width: 36px;
+    height: 36px;
+    background: rgba(244, 236, 216, 0.95);
+    border: 1px solid var(--line);
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tree-zoom-btn:hover { border-color: var(--gold); }
+  .tree-zoom-level {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    text-align: center;
+    color: var(--ink-soft);
+    background: rgba(244, 236, 216, 0.95);
+    padding: 4px 0;
+    border: 1px solid var(--line);
+  }
+  .tree-help-hint {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-faded);
+    background: rgba(244, 236, 216, 0.85);
+    padding: 4px 12px;
+    border: 1px solid var(--line);
+    pointer-events: none;
+    opacity: 0.7;
+    z-index: 5;
+  }
+  .tree-back {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    z-index: 10;
+  }
+
+  /* Tree canvas SVG layer */
+  .tree-connector-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2400px;
+    height: 2400px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  #tree-cards-layer {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Tree positioned elements */
+  .tree-pos {
+    position: absolute;
+  }
+
+  /* Tree-specific tier label and parent-pair labels */
+  .tree-tier-label {
+    text-align: center;
+  }
+  .tree-tier-label .name {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: var(--ink);
+    text-transform: uppercase;
+  }
+  .tree-tier-label .greek {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-faded);
+    margin-top: 3px;
+  }
+
+  .tree-lineage-label {
+    display: inline-block;
+    padding: 3px 12px;
+    background: var(--parchment);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--gold-deep);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .tree-parent-pair-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--gold-deep);
+    font-size: 13px;
+    text-align: center;
+    background: var(--parchment);
+    padding: 3px 10px;
+    white-space: nowrap;
+    display: inline-block;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+  }
+
+  /* Tree god cards (smaller version of dictionary card) */
+  .tree-god-card {
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(180, 140, 95, 0.55), transparent 55%),
+      radial-gradient(ellipse at 70% 85%, rgba(80, 58, 40, 0.5), transparent 50%),
+      linear-gradient(135deg, #7d6448 0%, #4d3a2a 100%);
+    border-top: 1px solid rgba(255, 230, 180, 0.55);
+    border-left: 1px solid rgba(255, 230, 180, 0.35);
+    border-right: 1px solid rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    padding: 14px 8px 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    width: 160px;
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 230, 180, 0.35),
+      inset -2px -2px 6px rgba(0, 0, 0, 0.35),
+      0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  .tree-god-card:hover {
+    transform: translateY(-3px);
+  }
+  .tree-god-card .symbol-icon {
+    width: 38px;
+    height: 38px;
+    margin: 0 auto 6px;
+    display: block;
+  }
+  .tree-god-card .name-kr {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: #f8ebc8;
+  }
+  .tree-god-card .name-en {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(248, 235, 200, 0.75);
+    margin-top: 3px;
+  }
+  .tree-god-card .domain {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: rgba(248, 235, 200, 0.85);
+    margin-top: 4px;
+  }
+
+  /* Smaller cards for minor gods (Nyx children, Aither/Hemera) */
+  .tree-god-card.minor {
+    width: 130px;
+    padding: 8px 4px 6px;
+    background: linear-gradient(135deg, #5c4836 0%, #3a2c1f 100%);
+    cursor: pointer;
+  }
+  .tree-god-card.minor .symbol-icon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 3px;
+  }
+  .tree-god-card.minor .name-kr { font-size: 11px; }
+  .tree-god-card.minor .name-en { font-size: 7px; letter-spacing: 0.15em; margin-top: 1px; }
+  .tree-god-card.minor .domain { font-size: 10px; margin-top: 2px; line-height: 1.2; }
+
+  /* Titan panel */
+  .titan-panel {
+    width: 850px;
+    background: linear-gradient(135deg, rgba(184, 137, 61, 0.08), rgba(184, 137, 61, 0.03));
+    border: 1.5px solid var(--gold);
+    border-radius: 4px;
+    padding: 20px 24px 24px;
+    position: relative;
+    box-shadow:
+      0 4px 12px rgba(74, 53, 32, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  .titan-panel::before {
+    content: '';
+    position: absolute;
+    top: 6px; left: 6px; right: 6px; bottom: 6px;
+    border: 1px solid rgba(184, 137, 61, 0.3);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .titan-panel-title {
+    text-align: center;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .titan-panel-title .name {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.35em;
+    color: var(--ink);
+    text-transform: uppercase;
+  }
+  .titan-panel-title .greek {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-faded);
+    margin-top: 3px;
+  }
+  .titan-panel-title .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--gold-deep);
+    margin-top: 6px;
+  }
+  .titan-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .titan-row-label {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    text-align: center;
+    padding: 8px 0 12px;
+    border-top: 1px solid rgba(184, 137, 61, 0.3);
+    margin-top: 12px;
+  }
+  .titan-row-label.top {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  .titan-row-label .sub {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--ink-faded);
+    margin-top: 2px;
+    text-transform: none;
+  }
+  .titan-panel .tree-god-card {
+    width: auto;
   }
 
   /* ============= TREE VIEW ============= */
@@ -317,8 +1147,10 @@
   .nodes.cols-2 { grid-template-columns: repeat(2, 1fr); max-width: 480px; margin: 0 auto; }
   .nodes.cols-3 { grid-template-columns: repeat(3, 1fr); }
   .nodes.cols-4 { grid-template-columns: repeat(2, 1fr); }
+  .nodes.cols-5 { grid-template-columns: repeat(2, 1fr); }
   @media (min-width: 600px) {
     .nodes.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .nodes.cols-5 { grid-template-columns: repeat(5, 1fr); }
   }
 
   .god-card {
@@ -1104,7 +1936,7 @@
 </head>
 <body>
 
-<div class="app" id="app" data-view="tree" data-filter="all">
+<div class="app" id="app" data-view="home" data-filter="all" data-from="home">
 
   <header class="header">
     <div class="brand" onclick="goHome()">
@@ -1146,19 +1978,115 @@
 
   <div class="view-stack">
 
-    <!-- ============== TREE VIEW ============== -->
+    <!-- ============== HOME VIEW ============== -->
+    <main class="view view-home" id="home-view">
+      <div class="home-content">
+        <div class="home-hero">
+          <div class="home-ornament">❦ ❦ ❦</div>
+          <h1 class="home-title">MYTHOS</h1>
+          <div class="home-greek">Μῦθος · Mythus</div>
+          <div class="home-subtitle">그리스 · 로마 신화</div>
+          <div class="home-divider"></div>
+          <div class="home-tagline">
+            카오스에서 올림포스까지<br>
+            신들의 계보를 따라 떠나는 여정
+          </div>
+        </div>
+
+        <div class="home-modes">
+          <button class="home-mode-card" onclick="goTree()">
+            <svg class="home-mode-illustration" viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="15" r="6" fill="currentColor"/>
+              <circle cx="25" cy="40" r="5" fill="currentColor" opacity="0.85"/>
+              <circle cx="50" cy="40" r="5" fill="currentColor" opacity="0.85"/>
+              <circle cx="75" cy="40" r="5" fill="currentColor" opacity="0.85"/>
+              <circle cx="15" cy="65" r="4" fill="currentColor" opacity="0.7"/>
+              <circle cx="35" cy="65" r="4" fill="currentColor" opacity="0.7"/>
+              <circle cx="50" cy="65" r="4" fill="currentColor" opacity="0.7"/>
+              <circle cx="65" cy="65" r="4" fill="currentColor" opacity="0.7"/>
+              <circle cx="85" cy="65" r="4" fill="currentColor" opacity="0.7"/>
+              <circle cx="25" cy="88" r="3" fill="currentColor" opacity="0.55"/>
+              <circle cx="50" cy="88" r="3" fill="currentColor" opacity="0.55"/>
+              <circle cx="75" cy="88" r="3" fill="currentColor" opacity="0.55"/>
+              <path d="M 50 21 L 50 25 L 25 35 M 50 25 L 50 35 M 50 25 L 75 35" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+              <path d="M 25 45 L 15 60 M 25 45 L 35 60" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+              <path d="M 50 45 L 50 60 M 50 45 L 65 60" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+              <path d="M 75 45 L 85 60" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+              <path d="M 35 69 L 25 84 M 50 69 L 50 84 M 65 69 L 75 84" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+            </svg>
+            <div class="home-mode-roman">I.</div>
+            <div class="home-mode-title">전체 가계도 보기</div>
+            <div class="home-mode-title-en">The Cosmic Tree</div>
+            <div class="home-mode-desc">모든 신을 한 화면에서<br>지도처럼 자유롭게 탐험</div>
+            <div class="home-mode-enter">入 · ENTER</div>
+          </button>
+
+          <button class="home-mode-card" onclick="goCategories()">
+            <svg class="home-mode-illustration" viewBox="0 0 100 100" fill="none">
+              <rect x="20" y="14" width="60" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="28" y1="22" x2="42" y2="22" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="68" cy="21" r="2" fill="currentColor"/>
+              <rect x="20" y="34" width="60" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.85"/>
+              <line x1="28" y1="42" x2="44" y2="42" stroke="currentColor" stroke-width="1.5" opacity="0.85"/>
+              <circle cx="68" cy="41" r="2" fill="currentColor" opacity="0.85"/>
+              <rect x="20" y="54" width="60" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.7"/>
+              <line x1="28" y1="62" x2="40" y2="62" stroke="currentColor" stroke-width="1.5" opacity="0.7"/>
+              <circle cx="68" cy="61" r="2" fill="currentColor" opacity="0.7"/>
+              <rect x="20" y="74" width="60" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.55"/>
+              <line x1="28" y1="82" x2="38" y2="82" stroke="currentColor" stroke-width="1.5" opacity="0.55"/>
+              <circle cx="68" cy="81" r="2" fill="currentColor" opacity="0.55"/>
+            </svg>
+            <div class="home-mode-roman">II.</div>
+            <div class="home-mode-title">항목별 보기</div>
+            <div class="home-mode-title-en">By Generation</div>
+            <div class="home-mode-desc">태초의 신 · 티탄 · 올림포스<br>세대별로 깊이있게 탐독</div>
+            <div class="home-mode-enter">入 · ENTER</div>
+          </button>
+        </div>
+
+        <div class="home-footer">✦ 헤시오도스 『신통기』 기반 ✦</div>
+      </div>
+    </main>
+
+    <!-- ============== CATEGORIES VIEW ============== -->
+    <main class="view view-categories" id="categories-view">
+      <button class="view-back" onclick="goHome()">← 홈으로</button>
+      <div class="categories-content">
+        <div class="cat-intro">
+          <div class="cat-intro-roman">II.</div>
+          <h2 class="cat-intro-title">항목별 보기</h2>
+          <div class="cat-intro-subtitle">By Generation · 세대와 계보에 따라 나누어 본 신들</div>
+          <div class="cat-intro-divider"></div>
+        </div>
+        <div class="categories-grid" id="categories-grid"></div>
+      </div>
+    </main>
+
+    <!-- ============== CATEGORY DETAIL VIEW ============== -->
+    <main class="view view-cat-detail" id="cat-detail-view">
+      <button class="view-back" onclick="goCategories()">← 항목별 보기</button>
+      <div class="cat-detail-content" id="cat-detail-container"></div>
+    </main>
+
+    <!-- ============== TREE VIEW (CANVAS) ============== -->
     <main class="view view-tree" id="tree-view">
-      <div class="tree-content" id="tree-container"></div>
-      <div class="empty-state">
-        <div class="empty-omega">∅</div>
-        <div class="empty-text" id="empty-text">검색 결과가 없습니다</div>
-        <div class="empty-hint">try another name</div>
+      <button class="view-back tree-back" onclick="goHome()">← 홈으로</button>
+      <div class="tree-canvas-wrap" id="tree-canvas-wrap">
+        <div class="tree-canvas" id="tree-canvas">
+          <div style="position: absolute; top: 200px; left: 50%; transform: translateX(-50%); text-align: center; padding: 40px; max-width: 500px;">
+            <div style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 16px; letter-spacing: 0.3em; color: var(--ink); margin-bottom: 12px;">COMING SOON</div>
+            <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; color: var(--ink-soft); line-height: 1.6;">
+              전체 가계도 캔버스 모드는<br>다음 업데이트에서 추가됩니다.<br><br>
+              지금은 <strong>"항목별 보기"</strong>를 이용해주세요.
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
     <!-- ============== DETAIL VIEW ============== -->
     <section class="view view-detail" id="detail-view">
-      <button class="detail-back" onclick="goBack()">← 가계도로 돌아가기</button>
+      <button class="detail-back" id="detail-back" onclick="goBack()">← 돌아가기</button>
       <div class="detail-content" id="detail-container"></div>
     </section>
 
@@ -1186,6 +2114,9 @@ const symbols = {
   '카오스': '<circle cx="24" cy="24" r="6" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="24" cy="24" r="11" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.6"/><circle cx="24" cy="24" r="2" fill="currentColor"/>',
   '가이아': '<path d="M 12 32 Q 24 18 36 32 L 36 38 L 12 38 Z" fill="currentColor"/><path d="M 18 32 Q 20 26 22 32 M 26 32 Q 28 24 30 32" fill="none" stroke="#4d3a2a" stroke-width="1"/>',
   '에로스': '<path d="M 24 14 Q 28 10 32 14 Q 34 18 30 22 L 24 28 L 18 22 Q 14 18 16 14 Q 20 10 24 14 Z" fill="currentColor"/><path d="M 14 32 L 34 32 M 30 28 L 34 32 L 30 36" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/>',
+  '타르타로스': '<path d="M 12 14 Q 24 12 36 14 L 34 18 Q 24 16 14 18 Z" fill="currentColor"/><path d="M 14 18 Q 16 30 24 36 Q 32 30 34 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="20" cy="24" r="1.2" fill="currentColor"/><circle cx="28" cy="24" r="1.2" fill="currentColor"/><circle cx="24" cy="30" r="1.2" fill="currentColor"/>',
+  '에레보스': '<path d="M 12 24 Q 12 14 24 14 Q 36 14 36 24 Q 36 34 24 34 Q 12 34 12 24 Z" fill="currentColor"/><path d="M 18 22 Q 24 18 30 22 M 18 28 Q 24 32 30 28" fill="none" stroke="#4d3a2a" stroke-width="1.2" stroke-linecap="round"/>',
+  '닉스': '<path d="M 32 14 Q 26 14 22 18 Q 18 22 18 28 Q 18 34 24 36 Q 16 36 12 30 Q 10 22 14 16 Q 20 10 28 12 Q 32 13 32 14 Z" fill="currentColor"/><circle cx="32" cy="20" r="0.8" fill="currentColor"/><circle cx="36" cy="26" r="0.8" fill="currentColor"/><circle cx="34" cy="32" r="0.8" fill="currentColor"/><circle cx="28" cy="34" r="0.6" fill="currentColor"/>',
   '우라노스': '<circle cx="24" cy="14" r="2.5" fill="currentColor"/><circle cx="14" cy="22" r="1.5" fill="currentColor"/><circle cx="34" cy="22" r="1.5" fill="currentColor"/><circle cx="18" cy="32" r="1.5" fill="currentColor"/><circle cx="30" cy="32" r="1.5" fill="currentColor"/><circle cx="24" cy="36" r="1.5" fill="currentColor"/><path d="M 24 14 L 14 22 L 18 32 L 24 36 L 30 32 L 34 22 Z" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.5"/>',
   '크로노스': '<path d="M 14 12 Q 28 12 32 24 Q 30 32 22 34 L 18 32 L 16 28 L 14 24 Z" fill="currentColor"/><path d="M 22 34 L 24 38 L 22 38 Z" fill="currentColor"/>',
   '레아': '<path d="M 16 28 Q 16 18 24 16 Q 32 18 32 28 L 30 30 L 18 30 Z" fill="currentColor"/><path d="M 20 32 L 28 32 M 21 35 L 27 35" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="24" cy="12" r="1.5" fill="currentColor"/>',
@@ -1204,7 +2135,37 @@ const symbols = {
   '헤르메스': '<line x1="24" y1="10" x2="24" y2="40" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M 18 14 Q 14 16 16 10 Q 22 10 24 14" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M 30 14 Q 34 16 32 10 Q 26 10 24 14" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M 18 20 Q 30 23 18 26 Q 30 29 18 32" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M 30 20 Q 18 23 30 26 Q 18 29 30 32" stroke="currentColor" stroke-width="1.2" fill="none"/>',
   '헤파이스토스': '<path d="M 10 30 L 22 18 L 26 22 L 14 34 Z" fill="currentColor"/><rect x="24" y="14" width="14" height="8" rx="1" fill="currentColor"/><path d="M 20 24 L 28 16" stroke="#4d3a2a" stroke-width="1"/>',
   '디오니소스': '<circle cx="20" cy="20" r="3" fill="currentColor"/><circle cx="28" cy="20" r="3" fill="currentColor"/><circle cx="16" cy="26" r="3" fill="currentColor"/><circle cx="24" cy="26" r="3" fill="currentColor"/><circle cx="32" cy="26" r="3" fill="currentColor"/><circle cx="20" cy="32" r="3" fill="currentColor"/><circle cx="28" cy="32" r="3" fill="currentColor"/><path d="M 24 14 Q 22 10 18 12 Q 20 16 22 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>',
-  '아프로디테': '<path d="M 10 26 Q 14 18 24 18 Q 32 18 34 22 L 40 18 L 38 26 L 42 28 L 36 30 Q 32 36 24 36 Q 14 36 10 30 Q 8 28 10 26 Z" fill="currentColor"/><circle cx="34" cy="22" r="1" fill="#4d3a2a"/>'
+  '아프로디테': '<path d="M 10 26 Q 14 18 24 18 Q 32 18 34 22 L 40 18 L 38 26 L 42 28 L 36 30 Q 32 36 24 36 Q 14 36 10 30 Q 8 28 10 26 Z" fill="currentColor"/><circle cx="34" cy="22" r="1" fill="#4d3a2a"/>',
+  // ============= 카오스의 자식 =============
+  '에레보스': '<circle cx="24" cy="24" r="13" fill="currentColor"/><path d="M 18 22 Q 24 18 30 22 M 18 28 Q 24 32 30 28" fill="none" stroke="#4d3a2a" stroke-width="1.2"/>',
+  '닉스': '<path d="M 32 14 Q 26 14 22 18 Q 18 22 18 28 Q 18 34 24 36 Q 16 36 12 30 Q 10 22 14 16 Q 20 10 28 12 Q 32 13 32 14 Z" fill="currentColor"/><circle cx="32" cy="20" r="0.8" fill="currentColor"/><circle cx="36" cy="26" r="0.8" fill="currentColor"/><circle cx="34" cy="32" r="0.8" fill="currentColor"/>',
+  // ============= 어둠 × 밤의 자식 =============
+  '아이테르': '<path d="M 24 10 L 27 20 L 38 20 L 29 26 L 32 36 L 24 30 L 16 36 L 19 26 L 10 20 L 21 20 Z" fill="currentColor"/>',
+  '헤메라': '<circle cx="24" cy="24" r="8" fill="currentColor"/><path d="M 24 8 L 24 14 M 24 34 L 24 40 M 8 24 L 14 24 M 34 24 L 40 24 M 12 12 L 16 16 M 32 32 L 36 36 M 12 36 L 16 32 M 32 16 L 36 12" stroke="currentColor" stroke-width="1.5"/>',
+  // ============= 닉스의 13자식 =============
+  '모이라이': '<path d="M 24 10 L 24 38 M 14 16 L 34 16 M 14 32 L 34 32" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="24" r="3" fill="currentColor"/><circle cx="24" cy="24" r="3" fill="currentColor"/><circle cx="34" cy="24" r="3" fill="currentColor"/>',
+  '타나토스': '<path d="M 24 14 Q 18 16 16 22 Q 14 30 24 36 Q 34 30 32 22 Q 30 16 24 14 Z" fill="currentColor"/><circle cx="20" cy="22" r="1.5" fill="#4d3a2a"/><circle cx="28" cy="22" r="1.5" fill="#4d3a2a"/>',
+  '힙노스': '<path d="M 14 30 Q 14 20 24 18 Q 34 20 34 30 Q 34 32 32 32 Q 30 26 24 26 Q 18 26 16 32 Q 14 32 14 30 Z" fill="currentColor"/><path d="M 16 18 L 32 18" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2,2"/>',
+  '네메시스': '<path d="M 24 8 L 24 38" stroke="currentColor" stroke-width="1.5"/><path d="M 14 18 L 24 14 L 34 18 L 24 22 Z M 14 30 L 24 26 L 34 30 L 24 34 Z" fill="currentColor"/>',
+  '에리스': '<path d="M 18 10 L 28 22 L 22 22 L 30 38 L 20 26 L 26 26 L 18 10 Z" fill="currentColor"/>',
+  '헤스페리데스': '<circle cx="24" cy="26" r="9" fill="currentColor"/><path d="M 24 17 Q 22 14 24 12 Q 26 14 24 17" fill="currentColor"/>',
+  '모로스': '<path d="M 14 20 L 34 20 L 30 30 L 18 30 Z" fill="currentColor"/><path d="M 22 16 L 22 20 M 24 14 L 24 20 M 26 16 L 26 20" stroke="currentColor" stroke-width="1.5"/>',
+  '케레스': '<path d="M 14 14 L 24 24 L 14 34 M 34 14 L 24 24 L 34 34" stroke="currentColor" stroke-width="2" fill="none"/>',
+  '오네이로이': '<path d="M 12 20 Q 16 16 20 20 Q 24 24 28 20 Q 32 16 36 20 M 12 28 Q 16 24 20 28 Q 24 32 28 28 Q 32 24 36 28" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  '모모스': '<path d="M 24 10 L 24 28 M 22 32 L 26 32 L 24 36 Z" fill="currentColor" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="14" r="2" fill="currentColor"/>',
+  '아파테': '<path d="M 12 28 Q 18 18 24 24 Q 30 30 36 20" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M 14 22 Q 20 14 26 22" fill="none" stroke="currentColor" stroke-width="1"/>',
+  '게라스': '<path d="M 18 12 L 30 12 L 30 16 L 26 16 L 26 32 L 30 32 L 30 36 L 18 36 L 18 32 L 22 32 L 22 16 L 18 16 Z" fill="currentColor"/>',
+  '필로테스': '<path d="M 16 18 Q 20 14 24 18 Q 28 14 32 18 Q 32 24 24 32 Q 16 24 16 18 Z" fill="currentColor"/>',
+  // ============= 새 티탄 (남신) =============
+  '코이오스': '<circle cx="24" cy="24" r="3" fill="currentColor"/><circle cx="24" cy="24" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="13" fill="none" stroke="currentColor" stroke-width="0.8" stroke-dasharray="2,2"/>',
+  '크리오스': '<path d="M 24 12 L 18 24 L 24 36 L 30 24 Z" fill="currentColor"/><path d="M 16 16 Q 12 22 16 28 M 32 16 Q 36 22 32 28" stroke="currentColor" stroke-width="1.2" fill="none"/>',
+  '이아페토스': '<path d="M 14 14 L 34 14 L 24 36 Z" fill="currentColor"/><line x1="24" y1="14" x2="24" y2="36" stroke="#4d3a2a" stroke-width="1.2"/>',
+  // ============= 새 티탄 (여신) =============
+  '테이아': '<path d="M 24 10 L 28 22 L 38 22 L 30 28 L 34 38 L 24 32 L 14 38 L 18 28 L 10 22 L 20 22 Z" fill="currentColor"/>',
+  '테미스': '<path d="M 14 24 L 34 24 M 24 14 L 24 34" stroke="currentColor" stroke-width="2.5"/><circle cx="24" cy="24" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M 12 16 L 16 16 M 32 16 L 36 16" stroke="currentColor" stroke-width="1.2"/>',
+  '므네모시네': '<path d="M 14 18 Q 24 14 34 18 M 14 24 Q 24 20 34 24 M 14 30 Q 24 26 34 30" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  '포이베': '<path d="M 14 28 Q 14 18 24 14 Q 34 18 34 28 L 34 32 L 14 32 Z" fill="currentColor"/><path d="M 24 14 L 24 8 M 18 16 L 14 12 M 30 16 L 34 12" stroke="currentColor" stroke-width="1.2"/>',
+  '테티스': '<path d="M 10 24 Q 14 16 24 16 Q 34 16 38 24 Q 34 32 24 32 Q 14 32 10 24 Z" fill="currentColor"/><path d="M 14 22 Q 24 26 34 22 M 14 26 Q 24 22 34 26" fill="none" stroke="#4d3a2a" stroke-width="1"/>'
 };
 
 function makeSeal(name, colorVar) {
@@ -1230,10 +2191,10 @@ const galleries = {
 
   '가이아': [
     {
-      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Gaia_Erichthonios_Staatliche_Antikensammlungen_2413.jpg?width=800',
-      title: '에리크토니오스를 건네는 가이아', titleEn: 'Gaia hands the infant Erichthonius',
-      meta: '아테네 도자기화 · 기원전 470년 · 베를린 고대박물관',
-      desc: '대지에서 솟아오른 가이아가 아테나에게 아기 에리크토니오스(아테네의 신화적 시조)를 건네는 장면. 헤파이스토스가 옆에서 지켜본다. 적색상 도자기화의 걸작 중 하나.'
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ara_Pacis,_Tellus_panel.jpg?width=800',
+      title: '아라 파키스의 텔루스(가이아) 부조', titleEn: 'Tellus Panel of the Ara Pacis',
+      meta: '로마 시대 · 기원전 13~9년 · 아라 파키스 박물관',
+      desc: '아우구스투스의 평화의 제단(Ara Pacis) 동쪽 면에 있는 부조. 가운데 대지의 어머니 가이아(텔루스)가 두 아기를 안고 있고, 무릎엔 곡식과 과일이 가득하다. 발치엔 평화롭게 누운 황소와 양. 양쪽엔 공기와 바다의 정령이 있어 우주의 풍요를 상징한다.'
     }
   ],
 
@@ -1249,12 +2210,6 @@ const galleries = {
       title: '에로스의 입맞춤으로 깨어나는 프시케', titleEn: 'Psyche Revived by Cupid',
       meta: '안토니오 카노바 · 1793 · 루브르',
       desc: '신고전주의 조각의 최고봉. 죽음에서 깨어나는 프시케를 안아 올리는 에로스의 모습이 대리석으로 표현되었다.'
-    },
-    {
-      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/The_abduction_of_Psyche_by_William-Adolphe_Bouguereau.jpg?width=800',
-      title: '프시케의 납치', titleEn: 'The Abduction of Psyche',
-      meta: '윌리엄 부그로 · 1895',
-      desc: '날개 달린 에로스가 잠든 프시케를 하늘로 들어 올리는 장면. 부그로의 아카데미즘 양식이 빛난다.'
     }
   ],
 
@@ -1638,6 +2593,33 @@ const gods = {
     story: '후대의 신화에서는 에로스가 <strong>아프로디테</strong>와 아레스의 아들로 다시 그려진다. 황금 화살과 납 화살을 든 장난기 어린 소년이 되어, 황금에 맞으면 사랑에 빠지고 납에 맞으면 미움에 휩싸인다. 아폴론을 놀려 다프네에게 황금을, 다프네에게 납을 쏘아 그 유명한 비극을 만들어낸 것도 그였다. 인간 프시케와의 사랑 이야기에서는 보이지 않는 연인으로 등장해 시험과 재회의 길을 걷는다. 로마에서는 <strong>큐피드</strong>라는 이름으로 더 친숙해졌다.',
     relations: { '근원': ['카오스 직후 생성'], '후대 부모': ['아프로디테', '아레스'] }
   },
+  '타르타로스': {
+    gen: 'primordial', tier: '태초의 신',
+    nameEn: 'TARTAROS', greek: 'Τάρταρος', roman: 'TARTARUS',
+    domain: '지하 심연', symbol: '깊은 어둠, 구덩이',
+    epithet: '가장 깊은 곳',
+    desc: '<strong>타르타로스</strong>는 카오스 직후에 생겨난 태초의 신 가운데 하나로, 우주의 가장 깊은 심연 그 자체다. 헤시오도스에 따르면 청동 모루가 하늘에서 떨어져 9일 동안 추락해야 닿는 곳이다. 단순한 장소가 아니라 인격을 가진 신이지만, 거의 행동하지 않고 "공간"으로서 존재한다.',
+    story: '우라노스는 가이아가 낳은 흉측한 자식들(키클롭스와 헤카톤케이레스)을 타르타로스에 가뒀고, 이것이 가이아의 분노와 첫 권력 교체의 발단이 되었다. 후에 제우스도 티타노마키아에서 패한 <strong>크로노스와 티탄들</strong>을 이곳에 가뒀고, 거인족(기간테스)과의 전쟁에서 패한 거인들도 이곳에 봉인되었다. 가이아와 결합해 가장 무서운 괴물 <strong>티폰</strong>을 낳기도 했다. 인간 영웅들도 이곳에 떨어지는데, 시지프스·탄탈로스·익시온이 영원한 형벌을 받는 곳이 바로 타르타로스다.',
+    relations: { '근원': ['카오스 직후 생성'], '배우자': ['가이아'], '자식': ['티폰'] }
+  },
+  '에레보스': {
+    gen: 'primordial', tier: '태초의 신',
+    nameEn: 'EREBOS', greek: 'Ἔρεβος', roman: 'EREBUS',
+    domain: '어둠', symbol: '암흑, 그림자',
+    epithet: '깊은 어둠',
+    desc: '<strong>에레보스</strong>는 카오스가 직접 낳은 두 자식 중 하나로, 깊은 어둠 그 자체다. 헤시오도스의 『신통기』에 따르면 카오스에서 자연스럽게 생겨난 가이아·타르타로스·에로스와 달리, 에레보스와 닉스는 카오스의 자식으로 태어났다. 저승의 입구와 산 자의 세계 사이에 있는 그림자의 영역을 다스린다.',
+    story: '에레보스는 누이 <strong>닉스(밤)</strong>와 결합해 두 자식을 낳았다 — 천상의 맑은 공기 <strong>아이테르</strong>와 낮의 여신 <strong>헤메라</strong>가 그들이다. 어둠과 밤에서 빛과 낮이 태어났다는 발상은 그리스 우주론의 시적인 핵심이다. 후대 신화에서 "에레보스로 내려간다"는 표현은 곧 죽음을 뜻하게 되었고, 단테의 『신곡』 림보 개념의 원형이 되었다.',
+    relations: { '부모': ['카오스'], '배우자': ['닉스'], '자식': ['아이테르', '헤메라'] }
+  },
+  '닉스': {
+    gen: 'primordial', tier: '태초의 신',
+    nameEn: 'NYX', greek: 'Νύξ', roman: 'NOX',
+    domain: '밤', symbol: '검은 베일, 별, 부엉이',
+    epithet: '밤의 여신',
+    desc: '<strong>닉스</strong>는 카오스가 직접 낳은 두 자식 중 하나로, 밤 그 자체다. 호메로스의 『일리아스』에서 제우스조차 그녀의 노여움을 두려워한다고 묘사될 만큼 신비롭고 두려운 존재. 매일 밤 검은 베일을 끌고 하늘을 가로지른다.',
+    story: '닉스는 오빠 에레보스와 결합해 아이테르(빛)와 헤메라(낮)를 낳았지만, 무엇보다 <strong>홀로 낳은 자식들의 명단</strong>이 그리스 신화 전체를 움직인다 — 모로스(파멸), 케르(죽음의 운명), <strong>타나토스(죽음)</strong>, <strong>힙노스(잠)</strong>, 오네이로이(꿈들), 모모스(비난), 헤스페리데스(저녁의 자매들), <strong>모이라이(운명의 세 여신)</strong>, <strong>네메시스(응보)</strong>, 아파테(기만), 게라스(노년), 그리고 <strong>에리스(불화)</strong>. 운명·죽음·잠·꿈·복수 — 인간 존재의 가장 근본적인 힘들이 모두 그녀의 자식이다.',
+    relations: { '부모': ['카오스'], '배우자': ['에레보스'], '자식': ['모이라이', '네메시스', '타나토스', '힙노스', '에리스 등'] }
+  },
   '우라노스': {
     gen: 'primordial', tier: '태초의 신',
     nameEn: 'OURANOS', greek: 'Οὐρανός', roman: 'CAELUS',
@@ -1815,23 +2797,265 @@ const gods = {
     desc: '<strong>아프로디테</strong>는 우라노스가 거세될 때 바다에 떨어진 살의 거품(아프로스)에서 태어났다. 그녀는 다른 신들보다 한 세대 앞선 존재이지만, 미와 사랑의 화신으로 올림포스 12신에 든다.',
     story: '키프로스 섬 해안의 거품에서 떠오른 그녀는 <strong>호라이</strong>(계절의 여신들)에게 환영받으며 올림포스로 인도되었다. 신들은 그녀의 아름다움에 매혹되어 다투었고, 제우스는 분쟁을 막기 위해 그녀를 가장 못생긴 신 <strong>헤파이스토스</strong>와 결혼시켰다. 그러나 그녀의 마음은 전쟁의 신 <strong>아레스</strong>에게 있었다. 한편 그녀가 사랑한 인간 <strong>아도니스</strong>는 사냥 중 멧돼지에 받혀 죽었고, 그가 흘린 피에서 아네모네 꽃이 피었다. <strong>황금 사과</strong> 사건에서 그녀는 헤라·아테나와 미모를 다투다 트로이의 왕자 파리스를 매수해 <strong>헬레네</strong>를 그에게 약속했고, 이것이 <strong>트로이 전쟁</strong>의 발단이 되었다.',
     relations: { '근원': ['우라노스의 거품'], '배우자': ['헤파이스토스'], '연인': ['아레스', '아도니스'], '자식': ['에로스'] }
+  },
+
+  // ============= 카오스의 자식 =============
+  '에레보스': {
+    gen: 'primordial', tier: '태초의 신',
+    nameEn: 'EREBOS', greek: 'Ἔρεβος', roman: 'EREBUS',
+    domain: '어둠', symbol: '암흑, 그림자',
+    epithet: '깊은 어둠',
+    desc: '<strong>에레보스</strong>는 카오스가 직접 낳은 두 자식 중 하나로, 깊은 어둠 그 자체다. 저승의 입구와 산 자의 세계 사이에 있는 그림자의 영역을 다스린다. 죽은 영혼이 저승으로 가기 위해 반드시 통과해야 하는 곳.',
+    story: '에레보스는 누이 <strong>닉스(밤)</strong>와 결합해 두 자식을 낳았다 — 천공의 맑은 빛 <strong>아이테르</strong>와 낮의 여신 <strong>헤메라</strong>가 그들이다. 어둠과 밤에서 빛과 낮이 태어났다는 발상은 그리스 우주론의 시적인 핵심이다. 후대 신화에서 "에레보스로 내려간다"는 표현은 곧 죽음을 뜻하게 되었고, 단테의 『신곡』 림보 개념의 원형이 되었다.',
+    relations: { '부모': ['카오스'], '배우자': ['닉스'], '자식': ['아이테르', '헤메라'] }
+  },
+  '닉스': {
+    gen: 'primordial', tier: '태초의 신',
+    nameEn: 'NYX', greek: 'Νύξ', roman: 'NOX',
+    domain: '밤', symbol: '검은 베일, 별, 부엉이',
+    epithet: '밤의 여신',
+    desc: '<strong>닉스</strong>는 카오스가 직접 낳은 두 자식 중 하나로, 밤 그 자체다. 호메로스의 『일리아스』에서 제우스조차 그녀의 노여움을 두려워한다고 묘사될 만큼 신비롭고 두려운 존재. 매일 밤 검은 베일을 끌고 하늘을 가로지른다.',
+    story: '닉스는 오빠 에레보스와 결합해 아이테르(빛)와 헤메라(낮)를 낳았지만, 무엇보다 <strong>홀로 낳은 자식들의 명단</strong>이 그리스 신화 전체를 움직인다 — 모로스(파멸), 케레스(죽음의 운명), <strong>타나토스(죽음)</strong>, <strong>힙노스(잠)</strong>, 오네이로이(꿈들), 모모스(비난), 헤스페리데스(저녁의 자매들), <strong>모이라이(운명의 세 여신)</strong>, <strong>네메시스(응보)</strong>, 아파테(기만), 게라스(노년), 필로테스(애욕), <strong>에리스(불화)</strong>. 운명·죽음·잠·꿈·복수 — 인간 존재의 가장 근본적인 힘들이 모두 그녀의 자식이다.',
+    relations: { '부모': ['카오스'], '배우자': ['에레보스'], '자식': ['모이라이', '네메시스', '타나토스', '힙노스', '에리스', '헤스페리데스'] }
+  },
+
+  // ============= 어둠 × 밤의 자식 (작은 카드) =============
+  '아이테르': {
+    gen: 'minor', tier: '어둠과 밤의 자식',
+    nameEn: 'AITHER', greek: 'Αἰθήρ', roman: 'AETHER',
+    domain: '천공의 맑은 빛', symbol: '맑은 상층 대기',
+    epithet: '신들이 숨쉬는 빛',
+    desc: '<strong>아이테르</strong>는 에레보스와 닉스 사이에서 태어난 첫 자식. 신들이 사는 올림포스 산정에 흐르는 맑고 빛나는 상층 대기 그 자체다. 인간이 숨쉬는 공기(아에르)와는 다른, 더 순수한 영역.',
+    story: '어둠에서 빛이 태어났다는 그리스 우주론의 시적 역설을 담고 있는 신. 별과 태양이 빛나는 무대가 되며, 신들의 음식인 암브로시아도 이 빛을 통해 전해진다고 한다. 후대 과학사에서는 17~19세기 물리학자들이 빛이 전파되는 매질을 가정해 "에테르(ether)"라 이름 붙였는데, 이 신의 이름에서 유래했다.',
+    relations: { '부모': ['에레보스', '닉스'], '형제': ['헤메라'] }
+  },
+  '헤메라': {
+    gen: 'minor', tier: '어둠과 밤의 자식',
+    nameEn: 'HEMERA', greek: 'Ἡμέρα', roman: 'DIES',
+    domain: '낮', symbol: '떠오르는 해',
+    epithet: '낮의 여신',
+    desc: '<strong>헤메라</strong>는 에레보스와 닉스 사이에서 태어난 낮의 여신. 매일 어머니 닉스가 거두어 가는 어둠의 베일을 걷어내고 세상에 빛을 가져온다.',
+    story: '헤시오도스에 따르면 헤메라와 어머니 닉스는 같은 집(타르타로스 근처)에 살지만 결코 함께 있지 않는다. 닉스가 들어오면 헤메라는 나가고, 헤메라가 돌아오면 닉스가 떠난다. 새벽의 여신 에오스와 종종 동일시되기도 하지만, 헤시오도스는 둘을 구분했다. 오빠이자 남편인 아이테르와 결합해 가이아·우라노스·탈라사 같은 더 근원적인 신들의 어머니가 되었다는 일부 후대 전승도 있다.',
+    relations: { '부모': ['에레보스', '닉스'], '형제': ['아이테르'] }
+  },
+
+  // ============= 닉스의 13자식 (작은 카드) =============
+  '모이라이': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'MOIRAI', greek: 'Μοῖραι', roman: 'PARCAE',
+    domain: '운명', symbol: '실패와 가위, 저울',
+    epithet: '운명의 세 여신',
+    desc: '<strong>모이라이</strong>는 운명의 세 여신. 클로토(실을 잣는 자), 라케시스(실을 나누는 자), 아트로포스(실을 끊는 자)로 이루어져, 모든 인간과 신의 운명의 실을 결정한다. 제우스조차 이들의 결정을 거스를 수 없다.',
+    story: '인간이 태어나는 순간 <strong>클로토</strong>가 운명의 실을 잣고, <strong>라케시스</strong>가 그 길이를 재며, <strong>아트로포스</strong>가 정해진 순간에 가위로 자른다. 이들은 평등하게 늙고 평등하게 두려움을 받았다. 메리오네스에게 죽음을 가져온 것도, 헤라클레스가 운명에 맞서 싸우다 결국 굴복한 것도 이들의 뜻이었다. 이름이 후대에 "운명(fate)"의 어원이 되었으며, 셰익스피어의 『맥베스』 세 마녀의 원형이기도 하다.',
+    relations: { '부모': ['닉스'] }
+  },
+  '타나토스': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'THANATOS', greek: 'Θάνατος', roman: 'MORS',
+    domain: '죽음', symbol: '검은 날개, 꺼진 횃불',
+    epithet: '평화로운 죽음',
+    desc: '<strong>타나토스</strong>는 죽음의 신. 폭력적이고 끔찍한 죽음을 가져오는 케레스와 달리, 그는 <strong>평화로운 자연사</strong>를 가져온다. 검은 망토와 날개를 두르고 꺼진 횃불을 든 청년의 모습.',
+    story: '쌍둥이 형제인 잠의 신 <strong>힙노스</strong>와 함께 인간에게 다가오는 두 가지 평화. 영웅 <strong>시지프스</strong>는 한때 타나토스를 사슬로 묶어 가두었고, 그동안 세상에서 아무도 죽지 않았다. <strong>헤라클레스</strong>는 죽어가는 알케스티스를 살리기 위해 타나토스와 직접 씨름해 그녀를 데려왔다. 프로이트는 인간 정신의 죽음 충동을 "타나토스"라 명명했다.',
+    relations: { '부모': ['닉스'], '형제': ['힙노스'] }
+  },
+  '힙노스': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'HYPNOS', greek: 'Ὕπνος', roman: 'SOMNUS',
+    domain: '잠', symbol: '양귀비, 날개',
+    epithet: '잠의 신',
+    desc: '<strong>힙노스</strong>는 잠의 신. 죽음의 신 타나토스의 쌍둥이 형제이며, 잠과 죽음이 얼마나 닮아 있는지를 보여주는 존재. 머리에 양귀비 화관을 쓰고 날개 달린 청년의 모습.',
+    story: '힙노스는 어두운 동굴에 살며 망각의 강 레테가 그 앞을 흐른다. 헤라가 트로이 전쟁 중 제우스를 잠재울 때 그의 도움을 받았다. 그는 처음엔 거절했지만 헤라가 카리테스 중 하나인 <strong>파시테아</strong>를 약속하자 응했고, 둘은 결혼했다. 그의 자식들이 <strong>오네이로이(꿈들)</strong>이며, 그중 가장 유명한 것이 인간의 모습을 한 모르페우스. "최면(hypnosis)"이라는 단어가 그의 이름에서 왔다.',
+    relations: { '부모': ['닉스'], '형제': ['타나토스'], '배우자': ['파시테아'], '자식': ['오네이로이'] }
+  },
+  '네메시스': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'NEMESIS', greek: 'Νέμεσις', roman: 'INVIDIA',
+    domain: '응보, 신적 분노', symbol: '저울, 채찍, 굴레',
+    epithet: '응보의 여신',
+    desc: '<strong>네메시스</strong>는 오만한 자를 벌하고, 분에 넘치는 행운을 누리는 자에게 균형을 되돌려주는 응보의 여신. "신들의 분노"의 화신이다. 그녀의 이름은 그 자체로 "갚아주다"의 어원.',
+    story: '<strong>나르키소스</strong>가 자신을 사랑한 이들을 모두 외면하고 차갑게 굴자, 네메시스는 그를 샘물에 비친 자기 자신과 사랑에 빠지게 만들어 그곳에서 죽게 했다. 또 <strong>크로이소스 왕</strong>이 자기 부를 자랑하자 그의 왕국을 무너뜨렸다. 영어 단어 "nemesis"가 "숙적, 응당한 보복"의 뜻으로 살아남았다.',
+    relations: { '부모': ['닉스'] }
+  },
+  '에리스': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'ERIS', greek: 'Ἔρις', roman: 'DISCORDIA',
+    domain: '불화', symbol: '황금 사과',
+    epithet: '불화의 여신',
+    desc: '<strong>에리스</strong>는 불화와 다툼의 여신. 닉스가 홀로 낳은 자식 중 가장 그리스 신화의 큰 사건들을 일으킨 존재. 그녀가 가는 곳마다 갈등이 자라난다.',
+    story: '에리스는 <strong>펠레우스와 테티스의 결혼식</strong>에 초대받지 못하자 분노해 "가장 아름다운 여신에게"라고 새긴 <strong>황금 사과</strong>를 던졌다. 헤라·아테나·아프로디테가 다투었고, 트로이 왕자 <strong>파리스</strong>가 아프로디테를 택해 헬레네를 얻었다. 이것이 <strong>트로이 전쟁</strong>의 직접적 발단이다. 한 여신의 분노가 십 년의 전쟁과 한 도시의 멸망을 가져왔다.',
+    relations: { '부모': ['닉스'] }
+  },
+  '헤스페리데스': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'HESPERIDES', greek: 'Ἑσπερίδες', roman: 'HESPERIDES',
+    domain: '저녁, 황금 사과의 정원', symbol: '황금 사과, 용',
+    epithet: '저녁의 자매들',
+    desc: '<strong>헤스페리데스</strong>는 세상의 서쪽 끝, 해가 지는 곳에 있는 황금 사과의 정원을 지키는 자매 요정들. 닉스가 홀로 낳은 자식이지만 후대에는 아틀라스의 딸들로도 그려진다.',
+    story: '이들이 지키는 황금 사과는 가이아가 헤라의 결혼식 선물로 준 것. 잠들지 않는 용 <strong>라돈</strong>이 함께 지킨다. <strong>헤라클레스의 12과업</strong> 중 열한 번째가 이 사과를 가져오는 것이었다. 그는 아틀라스에게 잠시 하늘을 대신 짊어지게 하고 사과를 얻었다. 이 정원의 위치는 세상의 끝, 빛이 사라지는 서쪽 — 그래서 자매들의 이름이 "저녁(헤스페로스)"에서 왔다.',
+    relations: { '부모': ['닉스'] }
+  },
+  '모로스': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'MOROS', greek: 'Μόρος', roman: 'FATUM',
+    domain: '파멸, 피할 수 없는 운명', symbol: '검은 형체',
+    epithet: '피할 수 없는 끝',
+    desc: '<strong>모로스</strong>는 "피할 수 없는 파멸"의 신. 모이라이가 정한 운명을 실제로 인간에게 가져다 주는 어두운 손길. 보이지 않지만 모든 죽음의 배후에 있다.',
+    story: '헤시오도스는 모로스를 닉스가 홀로 낳은 첫 자식으로 꼽았다. 그는 인격화되지 않은 채 거의 모든 비극의 그림자로 등장한다. 어떤 신도, 어떤 영웅도 그를 피할 수 없다는 점에서 모이라이의 결정을 집행하는 손이라 할 수 있다. 후대 라틴어 "fatum"의 개념이 여기서 발전했다.',
+    relations: { '부모': ['닉스'] }
+  },
+  '케레스': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'KERES', greek: 'Κῆρες', roman: 'TENEBRAE',
+    domain: '폭력적 죽음', symbol: '날개, 핏빛 망토, 검은 손톱',
+    epithet: '폭력적 죽음의 정령들',
+    desc: '<strong>케레스</strong>는 폭력적이고 잔인한 죽음을 가져오는 여성 죽음의 정령들. 평화로운 죽음의 신 타나토스와 정반대다. 전쟁터·역병·살해 등 비참한 종말의 자리에 모인다.',
+    story: '케레스는 검은 날개와 핏빛 망토를 두르고 검은 손톱으로 죽어가는 자의 피를 마신다. <strong>일리아스</strong>는 트로이 전투의 한복판에서 케레스가 시체 위를 떠다니며 영혼을 채간다고 묘사한다. 그들은 끔찍하지만 인격이 거의 없는, 차라리 무리진 자연력에 가까운 존재.',
+    relations: { '부모': ['닉스'] }
+  },
+  '오네이로이': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'ONEIROI', greek: 'Ὄνειροι', roman: 'SOMNIA',
+    domain: '꿈', symbol: '검은 날개, 두 개의 문',
+    epithet: '꿈의 영들',
+    desc: '<strong>오네이로이</strong>는 인간에게 꿈을 가져다 주는 꿈의 정령들. 헤시오도스는 닉스의 자식, 후대에는 잠의 신 힙노스의 자식으로 그려진다. 가장 유명한 셋이 모르페우스(인간 형상의 꿈), 포베토르(짐승 형상의 꿈), 판타소스(사물 형상의 꿈).',
+    story: '저승의 어두운 굴에 살며 매일 밤 두 개의 문으로 인간 세상에 나간다 — <strong>상아의 문</strong>으로 나오는 꿈은 거짓이고, <strong>뿔의 문</strong>으로 나오는 꿈은 진실이다. 오디세우스의 아내 페넬로페가 이 이야기를 호메로스의 『오디세이아』에서 전한다. 모르페우스의 이름은 "형태(morphē)"에서 왔고, 후대에 약물 모르핀의 어원이 되었다.',
+    relations: { '부모': ['닉스'] }
+  },
+  '모모스': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'MOMOS', greek: 'Μῶμος', roman: 'QUERELA',
+    domain: '비난, 풍자', symbol: '광대의 가면',
+    epithet: '비난과 조롱의 정령',
+    desc: '<strong>모모스</strong>는 비난, 조롱, 잔소리의 신. 신들조차 풍자하다가 결국 올림포스에서 추방당했다. 모든 작품과 일에서 흠잡을 거리를 찾아내는 존재.',
+    story: '모모스는 헤파이스토스가 만든 인간에 대해 "가슴에 창문이 없어 그 속을 들여다볼 수 없다"고 조롱했고, 포세이돈이 만든 황소에는 "뿔이 눈 아래 있어야 더 잘 받지 않겠느냐"고 트집 잡았다. 결국 신들이 그를 추방했다. 이솝 우화의 〈모모스의 트집〉 같은 이야기들이 그의 본질을 보여준다.',
+    relations: { '부모': ['닉스'] }
+  },
+  '아파테': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'APATE', greek: 'Ἀπάτη', roman: 'FRAUS',
+    domain: '기만, 사기', symbol: '두 얼굴',
+    epithet: '속임수의 여신',
+    desc: '<strong>아파테</strong>는 기만과 속임수, 사기의 여신. 그녀가 가는 곳마다 진실은 흐려지고 거짓이 자라난다. 닉스의 자식 중에서도 가장 인간 사회에 깊이 스며든 존재.',
+    story: '아파테는 <strong>판도라의 상자</strong>에서 풀려난 악들 중 하나로 꼽힌다. 헤라가 헤라클레스를 속이려 할 때 아파테의 힘을 빌렸다는 이야기도 있다. 그녀의 로마 대응신 <strong>프라우스(Fraus)</strong>는 영어 단어 "fraud(사기)"의 어원이 되었다.',
+    relations: { '부모': ['닉스'] }
+  },
+  '게라스': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'GERAS', greek: 'Γῆρας', roman: 'SENECTUS',
+    domain: '노년', symbol: '쇠약한 노인',
+    epithet: '늙음의 신',
+    desc: '<strong>게라스</strong>는 노년의 신. 인간이 피하고 싶지만 결국 모두에게 찾아오는 늙음 그 자체. 그리스인들은 노년을 단순한 자연 현상이 아니라 두려워해야 할 신성한 힘으로 여겼다.',
+    story: '게라스는 도자기화에서 쇠약하고 쪼그라든 노인의 모습으로 묘사된다. 그는 종종 <strong>헤라클레스</strong>와 함께 그려지는데, 영웅이 노년에 맞서 싸우는 장면이다. 그리스 신화에서 누군가에게 "영원한 젊음"을 약속받았다가 늙음만 영원히 받게 되는 <strong>티토노스</strong>의 비극이 게라스의 위력을 보여준다.',
+    relations: { '부모': ['닉스'] }
+  },
+  '필로테스': {
+    gen: 'minor', tier: '닉스의 자식',
+    nameEn: 'PHILOTES', greek: 'Φιλότης', roman: 'AMICITIA',
+    domain: '애욕, 친애', symbol: '엮인 두 손',
+    epithet: '애욕의 여신',
+    desc: '<strong>필로테스</strong>는 애욕과 우정, 결합의 여신. 에로스가 우주적 결합의 힘이라면, 필로테스는 더 인간적인 친밀과 애착의 여신.',
+    story: '닉스의 자식 중에 드물게 부정적이지 않은 신. 헤시오도스의 명단에 등장하지만 후대 문학에서는 거의 다루어지지 않는다. 어머니 닉스의 어두운 자녀들 사이에서 친밀함과 사랑이라는 한 줄기 따뜻한 빛 같은 존재다.',
+    relations: { '부모': ['닉스'] }
+  },
+
+  // ============= 새 티탄들 (남신 5명, 크로노스·히페리온·오케아노스는 기존) =============
+  '코이오스': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'KOIOS', greek: 'Κοῖος', roman: 'COEUS',
+    domain: '천구의 축, 지성', symbol: '북쪽 기둥, 별',
+    epithet: '천구를 떠받치는 자',
+    desc: '<strong>코이오스</strong>는 가이아와 우라노스의 자식 중 하나. 하늘의 북쪽 축, 즉 별들이 도는 중심을 떠받치는 티탄. 지성과 사유, 천문을 다스린다.',
+    story: '여동생이자 아내인 <strong>포이베</strong>와 결합해 <strong>레토</strong>(아폴론·아르테미스의 어머니)와 아스테리아를 낳았다. 즉 코이오스는 제우스의 장인이자 아폴론·아르테미스의 외조부다. 티타노마키아에서 다른 티탄들과 함께 제우스에 맞섰다가 패해 타르타로스에 갇혔다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['포이베'], '자식': ['레토', '아스테리아'] }
+  },
+  '크리오스': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'KRIOS', greek: 'Κρῖος', roman: 'CRIUS',
+    domain: '남쪽 기둥, 별자리', symbol: '숫양',
+    epithet: '남쪽을 떠받치는 자',
+    desc: '<strong>크리오스</strong>는 가이아와 우라노스의 자식. 하늘의 남쪽 기둥을 떠받치는 티탄. 이름은 그리스어로 "숫양"이며, 황도 12궁의 양자리(Aries)와 연결된다.',
+    story: '에우리비아와 결합해 페르세스(파괴), 팔라스(전쟁의 지혜), <strong>아스트라이오스</strong>(별의 신)를 낳았다. 아스트라이오스는 새벽의 여신 에오스와 결합해 보레아스(북풍), 노토스(남풍), 제피로스(서풍), 에우로스(동풍)와 모든 별을 낳았다. 즉 크리오스는 모든 바람과 별의 할아버지다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['에우리비아'], '자식': ['아스트라이오스', '팔라스', '페르세스'] }
+  },
+  '이아페토스': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'IAPETOS', greek: 'Ἰαπετός', roman: 'IAPETUS',
+    domain: '관통, 죽음의 시간', symbol: '창',
+    epithet: '인류의 조상',
+    desc: '<strong>이아페토스</strong>는 가이아와 우라노스의 자식 티탄. 그의 자손들이 인류의 운명을 결정짓는 신화의 중요한 인물이 된다.',
+    story: '오케아노스의 딸 <strong>클리메네</strong>와 결합해 네 아들을 낳았다 — <strong>아틀라스</strong>(하늘을 떠받치는 거인), <strong>프로메테우스</strong>(인간에게 불을 준 자), <strong>에피메테우스</strong>(판도라의 남편), <strong>메노이티오스</strong>(오만으로 제우스에게 죽임당한 자). 즉 이아페토스는 인간의 운명에 가장 깊이 관여한 티탄들의 아버지다. 그 자신은 티타노마키아에서 제우스에게 패해 타르타로스에 갇혔다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['클리메네'], '자식': ['아틀라스', '프로메테우스', '에피메테우스', '메노이티오스'] }
+  },
+
+  // 여 티탄들 (테이아, 테미스, 므네모시네, 포이베, 테티스)
+  '테이아': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'THEIA', greek: 'Θεία', roman: 'THEA',
+    domain: '빛', symbol: '빛나는 광채',
+    epithet: '빛나는 여신',
+    desc: '<strong>테이아</strong>는 가이아와 우라노스의 자식 여 티탄. 빛 그 자체이자, 천체의 광채를 주관한다. 그녀의 이름은 그리스어로 "여신"이라는 일반 명사와 같다.',
+    story: '오빠 <strong>히페리온</strong>과 결합해 셋의 자식을 낳았다 — <strong>헬리오스</strong>(태양), <strong>셀레네</strong>(달), <strong>에오스</strong>(새벽). 즉 하늘의 모든 빛은 테이아에게서 나왔다. 핀다로스는 그녀를 "황금·은·보석에게 광채를 부여하는 자"라고 노래했다 — 즉 빛나는 모든 것이 그녀의 선물이다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['히페리온'], '자식': ['헬리오스', '셀레네', '에오스'] }
+  },
+  '테미스': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'THEMIS', greek: 'Θέμις', roman: 'THEMIS',
+    domain: '신성한 법, 정의', symbol: '저울, 검',
+    epithet: '신성한 질서의 수호자',
+    desc: '<strong>테미스</strong>는 가이아와 우라노스의 자식 여 티탄. 단순한 법이 아니라 <strong>자연의 신성한 질서</strong> 그 자체를 다스린다. 그녀의 법은 인간이 만든 법(노모스)보다 위에 있다.',
+    story: '제우스의 두 번째 아내가 되어 <strong>모이라이(운명의 세 여신)</strong>, <strong>호라이(계절)</strong>, 그리고 정의의 여신 <strong>디케</strong>를 낳았다. 즉 테미스는 우주의 시간 질서와 도덕 질서를 다스리는 어머니다. <strong>델포이의 신탁</strong>도 원래 그녀의 것이었고 후에 아폴론에게 넘어갔다. 현대 법정의 정의의 여신상(저울과 칼)이 바로 그녀다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['제우스'], '자식': ['모이라이', '호라이', '디케'] }
+  },
+  '므네모시네': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'MNEMOSYNE', greek: 'Μνημοσύνη', roman: 'MONETA',
+    domain: '기억', symbol: '책, 머리띠',
+    epithet: '기억의 여신',
+    desc: '<strong>므네모시네</strong>는 가이아와 우라노스의 자식 여 티탄. 기억 그 자체이며, 모든 시와 노래의 원천. 문자가 없던 시대 그리스에서 기억은 신성한 능력이었다.',
+    story: '제우스와 아흐레 밤을 함께 보내 <strong>아홉 무사이(뮤즈)</strong>를 낳았다 — 칼리오페(서사시), 클레이오(역사), 에라토(연애시), 에우테르페(음악), 멜포메네(비극), 폴리힘니아(찬가), 테르프시코레(춤), 탈리아(희극), 우라니아(천문). 즉 모든 예술과 학문이 그녀의 자녀들이다. 시인들이 작품 첫머리에 "무사여, 노래하라"고 청할 때 그들은 결국 므네모시네의 딸들을 부르는 것이다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['제우스'], '자식': ['무사이(9 자매)'] }
+  },
+  '포이베': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'PHOIBE', greek: 'Φοίβη', roman: 'PHOEBE',
+    domain: '예지, 달빛', symbol: '달, 월계관',
+    epithet: '빛나는 예언자',
+    desc: '<strong>포이베</strong>는 가이아와 우라노스의 자식 여 티탄. 이름은 "빛나는"이라는 뜻. 달과 신탁, 예지의 영역을 다스린다.',
+    story: '오빠 코이오스와 결합해 <strong>레토</strong>(아폴론·아르테미스의 어머니)와 아스테리아를 낳았다. 즉 아폴론과 아르테미스는 그녀의 손자손녀. 한때 <strong>델포이의 신탁</strong>을 다스렸으며, 그 권능을 손자 아폴론에게 결혼 선물로 주었다 — 그래서 아폴론의 별명이 "포이보스(Phoebus, 빛나는 자)"가 되었다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['코이오스'], '자식': ['레토', '아스테리아'] }
+  },
+  '테티스': {
+    gen: 'titan', tier: '티탄',
+    nameEn: 'TETHYS', greek: 'Τηθύς', roman: 'TETHYS',
+    domain: '바닷물, 강의 어머니', symbol: '물결, 강',
+    epithet: '강물의 어머니',
+    desc: '<strong>테티스</strong>는 가이아와 우라노스의 자식 여 티탄. 바닷물과 모든 강물의 어머니. 아킬레우스의 어머니인 바다 요정 테티스(Thetis)와는 다른 인물이니 혼동하지 말 것 — 이쪽은 그녀의 손녀.',
+    story: '오빠 <strong>오케아노스</strong>와 결합해 세 천 명의 <strong>오케아니데스</strong>(바다 요정)와 세 천 명의 강의 신을 낳았다. 즉 세상의 모든 강물이 그녀의 자식이다. 헤라가 어렸을 때 잠시 그녀의 손에서 자랐다는 전승도 있다. 현대 지질학에서 고대 대양에 "테티스해(Tethys Ocean)"라는 이름이 붙은 것은 이 신에서 유래한다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['오케아노스'], '자식': ['오케아니데스(3,000 요정)', '강의 신들'] }
   }
 };
 
 // ============= TREE STRUCTURE =============
 const treeStructure = [
   {
-    tier: '태초의 신',
-    greek: 'Πρωτογενοί — Protogenoi',
-    cols: 1,
-    nodes: ['카오스']
+    tier: '태초의 시작',
+    greek: 'Ἀρχή — Arche',
+    cols: 4,
+    nodes: ['카오스', '가이아', '타르타로스', '에로스']
   },
-  { lineage: '카오스에서' },
+  { lineage: '카오스가 낳은 자식' },
   {
-    tier: '하늘과 대지',
-    greek: 'Οὐρανός · Γαῖα',
-    cols: 3,
-    nodes: ['가이아', '에로스', '우라노스']
+    tier: '어둠과 밤',
+    greek: 'Ἔρεβος · Νύξ',
+    cols: 2,
+    nodes: ['에레보스', '닉스']
+  },
+  { lineage: '가이아 홀로 낳은 자식' },
+  {
+    tier: '하늘',
+    greek: 'Οὐρανός',
+    cols: 1,
+    nodes: ['우라노스']
   },
   { lineage: '가이아 × 우라노스' },
   {
@@ -1983,7 +3207,7 @@ document.addEventListener('keydown', e => {
   }
 });
 
-function showGod(name) {
+function renderGodDetail(name) {
   const g = gods[name];
   if (!g) return;
 
@@ -2067,20 +3291,95 @@ function showGod(name) {
       <div class="ornament">❦ ❦ ❦</div>
     </div>
   `;
+}
 
-  const view = document.getElementById('detail-view');
-  view.scrollTop = 0;
-  document.getElementById('app').dataset.view = 'detail';
+// ============= ROUTER =============
+// Tracks where the user came from so detail back button knows where to return
+let detailReturnView = 'home';
+let detailReturnCategory = null;
+
+function goHome() {
+  const app = document.getElementById('app');
+  app.dataset.view = 'home';
+  app.dataset.from = 'home';
+  if (typeof clearSearch === 'function') clearSearch();
+}
+
+function goCategories() {
+  const app = document.getElementById('app');
+  app.dataset.view = 'categories';
+  app.dataset.from = 'categories';
+  renderCategories();
+}
+
+function goCatDetail(catId) {
+  const app = document.getElementById('app');
+  app.dataset.view = 'cat-detail';
+  app.dataset.from = 'cat-detail';
+  app.dataset.category = catId;
+  renderCatDetail(catId);
+}
+
+function goTree() {
+  const app = document.getElementById('app');
+  app.dataset.view = 'tree';
+  app.dataset.from = 'tree';
+  // Initialize tree canvas if not yet
+  if (typeof initTreeCanvas === 'function') initTreeCanvas();
+}
+
+function showGod(name) {
+  // Remember where we came from
+  const app = document.getElementById('app');
+  const currentView = app.dataset.view;
+  if (currentView === 'tree') {
+    detailReturnView = 'tree';
+  } else if (currentView === 'cat-detail') {
+    detailReturnView = 'cat-detail';
+    detailReturnCategory = app.dataset.category;
+  } else if (currentView === 'categories') {
+    detailReturnView = 'categories';
+  } else {
+    detailReturnView = 'home';
+  }
+  // Update back button label
+  updateDetailBackLabel();
+  // Render and show
+  if (typeof renderGodDetail === 'function') renderGodDetail(name);
+  app.dataset.view = 'detail';
+  // Scroll detail view to top
+  const detailView = document.getElementById('detail-view');
+  if (detailView) detailView.scrollTop = 0;
+}
+
+function updateDetailBackLabel() {
+  const btn = document.getElementById('detail-back');
+  if (!btn) return;
+  let label = '← 돌아가기';
+  if (detailReturnView === 'tree') {
+    label = '← 가계도로 돌아가기';
+  } else if (detailReturnView === 'cat-detail') {
+    label = '← 항목으로 돌아가기';
+  } else if (detailReturnView === 'categories') {
+    label = '← 항목별 보기';
+  } else {
+    label = '← 홈으로';
+  }
+  btn.textContent = label;
 }
 
 function goBack() {
-  document.getElementById('app').dataset.view = 'tree';
-}
-
-function goHome() {
-  goBack();
-  setFilter('all');
-  if (typeof clearSearch === 'function') clearSearch();
+  const app = document.getElementById('app');
+  if (detailReturnView === 'tree') {
+    app.dataset.view = 'tree';
+  } else if (detailReturnView === 'cat-detail' && detailReturnCategory) {
+    app.dataset.view = 'cat-detail';
+    app.dataset.from = 'cat-detail';
+  } else if (detailReturnView === 'categories') {
+    app.dataset.view = 'categories';
+  } else {
+    app.dataset.view = 'home';
+  }
 }
 
 function setFilter(filter) {
@@ -2088,6 +3387,176 @@ function setFilter(filter) {
   document.querySelectorAll('.filter-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.filter === filter);
   });
+  // (Filter functionality reserved for legacy tree view; in canvas view we'll add later)
+}
+
+// ============= CATEGORIES DATA =============
+const categoryDefs = [
+  {
+    id: 'primordial',
+    roman: 'I.',
+    name: '태초의 신',
+    greek: 'Πρωτογενοί · Protogenoi',
+    desc: '우주가 처음 분화될 때<br>자연 발생한 신들',
+    count: '5 DEITIES',
+    accent: '#e0c8a0',
+    gods: ['카오스', '가이아', '타르타로스', '에로스', '우라노스'],
+    intro: '헤시오도스 『신통기』에 따르면, 가장 먼저 카오스가 생겨났고 그 뒤를 이어 가이아 · 타르타로스 · 에로스가 자연스럽게 솟아났으며, 가이아가 홀로 우라노스를 낳았다. 모든 신화의 시작점이다.'
+  },
+  {
+    id: 'chaos-children',
+    roman: 'II.',
+    name: '카오스의 자식',
+    greek: 'Ἔρεβος · Νύξ',
+    desc: '어둠과 밤<br>모든 두려운 힘의 어머니',
+    count: '2 DEITIES',
+    accent: '#c0a0d8',
+    gods: ['에레보스', '닉스'],
+    intro: '카오스가 직접 낳은 두 자식. 어둠의 에레보스와 밤의 닉스. 호메로스의 『일리아스』는 제우스조차 닉스를 두려워한다고 전한다.'
+  },
+  {
+    id: 'darkness-children',
+    roman: 'III.',
+    name: '어둠(에레보스) × 밤(닉스)의 자식',
+    greek: 'Αἰθήρ · Ἡμέρα',
+    desc: '빛과 낮<br>어둠에서 태어난 광채',
+    count: '2 DEITIES',
+    accent: '#f0d8a0',
+    gods: ['아이테르', '헤메라'],
+    intro: '어둠과 밤이 결합해 태어난 두 자식. 천공의 빛 아이테르와 낮의 여신 헤메라. 어둠에서 빛이 솟아난다는 그리스 우주론의 시적 발상이다.'
+  },
+  {
+    id: 'nyx-children',
+    roman: 'IV.',
+    name: '닉스의 자식들',
+    greek: 'Παῖδες Νυκτός',
+    desc: '운명·죽음·잠·복수<br>인간의 가장 어두운 힘',
+    count: '13 DEITIES',
+    accent: '#c8b0d8',
+    gods: ['모이라이', '타나토스', '힙노스', '네메시스', '에리스', '헤스페리데스', '모로스', '케레스', '오네이로이', '모모스', '아파테', '게라스', '필로테스'],
+    intro: '닉스가 홀로 낳은 열세 자식들. 운명, 죽음, 잠, 응보, 불화, 꿈 — 인간 존재의 가장 근본적이고 어두운 힘들이 모두 그녀에게서 나왔다.'
+  },
+  {
+    id: 'titan',
+    roman: 'V.',
+    name: '티탄 12신',
+    greek: 'Δώδεκα Τιτᾶνες',
+    desc: '가이아와 우라노스의<br>위대한 자식들',
+    count: '12 DEITIES',
+    accent: '#f5d588',
+    gods: ['오케아노스', '코이오스', '크리오스', '히페리온', '이아페토스', '크로노스', '테이아', '레아', '테미스', '므네모시네', '포이베', '테티스'],
+    intro: '가이아와 우라노스가 결합해 낳은 위대한 열두 자식. 남신 여섯과 여신 여섯으로 이루어진 첫 세대 신족. 크로노스가 아버지를 거세하고 이들의 시대를 열었다.'
+  },
+  {
+    id: 'olympian-1',
+    roman: 'VI.',
+    name: '올림포스 1세대',
+    greek: 'Ὀλύμπιοι α´',
+    desc: '크로노스 × 레아의<br>여섯 자식',
+    count: '6 DEITIES',
+    accent: '#ffd478',
+    gods: ['제우스', '헤라', '포세이돈', '하데스', '데메테르', '헤스티아'],
+    intro: '티탄 크로노스와 레아의 자식들. 제우스가 아버지를 쫓아내고 형제들과 함께 올림포스를 차지했다. 하늘·바다·저승을 나눠 다스리는 세 형제가 여기서 시작된다.'
+  },
+  {
+    id: 'olympian-2',
+    roman: 'VII.',
+    name: '올림포스 2세대',
+    greek: 'Ὀλύμπιοι β´',
+    desc: '제우스와 여러 어머니의<br>일곱 자식',
+    count: '7 DEITIES',
+    accent: '#d4f0dc',
+    gods: ['아테나', '아폴론', '아르테미스', '아레스', '헤르메스', '헤파이스토스', '디오니소스'],
+    intro: '제우스와 여러 여신·인간의 자녀들. 헤라가 낳은 아레스와 헤파이스토스 외에 메티스, 레토, 마이아, 세멜레가 어머니다. 헤라의 분노와 질투가 그치지 않는 시기.'
+  },
+  {
+    id: 'special',
+    roman: 'VIII.',
+    name: '특수 출생',
+    greek: 'Ἀναδυομένη',
+    desc: '바다의 거품에서<br>홀로 태어난 미의 여신',
+    count: '1 DEITY',
+    accent: '#f0c4d8',
+    gods: ['아프로디테'],
+    intro: '크로노스가 우라노스를 거세할 때 바다에 떨어진 살에서 솟아오른 거품에서 태어났다. 부모 없이 바다의 거품(아프로스)에서 솟아났기에 "아프로디테"라 불린다.'
+  }
+];
+
+// Category icons (SVG)
+const categoryIcons = {
+  'primordial': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="24" r="14" stroke="currentColor" stroke-width="0.8" stroke-dasharray="2,2"/><circle cx="24" cy="24" r="6" fill="currentColor" opacity="0.7"/>',
+  'chaos-children': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><path d="M 16 16 Q 24 12 32 16 Q 36 24 32 32 Q 24 36 16 32 Q 12 24 16 16 Z" fill="currentColor" opacity="0.7"/><circle cx="34" cy="18" r="1.2" fill="currentColor"/><circle cx="36" cy="26" r="1" fill="currentColor"/><circle cx="32" cy="34" r="1" fill="currentColor"/>',
+  'darkness-children': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="24" r="6" fill="currentColor" opacity="0.85"/><circle cx="32" cy="24" r="6" fill="currentColor" opacity="0.5"/>',
+  'nyx-children': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="14" r="2" fill="currentColor"/><circle cx="32" cy="18" r="2" fill="currentColor"/><circle cx="34" cy="26" r="2" fill="currentColor"/><circle cx="30" cy="32" r="2" fill="currentColor"/><circle cx="22" cy="34" r="2" fill="currentColor"/><circle cx="14" cy="30" r="2" fill="currentColor"/><circle cx="14" cy="22" r="2" fill="currentColor"/><circle cx="18" cy="16" r="2" fill="currentColor"/>',
+  'titan': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><path d="M 14 12 Q 28 12 32 24 Q 30 32 22 34 L 18 32 L 16 28 L 14 24 Z" fill="currentColor" opacity="0.85"/>',
+  'olympian-1': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><path d="M 28 10 L 19 26 L 25 26 L 17 38 L 30 22 L 24 22 L 30 10 Z" fill="currentColor"/>',
+  'olympian-2': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><ellipse cx="24" cy="28" rx="11" ry="13" fill="currentColor" opacity="0.85"/><circle cx="19" cy="24" r="3" fill="#4d3a2a"/><circle cx="29" cy="24" r="3" fill="#4d3a2a"/>',
+  'special': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><path d="M 10 26 Q 14 18 24 18 Q 32 18 34 22 L 40 18 L 38 26 L 42 28 L 36 30 Q 32 36 24 36 Q 14 36 10 30 Q 8 28 10 26 Z" fill="currentColor"/>'
+};
+
+function renderCategories() {
+  const grid = document.getElementById('categories-grid');
+  if (!grid) return;
+  grid.innerHTML = categoryDefs.map(cat => `
+    <button class="category-card" style="--accent: ${cat.accent};" onclick="goCatDetail('${cat.id}')">
+      <svg class="category-icon" viewBox="0 0 48 48" fill="none">${categoryIcons[cat.id]}</svg>
+      <div class="category-number">${cat.roman}</div>
+      <div class="category-name">${cat.name}</div>
+      <div class="category-greek">${cat.greek}</div>
+      <div class="category-desc">${cat.desc}</div>
+      <div class="category-count">${cat.count}</div>
+    </button>
+  `).join('');
+}
+
+function renderCatDetail(catId) {
+  const cat = categoryDefs.find(c => c.id === catId);
+  if (!cat) return;
+  const container = document.getElementById('cat-detail-container');
+  if (!container) return;
+
+  const godsHtml = cat.gods.map(name => {
+    const g = gods[name];
+    if (!g) {
+      // Render a placeholder for missing gods
+      return `<button class="god-card" disabled style="opacity: 0.5;">
+        <div style="padding: 30px 8px; color: #f8ebc8;">
+          <div class="god-name-kr">${name}</div>
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; margin-top: 8px; color: rgba(248, 235, 200, 0.5);">자료 준비중</div>
+        </div>
+      </button>`;
+    }
+    const sealColorMap = {
+      'primordial': '#e0c8a0',
+      'titan': '#f5d588',
+      'olympian-1': '#ffd478',
+      'olympian-2': '#d4f0dc',
+      'special': '#f0c4d8',
+      'minor': '#f0d8a0'
+    };
+    return `<button class="god-card" data-gen="${g.gen}" style="--accent: ${sealColorMap[g.gen] || sealColorMap.primordial}" onclick="showGod('${name}')">
+      ${makeSeal(name, sealColorMap[g.gen] || sealColorMap.primordial)}
+      <div class="god-name-kr">${name}</div>
+      <div class="god-name-en">${g.nameEn}</div>
+      <div class="god-roman">${g.roman}</div>
+      <div class="god-domain">${g.domain.split(',')[0]}</div>
+    </button>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="cat-detail-intro">
+      <div class="roman">${cat.roman}</div>
+      <h2>${cat.name}</h2>
+      <div class="greek-name">${cat.greek}</div>
+      <p>${cat.intro}</p>
+      <div class="divider"></div>
+    </div>
+    <div class="cat-gods-grid${(catId === 'nyx-children' || catId === 'darkness-children') ? ' minor-grid' : ''}">${godsHtml}</div>
+  `;
+
+  // Scroll to top
+  const view = document.getElementById('cat-detail-view');
+  if (view) view.scrollTop = 0;
 }
 
 // ============= SEARCH =============
@@ -2215,6 +3684,7 @@ searchInput.addEventListener('keydown', e => {
 });
 
 renderTree();
+renderCategories();
 </script>
 
 </body>
