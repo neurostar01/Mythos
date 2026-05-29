@@ -1244,12 +1244,13 @@
   .god-card[data-gen="olympian-2"] { --accent: var(--c-olympian-2); }
   .god-card[data-gen="special"] { --accent: var(--c-special); }
 
-  .app[data-filter]:not([data-filter="all"]) .god-card { opacity: 0.25; }
-  .app[data-filter="primordial"] .god-card[data-gen="primordial"],
-  .app[data-filter="titan"] .god-card[data-gen="titan"],
-  .app[data-filter="olympian-1"] .god-card[data-gen="olympian-1"],
-  .app[data-filter="olympian-2"] .god-card[data-gen="olympian-2"],
-  .app[data-filter="special"] .god-card[data-gen="special"] {
+  /* Filter dim only applies on home view (god grid), not in category pages */
+  .app[data-view="home"][data-filter]:not([data-filter="all"]) .god-card { opacity: 0.25; }
+  .app[data-view="home"][data-filter="primordial"] .god-card[data-gen="primordial"],
+  .app[data-view="home"][data-filter="titan"] .god-card[data-gen="titan"],
+  .app[data-view="home"][data-filter="olympian-1"] .god-card[data-gen="olympian-1"],
+  .app[data-view="home"][data-filter="olympian-2"] .god-card[data-gen="olympian-2"],
+  .app[data-view="home"][data-filter="special"] .god-card[data-gen="special"] {
     opacity: 1;
   }
 
