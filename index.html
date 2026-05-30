@@ -766,6 +766,43 @@
     gap: 16px;
   }
 
+  /* Sex-based divider for titans (남신/여신 grouping) */
+  .sex-divider {
+    text-align: center;
+    margin: 0 0 20px;
+    grid-column: 1 / -1;
+  }
+  .sex-divider:not(:first-child) {
+    margin-top: 36px;
+  }
+  .sex-divider .sex-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: rgba(184, 137, 61, 0.85);
+    margin-bottom: 8px;
+  }
+  .sex-divider .sex-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+  .sex-divider .sex-line {
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: rgba(184, 137, 61, 0.6);
+  }
+  .sex-divider .sex-kr {
+    font-family: 'Noto Serif KR', 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: #4d3a2a;
+    letter-spacing: 0.2em;
+    font-weight: 500;
+  }
+
   /* Smaller cards for minor gods grid (Nyx's children etc.) */
   .cat-gods-grid.minor-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -2953,7 +2990,88 @@ const galleries = {
       img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Helios_in_his_chariot,_early_4th_century_BC,_Athena%27s_temple,_Ilion_(8125831363).jpg?width=800',
       title: '태양 마차를 모는 헬리오스', titleEn: 'Helios in his Chariot',
       meta: '그리스 부조 · 기원전 4세기 · 일리온 아테나 신전',
-      desc: '히페리온은 직접 묘사가 드물고 주로 그의 아들 헬리오스를 통해 표현된다. 태양 마차를 모는 도상이 후대 아폴론으로 이어졌다.'
+      desc: '히페리온은 직접 묘사가 드물고 주로 그의 아들 <strong>헬리오스</strong>를 통해 표현된다. 태양 마차를 모는 이 도상이 후대 아폴론으로 이어졌다. 히페리온 자신은 빛의 운행을 다스리는 신이지만, 그 빛이 인간에게 보이는 형태가 곧 헬리오스의 마차였다.'
+    },
+    {
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mengs,_Helios_als_Personifikation_des_Mittages.jpg?width=800',
+      title: '정오의 의인화로서의 헬리오스', titleEn: 'Helios as a Personification of Midday',
+      meta: '안톤 라파엘 멩스 · 1765 · 신고전주의',
+      desc: '독일 신고전주의 거장 멩스가 그린 헬리오스. 빛 자체의 화신으로, 마차 없이 정오의 태양 그 자체를 의인화했다. 마차 없는 도상은 신화의 헬리오스보다 그의 아버지 <strong>히페리온</strong>(빛 자체의 운행)에 가까운 묘사로 해석되기도 한다. 시리즈 〈하루의 시간들〉 중 정오 부분.'
+    }
+  ],
+
+  '이아페토스': [
+    {
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Atlas_Farnese.jpg?width=800',
+      title: '파르네세 아틀라스', titleEn: 'Farnese Atlas',
+      meta: '로마 시대 · 2세기 · 나폴리 국립고고학박물관',
+      desc: '이아페토스의 아들 <strong>아틀라스</strong>가 천구를 짊어진 가장 오래된 조각상. 2미터가 넘는 대리석상으로, 헬레니즘 원본의 로마 시대 복제. 어깨에 진 천구에는 <strong>고대 그리스의 41개 별자리</strong>가 부조로 새겨져 있어, <strong>현존하는 가장 오래된 천구 도상</strong>이기도 하다. 이아페토스의 비극이 그의 아들에게로 이어졌다.'
+    },
+    {
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Prometheus_Brings_Fire_by_Heinrich_Friedrich_F%C3%BCger.jpg?width=800',
+      title: '인류에게 불을 가져다주는 프로메테우스', titleEn: 'Prometheus Brings Fire',
+      meta: '하인리히 프리드리히 퓌거 · 1817 · 리히텐슈타인 미술관',
+      desc: '이아페토스의 둘째 아들 <strong>프로메테우스</strong>가 신들에게서 훔친 불을 인간에게 가져다주는 순간. 횃불을 든 영웅 옆에서 무릎 꿇은 첫 인간이 빛을 받는 장면. 인류 문명의 시작이자, 이아페토스 가문의 영원한 비극이 시작되는 순간을 담았다.'
+    }
+  ],
+
+  '테이아': [
+    {
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Big_Splash.jpg?width=800',
+      title: '거대 충돌 (테이아의 행성 충돌)', titleEn: 'The Big Splash — Theia Impact',
+      meta: 'NASA · 현대 천문학 상상도',
+      desc: '약 45억 년 전, 화성 크기의 원시 행성 <strong>"테이아(Theia)"</strong>가 원시 지구와 충돌한 〈거대 충돌설(Giant-impact hypothesis)〉의 상상도. 이 충돌의 잔해에서 <strong>달</strong>이 탄생했다. 빛(달)의 어머니라는 그리스 신화가 현대 과학으로 부활한 사례. 테이아 자신을 그린 명화는 드물지만, 그녀의 신화는 천문학에서 살아 있다.'
+    },
+    {
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Selene_and_Endymion_by_Nicolas_Poussin.jpg?width=800',
+      title: '셀레네와 엔디미온', titleEn: 'Selene and Endymion',
+      meta: '니콜라 푸생 · 1630 · 디트로이트 미술관',
+      desc: '테이아의 딸 <strong>셀레네(달)</strong>가 잠든 양치기 엔디미온을 사랑하게 된 장면. 프랑스 고전주의 거장 푸생이 그린 시적 작품. 테이아의 세 자식(헬리오스·셀레네·에오스)이 모두 어머니의 빛을 나눠 가진 신화의 한 단편이다.'
+    }
+  ],
+
+  '테티스': [
+    {
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Phillipopolis_Mosaic_Tethys_Detail.jpg?width=800',
+      title: '테티스 모자이크', titleEn: 'Tethys Mosaic',
+      meta: '로마 시대 · 2-3세기 · 필리포폴리스 (현재 시리아)',
+      desc: '머리에서 게의 집게발과 황소뿔이 솟은 여신 — 바닷물의 어머니 테티스의 전형적 도상. 남편 오케아노스와 비슷하게 묘사되지만 좀 더 부드럽고 풍성한 표현. 후대 비잔틴 모자이크에서도 같은 도상이 자주 등장한다.'
+    },
+    {
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Tethys_Ocean_(en).png?width=800',
+      title: '테티스해 (사라진 고대 대양)', titleEn: 'Tethys Ocean',
+      meta: '지질학 복원도 · 트라이아스기 후기',
+      desc: '약 2억 5천만 년 전 판게아 초대륙 동쪽에 펼쳐졌던 거대한 고대 바다 <strong>테티스해(Tethys Ocean)</strong>. 1893년 지질학자 에두아르트 쥐스가 신화의 이름을 빌려 명명했다. 알프스·히말라야 산맥이 융기하면서 사라졌고, 지중해·흑해·카스피해가 그 마지막 잔재. 신화의 어머니 바다가 지구과학의 어머니 바다가 된 셈.'
+    }
+  ],
+
+  '코이오스': [
+    {
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Marcantonio_Franceschini_-_The_Birth_of_Apollo_and_Diana_-_Walters_3724.jpg?width=800',
+      title: '아폴론과 디아나의 탄생', titleEn: 'The Birth of Apollo and Diana',
+      meta: '마르칸토니오 프란체스키니 · 1692-1709 · 리히텐슈타인 미술관',
+      desc: '이탈리아 바로크 화가 프란체스키니가 그린 코이오스의 외손주 탄생 장면. <strong>레토</strong>(코이오스와 포이베의 딸)가 델로스 섬에서 야자수를 붙잡고 쌍둥이 <strong>아폴론과 아르테미스</strong>를 낳는 순간을 묘사했다. 헤라의 질투 때문에 어떤 땅도 받아주지 않아 떠도는 섬 델로스만이 그녀를 맞아주었다. 그림 배경에 헤라가 음울하게 지켜보는 모습이 보인다.'
+    },
+    {
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hecate,_or_The_Night_of_Enitharmon%27s_Joy,_Butlin_316.jpg?width=800',
+      title: '헤카테 (밤의 여신)', titleEn: 'Hecate / The Night of Enitharmon\'s Joy',
+      meta: '윌리엄 블레이크 · 1795 · 테이트 브리튼',
+      desc: '코이오스의 외증손녀 <strong>헤카테</strong>(마법·교차로·달의 여신)를 그린 블레이크의 신비주의 걸작. 코이오스의 둘째 딸 아스테리아가 페르세스와 결합해 헤카테를 낳았으니, 코이오스 가문이 그리스 신화의 모든 빛(아폴론·아르테미스)과 어둠(헤카테)을 동시에 다스리는 셈. 셰익스피어 〈맥베스〉의 마녀들이 헤카테에서 영감을 얻었다.'
+    }
+  ],
+
+  '크리오스': [
+    {
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Sidney_Hall_-_Urania%27s_Mirror_-_Aries.jpg?width=800',
+      title: '양자리 (Aries)', titleEn: 'Aries Constellation',
+      meta: '시드니 홀 · 1825 · 〈우라니아의 거울〉',
+      desc: '19세기 영국에서 출간된 천문 도감 〈우라니아의 거울(Urania\'s Mirror)〉 중 황도 12궁의 첫 별자리 <strong>양자리(Aries)</strong> 도상. 크리오스의 이름이 곧 "숫양"이며, 매년 춘분(3월 21일경) 태양이 양자리에 들어서며 한 해가 시작된다. 한 해의 시작을 알리는 별자리.'
+    },
+    {
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Lorenzo_Costa_-_The_Argo_-_WGA05418.jpg?width=800',
+      title: '아르고호의 출항', titleEn: 'The Argo',
+      meta: '로렌초 코스타 · 1500년경 · 파도바 시립 박물관',
+      desc: '크리오스의 신화적 후예 — <strong>황금 양털(Golden Fleece)</strong>을 찾아 떠나는 〈아르고호의 원정〉. 한 해의 시작 별자리 양자리(크리오스)와 연결된 양이 죽어 그 가죽이 콜키스 왕국에 걸렸고, 영웅 이아손이 50명의 영웅(아르고노타이)과 함께 그것을 찾아 떠난 그리스 신화의 가장 유명한 모험. 크리오스의 그림자가 영웅 신화의 한가운데로 이어진다.'
     }
   ],
 
@@ -3364,20 +3482,32 @@ const gods = {
   '오케아노스': {
     gen: 'titan', tier: '티탄',
     nameEn: 'OKEANOS', greek: 'Ὠκεανός', roman: 'OCEANUS',
-    domain: '대양', symbol: '강물, 황소뿔',
+    domain: '대양, 모든 강물의 근원', symbol: '강물, 황소뿔, 게의 집게',
     epithet: '세상을 휘감는 강',
-    desc: '<strong>오케아노스</strong>는 세상의 끝을 둘러싼 거대한 강이다. 그리스인들에게 바다는 폰토스와 포세이돈의 영역이었지만, 그 너머 대지를 감싸는 무한한 흐름은 오케아노스였다.',
-    story: '오케아노스는 누이 테티스와 결합해 <strong>3,000명의 강의 신</strong>과 <strong>3,000명의 오케아니데스(바다 요정)</strong>를 낳았다. 세상 모든 강과 샘이 그의 자식이다. 티타노마키아가 일어났을 때 그는 형제들과 달리 <strong>중립을 지켰고</strong>, 그 덕에 처벌받지 않은 채 자기 영역에 남았다. 호메로스는 그를 "신들의 기원"이라 부르기도 했다.',
-    relations: { '부모': ['우라노스', '가이아'], '배우자': ['테티스'], '자식': ['강의 신들', '오케아니데스'] }
+    desc: '<strong>오케아노스</strong>는 세상의 끝을 둘러싼 거대한 강이다. 그리스인들에게 바다(폰토스·포세이돈의 영역)는 단지 지중해 정도였고, 그 너머 모든 대지를 둥글게 감싸 흐르는 무한한 흐름이 곧 오케아노스였다. 호메로스는 그를 <strong>"신들의 기원"</strong>이라 불렀고, 모든 강과 샘과 바다의 물이 결국 그에게서 흘러나온다고 보았다.',
+    story: '오케아노스는 누이 <strong>테티스</strong>와 결합해 <strong>3,000명의 강의 신(포타모이)</strong>과 <strong>3,000명의 오케아니데스(바다 요정)</strong>를 낳았다 — 세상 모든 흐르는 물이 그의 자식들이다. 나일강·이스트로스(다뉴브)·스카만드로스 같은 강의 신들이 모두 그의 아들. 다른 티탄들과 달리 그는 <strong>티타노마키아에서 중립을 지켰고</strong>, 그 덕에 처벌받지 않은 채 자기 영역에 남아 계속 흐른다. 헬레니즘 시대부터는 머리에서 게의 집게발이 솟아나고 텁수룩한 수염에서 물이 흐르는 노인의 모습으로 그려졌다. 〈호메로스 찬가〉에서 헤라는 그를 "양육의 아버지"라 부르며 어린 시절 그의 집에서 자랐다고 회상한다.',
+    relations: { '부모': ['우라노스', '가이아'], '배우자': ['테티스'], '자식': ['강의 신 3,000', '오케아니데스 3,000'] },
+    modern: [
+      { icon: '🌊', title: '"대양(Ocean)" 어원', text: '영어 <strong>ocean</strong>, 프랑스어 océan, 스페인어 océano — 모든 유럽어의 "대양" 단어가 그의 이름에서 직접 왔다. <strong>oceanography(해양학)</strong>, <strong>oceanic(해양의)</strong> 모두 마찬가지.' },
+      { icon: '🪐', title: '토성의 위성, 해왕성 발견사', text: '1846년 해왕성 발견 이후 천왕성 너머 가설적 행성을 "오케아노스"로 명명하자는 제안이 있었다. 실제 토성의 가장 큰 위성 중 하나인 타이탄에 그의 자식 이름(테티스 등)이 붙어 있다.' },
+      { icon: '🗺️', title: '고대 세계지도의 가장자리', text: '중세까지 유럽의 세계지도(T-O 지도) 가장자리에는 항상 "OCEANUS"라는 글자가 둥글게 둘러쳐 있었다. 알려진 세계를 둘러싼 미지의 물 — 그것이 곧 오케아노스였다.' },
+      { icon: '📖', title: '〈오디세이아〉의 끝없는 항해', text: '호메로스의 〈오디세이아〉에서 오디세우스가 저승으로 가려면 먼저 오케아노스의 흐름을 건너야 한다. 키메리아인의 땅, 세이렌의 섬, 스킬라와 카리브디스 — 모두 오케아노스 너머에 있다. 모든 모험 서사의 원형 무대.' }
+    ]
   },
   '히페리온': {
     gen: 'titan', tier: '티탄',
     nameEn: 'HYPERION', greek: 'Ὑπερίων', roman: 'HYPERION',
-    domain: '천공의 빛', symbol: '빛, 동쪽',
+    domain: '천공의 빛, 관측', symbol: '햇살, 동쪽',
     epithet: '높이 가는 자',
-    desc: '<strong>히페리온</strong>은 빛 그 자체의 티탄이다. 이름은 "높이 가는 자"라는 뜻으로, 하늘을 가로지르는 빛의 운행을 다스린다.',
-    story: '히페리온은 누이 <strong>테이아</strong>와 결합해 세 명의 빛나는 자식을 낳았다 — 태양의 신 <strong>헬리오스</strong>, 달의 여신 <strong>셀레네</strong>, 새벽의 여신 <strong>에오스</strong>가 그들이다. 티타노마키아 이후 히페리온의 직무는 점차 그의 손자 세대인 <strong>아폴론</strong>(태양)과 <strong>아르테미스</strong>(달)에게로 옮겨갔다. 셰익스피어는 햄릿에서 그를 "히페리온이 사티로스에 비할 바 없듯이"라며 고귀함의 상징으로 인용했다.',
-    relations: { '부모': ['우라노스', '가이아'], '배우자': ['테이아'], '자식': ['헬리오스', '셀레네', '에오스'] }
+    desc: '<strong>히페리온</strong>은 빛 그 자체의 티탄이다. 이름은 그리스어로 <strong>"높이 가는 자(ὑπέρ + ἰών)"</strong>, 즉 매일 하늘을 가로지르는 천체의 운행을 다스리는 자라는 뜻. 그의 통치 아래에서 해와 달이 처음 길을 알게 되었다.',
+    story: '히페리온은 누이 <strong>테이아</strong>와 결합해 세 명의 빛나는 자식을 낳았다 — 태양의 신 <strong>헬리오스</strong>, 달의 여신 <strong>셀레네</strong>, 새벽의 여신 <strong>에오스</strong>가 그들이다. 즉 우리가 보는 모든 천체의 빛이 그의 가문에서 나온다. 티타노마키아 이후 그는 직접 활동에서 물러났고, 그의 직무는 후대 손자뻘인 <strong>아폴론</strong>(태양)과 <strong>아르테미스</strong>(달)에게 넘어갔다. 셰익스피어 〈햄릿〉에서 햄릿은 죽은 아버지를 "히페리온"에, 새 의붓아버지를 "사티로스"에 비유하며 <strong>"히페리온이 사티로스에 비교될 바가 아니다"</strong>라고 한탄한다 — 영문학에서 가장 유명한 히페리온 인용. 존 키츠는 미완성 서사시 〈히페리온〉(1819)에서 그를 티탄 시대의 마지막 빛으로 그렸다.',
+    relations: { '부모': ['우라노스', '가이아'], '배우자': ['테이아'], '자식': ['헬리오스', '셀레네', '에오스'] },
+    modern: [
+      { icon: '📖', title: '셰익스피어 〈햄릿〉', text: '햄릿이 죽은 아버지를 회상하며 <strong>"Hyperion to a satyr(히페리온과 사티로스 차이)"</strong>라 말한다. 격조 높은 인격과 비루한 인격의 극명한 대비를 가리키는 영문학의 대표적 비유로 자리잡았다.' },
+      { icon: '📜', title: '키츠의 미완성 서사시', text: '존 키츠가 1818-1820년에 쓴 두 편의 미완성 서사시 〈Hyperion〉과 〈The Fall of Hyperion〉. 티탄에서 올림포스로 권력이 넘어가는 비극을 다룬다. 키츠 자신이 폐결핵으로 죽기 전 완성하지 못한 걸작.' },
+      { icon: '🛰️', title: 'NASA 〈히페리온〉, 토성의 위성', text: '토성의 위성 중 하나 <strong>히페리온(Hyperion)</strong>은 1848년 발견. 매우 불규칙한 모양과 회전을 보이는 특이한 위성이다. 2007년 카시니 탐사선이 근접 촬영해 화제가 됐다.' },
+      { icon: '🎮', title: '대중문화 〈히페리온〉', text: '댄 시먼스의 SF 4부작 〈히페리온 칸토스(1989-1997)〉, 게임 〈호라이즌 제로 던〉의 거대 로봇 "Hephaestus" — 거대하고 신비로운 존재를 가리키는 이름으로 자주 차용된다.' }
+    ]
   },
   '제우스': {
     gen: 'olympian-1', tier: '올림포스 1세대',
@@ -3738,40 +3868,64 @@ const gods = {
   '코이오스': {
     gen: 'titan', tier: '티탄',
     nameEn: 'KOIOS', greek: 'Κοῖος', roman: 'COEUS',
-    domain: '천구의 축, 지성', symbol: '북쪽 기둥, 별',
+    domain: '천구의 축, 지성, 예지', symbol: '북쪽 기둥, 별, 두루마리',
     epithet: '천구를 떠받치는 자',
-    desc: '<strong>코이오스</strong>는 가이아와 우라노스의 자식 중 하나. 하늘의 북쪽 축, 즉 별들이 도는 중심을 떠받치는 티탄. 지성과 사유, 천문을 다스린다.',
-    story: '여동생이자 아내인 <strong>포이베</strong>와 결합해 <strong>레토</strong>(아폴론·아르테미스의 어머니)와 아스테리아를 낳았다. 즉 코이오스는 제우스의 장인이자 아폴론·아르테미스의 외조부다. 티타노마키아에서 다른 티탄들과 함께 제우스에 맞섰다가 패해 타르타로스에 갇혔다.',
-    relations: { '부모': ['가이아', '우라노스'], '배우자': ['포이베'], '자식': ['레토', '아스테리아'] }
+    desc: '<strong>코이오스</strong>는 가이아와 우라노스의 자식 티탄. 별들이 그 주위를 도는 하늘의 <strong>북쪽 축</strong>을 떠받치는 신이자, 지성·사유·예지의 신. 이름은 그리스어 <strong>"질문하다(κοιάω)"</strong>에서 와서 "묻는 자, 캐묻는 지성"이라는 뜻으로도 해석된다. 로마식 이름 <strong>코에우스(Coeus)</strong>.',
+    story: '여동생이자 아내인 <strong>포이베</strong>와 결합해 두 딸을 낳았다 — <strong>레토</strong>(제우스의 사랑을 받아 <strong>아폴론·아르테미스</strong>를 낳음)와 <strong>아스테리아</strong>(별의 여신, 마법의 여신 헤카테의 어머니). 즉 코이오스는 <strong>아폴론과 아르테미스의 외조부</strong>이자, 마법의 여신 헤카테의 외증조부다. 그가 다스리던 예지의 영역은 후대에 손녀 헤카테와 손자 아폴론에게로 이어졌다. 티타노마키아에서 다른 형제들과 함께 제우스에 맞섰다가 패해 <strong>타르타로스</strong>에 갇혔다. 일부 후대 전승에서 그가 미쳐 광기 속에서 타르타로스를 빠져나오려 영원히 시도한다는 이야기도 있다(롤랑드의 〈티탄들의 멸망〉).',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['포이베'], '자식': ['레토', '아스테리아'], '손자손녀': ['아폴론', '아르테미스', '헤카테'] },
+    modern: [
+      { icon: '🧭', title: '"북극(Polus)"의 신화적 기원', text: '코이오스는 그리스 신화에서 <strong>천구의 북쪽 축</strong>을 인격화한 존재. 별들이 그 주위를 회전하는 중심점 — 즉 천문학의 <strong>천구의 북극(celestial north pole)</strong>이 곧 그의 자리다. 그래서 그의 별명이 "<strong>폴로스(Polos, 축)</strong>"이기도 했다.' },
+      { icon: '📜', title: '〈파라다이스 로스트〉의 등장', text: '존 밀턴의 서사시 〈실낙원(Paradise Lost)〉(1667)에서 사탄의 부하 타락 천사 중 한 명의 이름이 <strong>코에우스</strong>다. 즉 신과 맞서다 추방된 자라는 신화적 원형이 기독교 서사에 흡수된 사례.' },
+      { icon: '🤔', title: '"지성, 묻는 자"', text: '그리스어 어원 <strong>κοῖος(질문)</strong>가 그의 본질이다. 그가 다스린 영역은 단순한 천문이 아니라 <strong>"왜?"라고 묻는 능력</strong> — 즉 철학적 탐구의 시작점. 그래서 후대 인도-유럽학자들이 켈트 신화의 지식의 신 〈오그마〉, 노르웨이의 지혜의 신 〈미미르〉와의 친연성을 추정해왔다.' },
+      { icon: '🌌', title: '아스테리아 → 헤카테 → 마법의 계보', text: '코이오스의 둘째 딸 <strong>아스테리아</strong>는 별의 여신으로, 제우스의 구애를 피해 메추라기로 변신해 바다에 떨어져 섬이 되었다 — 그 섬이 <strong>델로스</strong>다(언니 레토가 그곳에서 아폴론·아르테미스를 낳음). 아스테리아의 딸이 〈마법의 여신 <strong>헤카테</strong>〉. 즉 그리스 신화의 마법 계보가 코이오스에서 시작된다.' }
+    ]
   },
   '크리오스': {
     gen: 'titan', tier: '티탄',
     nameEn: 'KRIOS', greek: 'Κρῖος', roman: 'CRIUS',
-    domain: '남쪽 기둥, 별자리', symbol: '숫양',
+    domain: '남쪽 기둥, 황도대, 별자리', symbol: '숫양, 별자리',
     epithet: '남쪽을 떠받치는 자',
-    desc: '<strong>크리오스</strong>는 가이아와 우라노스의 자식. 하늘의 남쪽 기둥을 떠받치는 티탄. 이름은 그리스어로 "숫양"이며, 황도 12궁의 양자리(Aries)와 연결된다.',
-    story: '에우리비아와 결합해 페르세스(파괴), 팔라스(전쟁의 지혜), <strong>아스트라이오스</strong>(별의 신)를 낳았다. 아스트라이오스는 새벽의 여신 에오스와 결합해 보레아스(북풍), 노토스(남풍), 제피로스(서풍), 에우로스(동풍)와 모든 별을 낳았다. 즉 크리오스는 모든 바람과 별의 할아버지다.',
-    relations: { '부모': ['가이아', '우라노스'], '배우자': ['에우리비아'], '자식': ['아스트라이오스', '팔라스', '페르세스'] }
+    desc: '<strong>크리오스</strong>는 가이아와 우라노스의 자식 티탄. 하늘의 <strong>남쪽 기둥</strong>을 떠받치는 신. 이름은 그리스어로 <strong>"숫양(Κρῖος, kríos)"</strong>이며, <strong>황도 12궁의 양자리(Aries)</strong>와 직접 연결된다. 즉 그는 황도(태양이 지나는 길)가 시작되는 별자리, 봄이 시작되는 별자리의 신화적 원형.',
+    story: '바다의 여신 <strong>에우리비아</strong>(폰토스의 딸)와 결합해 세 아들을 낳았다 — <strong>아스트라이오스</strong>(별의 신), <strong>팔라스</strong>(전쟁의 지혜), <strong>페르세스</strong>(파괴). 아스트라이오스는 새벽의 여신 <strong>에오스</strong>와 결합해 네 방향의 바람신 <strong>보레아스(북풍)·노토스(남풍)·제피로스(서풍)·에우로스(동풍)</strong>과 모든 <strong>별</strong>(아스트라)을 낳았다. 즉 크리오스는 <strong>모든 바람과 별의 할아버지</strong>다. 둘째 아들 페르세스는 코이오스의 손녀 <strong>아스테리아</strong>와 결혼해 마법의 여신 <strong>헤카테</strong>를 낳았다 — 즉 크리오스도 헤카테의 외증조부 격이 된다. 티타노마키아 패배 후 다른 티탄들과 함께 타르타로스에 갇혔다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['에우리비아'], '자식': ['아스트라이오스', '팔라스', '페르세스'], '손자': ['보레아스', '노토스', '제피로스', '에우로스', '헤카테'] },
+    modern: [
+      { icon: '♈', title: '황도 12궁의 첫 별자리 〈양자리(Aries)〉', text: '크리오스의 이름이 곧 <strong>"숫양"</strong>이며, 황도 12궁의 첫 번째 별자리가 <strong>양자리(Aries)</strong>다. 매년 춘분(3월 21일경)에 태양이 양자리에 들어서며, 점성술에서 황도대의 시작점. 즉 한 해의 시작을 알리는 별자리.' },
+      { icon: '🌬️', title: '바람의 할아버지', text: '크리오스의 아들 <strong>아스트라이오스</strong>와 새벽의 여신 에오스 사이에서 네 바람신이 태어났다 — <strong>보레아스(북풍)·노토스(남풍)·제피로스(서풍)·에우로스(동풍)</strong>. 즉 우리가 느끼는 모든 바람이 크리오스 가문에서 나온다. 시뇨렐리·보티첼리의 명화 〈비너스의 탄생〉에 등장하는 두 바람신도 그의 손자.' },
+      { icon: '⭐', title: '"별(astro-)"의 어근', text: '크리오스의 아들 <strong>아스트라이오스(Ἀστραῖος, "별의")</strong>의 이름에서 영어 <strong>astronomy(천문학)</strong>, <strong>astrology(점성술)</strong>, <strong>astronaut(우주비행사)</strong>, <strong>asterisk(*)</strong>, <strong>disaster(불운, 별이 어긋남)</strong>이 모두 왔다. 즉 별을 다루는 모든 학문의 어원이 크리오스 가문이다.' },
+      { icon: '🐏', title: '〈황금 양털의 아르고원정대〉', text: '그리스 신화의 가장 유명한 모험 — <strong>이아손이 황금 양털(Golden Fleece)</strong>을 찾아 떠나는 〈아르고호의 원정〉. 그 황금 양털을 가진 숫양이 별자리가 되어 양자리(Aries)가 되었다는 신화. 크리오스의 신화적 그림자가 영웅 신화의 한가운데로 이어진다.' }
+    ]
   },
   '이아페토스': {
     gen: 'titan', tier: '티탄',
     nameEn: 'IAPETOS', greek: 'Ἰαπετός', roman: 'IAPETUS',
-    domain: '관통, 죽음의 시간', symbol: '창',
-    epithet: '인류의 조상',
-    desc: '<strong>이아페토스</strong>는 가이아와 우라노스의 자식 티탄. 그의 자손들이 인류의 운명을 결정짓는 신화의 중요한 인물이 된다.',
-    story: '오케아노스의 딸 <strong>클리메네</strong>와 결합해 네 아들을 낳았다 — <strong>아틀라스</strong>(하늘을 떠받치는 거인), <strong>프로메테우스</strong>(인간에게 불을 준 자), <strong>에피메테우스</strong>(판도라의 남편), <strong>메노이티오스</strong>(오만으로 제우스에게 죽임당한 자). 즉 이아페토스는 인간의 운명에 가장 깊이 관여한 티탄들의 아버지다. 그 자신은 티타노마키아에서 제우스에게 패해 타르타로스에 갇혔다.',
-    relations: { '부모': ['가이아', '우라노스'], '배우자': ['클리메네'], '자식': ['아틀라스', '프로메테우스', '에피메테우스', '메노이티오스'] }
+    domain: '인류의 조상, 창', symbol: '창, 인간',
+    epithet: '인류의 아버지',
+    desc: '<strong>이아페토스</strong>는 가이아와 우라노스의 자식 티탄. 자기 자신은 신화에서 거의 행동하지 않지만, <strong>네 아들의 운명이 인류 신화의 가장 비극적인 장들</strong>을 채운다. 그의 이름은 성경의 <strong>야벳(Japheth, 노아의 아들)</strong>과 어원이 같다는 학설이 있어, 그리스인과 헤브라이인의 공통 조상 신화를 연결하는 핵심 인물로 여겨진다.',
+    story: '오케아노스의 딸 <strong>클리메네</strong>와 결합해 네 아들을 낳았다 — <strong>아틀라스</strong>(하늘을 영원히 떠받치는 거인), <strong>프로메테우스</strong>(인류에게 불을 가져다준 영웅, 매일 독수리에게 간을 쪼이는 형벌), <strong>에피메테우스</strong>(판도라의 남편, "뒤늦게 생각하는 자"), <strong>메노이티오스</strong>(제우스의 번개에 맞아 타르타로스에 갇힌 자). 네 아들의 운명은 모두 비극적이지만, 그 가운데 프로메테우스가 진흙으로 <strong>인간을 빚어낸 자</strong>다. 즉 이아페토스는 인류의 할아버지인 셈. 티타노마키아 후 그 자신도 타르타로스에 갇혔다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['클리메네'], '자식': ['아틀라스', '프로메테우스', '에피메테우스', '메노이티오스'] },
+    modern: [
+      { icon: '📖', title: '성경의 야벳 (Japheth)', text: '구약성경에서 노아의 세 아들 중 하나가 <strong>야벳(Japheth)</strong>으로, 유럽 민족의 조상이라 한다. 이아페토스(Ἰαπετός)와 야벳(Yepheth)의 어원이 같다는 학설은 19세기부터 제기되어 왔다. 인도-유럽 공통 신화의 흔적일 수도.' },
+      { icon: '🪐', title: '토성의 위성 〈이아페토스〉', text: '토성의 세 번째로 큰 위성 <strong>이아페토스(Iapetus)</strong>. 1671년 카시니가 발견. 한쪽 면은 새까맣고 한쪽 면은 새하얀 <strong>"음과 양의 위성"</strong>으로 유명하다. 카시니가 처음 발견했을 때 한쪽만 보이고 한쪽은 보이지 않아 충격을 받았다.' },
+      { icon: '🎬', title: '〈2001 스페이스 오디세이〉', text: '아서 C. 클라크의 원작 소설에서 모노리스가 발견되는 곳이 바로 토성의 위성 <strong>이아페토스</strong>다 (영화에서는 목성으로 변경). 〈스페이스 오디세이〉의 신비로운 종말이 인류 조상의 이름을 가진 위성에서 일어난 셈.' },
+      { icon: '⛏️', title: '"인류의 아버지"', text: '이아페토스는 아들 프로메테우스(인간을 빚은 자), 에피메테우스(판도라의 남편)를 통해 사실상 인류 신화의 시작점에 서 있다. 핀다로스, 아이스킬로스 등 그리스 시인들이 인간을 가리켜 "이아페토스의 자손들"이라 부르곤 했다.' }
+    ]
   },
 
   // 여 티탄들 (테이아, 테미스, 므네모시네, 포이베, 테티스)
   '테이아': {
     gen: 'titan', tier: '티탄',
     nameEn: 'THEIA', greek: 'Θεία', roman: 'THEA',
-    domain: '빛', symbol: '빛나는 광채',
-    epithet: '빛나는 여신',
-    desc: '<strong>테이아</strong>는 가이아와 우라노스의 자식 여 티탄. 빛 그 자체이자, 천체의 광채를 주관한다. 그녀의 이름은 그리스어로 "여신"이라는 일반 명사와 같다.',
-    story: '오빠 <strong>히페리온</strong>과 결합해 셋의 자식을 낳았다 — <strong>헬리오스</strong>(태양), <strong>셀레네</strong>(달), <strong>에오스</strong>(새벽). 즉 하늘의 모든 빛은 테이아에게서 나왔다. 핀다로스는 그녀를 "황금·은·보석에게 광채를 부여하는 자"라고 노래했다 — 즉 빛나는 모든 것이 그녀의 선물이다.',
-    relations: { '부모': ['가이아', '우라노스'], '배우자': ['히페리온'], '자식': ['헬리오스', '셀레네', '에오스'] }
+    domain: '빛, 시각, 천체의 광채', symbol: '빛나는 후광, 금',
+    epithet: '신성한 자, 빛의 어머니',
+    desc: '<strong>테이아</strong>는 가이아와 우라노스의 자식 여 티탄. 이름은 그리스어로 <strong>"신성한, 빛나는(divine, shining)"</strong>이라는 뜻 — 신을 뜻하는 단어 "테오스(θεός)"의 여성형이기도 하다. 빛 그 자체이자, 인간이 빛을 볼 수 있게 해주는 시각의 신. 별명 <strong>에우리파이사(Εὐρυφάεσσα, "널리 빛나는 자")</strong>로도 불린다.',
+    story: '오빠 <strong>히페리온</strong>과 결합해 세 자식을 낳았다 — <strong>헬리오스</strong>(태양), <strong>셀레네</strong>(달), <strong>에오스</strong>(새벽). 즉 우리가 보는 모든 빛이 그녀에게서 왔다. 핀다로스의 〈이스미아 송시 5번〉에서 그녀는 더욱 놀라운 역할을 한다 — 그녀가 신적인 광채를 부여했기에 <strong>금(gold)</strong>이 다른 어떤 금속보다 귀하게 여겨지게 되었다는 것. 즉 모든 빛나는 것의 가치가 그녀에게서 비롯됐다. 다른 티탄들과 함께 티타노마키아 이후 활동을 멈추고, 그녀의 역할은 손녀들에게 옮겨갔다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['히페리온'], '자식': ['헬리오스', '셀레네', '에오스'] },
+    modern: [
+      { icon: '🌕', title: '"테이아 충돌설" — 달의 탄생', text: '현대 천문학에서 <strong>"거대 충돌설(Giant-impact hypothesis)"</strong>은 약 45억 년 전 화성 크기의 행성 <strong>"테이아(Theia)"</strong>가 원시 지구와 충돌해 그 잔해에서 <strong>달</strong>이 탄생했다고 한다. 1984년 명명. 빛(달)의 어머니라는 신화가 천문학에 정확히 부활한 셈.' },
+      { icon: '✨', title: '"신학(theology)"의 어근', text: '그녀의 이름 어근 <strong>"theo-"</strong>는 그리스어 "θεός(신)"에서 와서 <strong>theology(신학)</strong>, <strong>theist(유신론자)</strong>, <strong>atheist(무신론자)</strong>, <strong>pantheon(만신전)</strong> 등 수많은 단어의 뿌리가 됐다.' },
+      { icon: '👁️', title: '"보는 능력"', text: '고대 그리스인들은 눈에서 빛이 나와 사물을 비추기 때문에 본다고 생각했다. 즉 시각은 <strong>"본다"가 아니라 "비춘다"</strong>는 능동적 행위였고, 그 빛의 원천이 테이아였다. 인지과학·시지각 연구에서 흥미로운 고대 모델로 종종 인용된다.' },
+      { icon: '🎮', title: '대중문화 〈테이아〉', text: '게임 〈Smite〉의 플레이어블 캐릭터, 영화·소설에서 "빛의 어머니" 모티프로 자주 등장. 일본 만화 〈성투사 성전사〉의 황금성 부활 일화에서 중요한 역할.' }
+    ]
   },
   '테미스': {
     gen: 'titan', tier: '티탄',
@@ -3821,11 +3975,17 @@ const gods = {
   '테티스': {
     gen: 'titan', tier: '티탄',
     nameEn: 'TETHYS', greek: 'Τηθύς', roman: 'TETHYS',
-    domain: '바닷물, 강의 어머니', symbol: '물결, 강',
+    domain: '바닷물, 모든 강의 어머니', symbol: '물결, 황소뿔, 강',
     epithet: '강물의 어머니',
-    desc: '<strong>테티스</strong>는 가이아와 우라노스의 자식 여 티탄. 바닷물과 모든 강물의 어머니. 아킬레우스의 어머니인 바다 요정 테티스(Thetis)와는 다른 인물이니 혼동하지 말 것 — 이쪽은 그녀의 손녀.',
-    story: '오빠 <strong>오케아노스</strong>와 결합해 세 천 명의 <strong>오케아니데스</strong>(바다 요정)와 세 천 명의 강의 신을 낳았다. 즉 세상의 모든 강물이 그녀의 자식이다. 헤라가 어렸을 때 잠시 그녀의 손에서 자랐다는 전승도 있다. 현대 지질학에서 고대 대양에 "테티스해(Tethys Ocean)"라는 이름이 붙은 것은 이 신에서 유래한다.',
-    relations: { '부모': ['가이아', '우라노스'], '배우자': ['오케아노스'], '자식': ['오케아니데스(3,000 요정)', '강의 신들'] }
+    desc: '<strong>테티스</strong>는 가이아와 우라노스의 자식 여 티탄. 바닷물과 모든 강물의 어머니. ⚠️ <strong>아킬레우스의 어머니인 바다 요정 테티스(Thetis)와는 다른 인물</strong>이니 혼동하지 말 것 — 이쪽은 그녀의 할머니뻘이다. 그리스어로 두 이름의 철자도 다르다 (Τηθύς vs Θέτις).',
+    story: '오빠 <strong>오케아노스</strong>와 결합해 <strong>3,000명의 오케아니데스</strong>(바다 요정)와 <strong>3,000명의 강의 신(포타모이)</strong>을 낳았다. 즉 세상의 모든 강물이 그녀의 자식이다. 헤라가 티타노마키아 중에 잠시 그녀의 손에서 자랐다는 전승이 있어, 헤라의 양어머니로도 추앙받는다. 헤라가 후에 칼리스토를 별자리(큰곰자리)로 만들 때, "그 음란한 여인이 절대 내 바닷속에서 쉴 수 없게 해달라"고 테티스에게 부탁해서 <strong>큰곰자리가 절대 수평선 아래로 지지 않는 별자리</strong>가 되었다 — 그래서 북반구 어디서나 1년 내내 보인다.',
+    relations: { '부모': ['가이아', '우라노스'], '배우자': ['오케아노스'], '자식': ['오케아니데스(3,000)', '강의 신들(3,000)'] },
+    modern: [
+      { icon: '🌍', title: '〈테티스해(Tethys Ocean)〉 — 고대의 바다', text: '19세기 지질학자 <strong>에두아르트 쥐스</strong>가 1893년 명명한 가설적 고대 대양. <strong>약 2억 5천만 년 전</strong> 판게아 초대륙 동쪽에 있었던 거대한 바다로, 알프스·히말라야 산맥이 형성되면서 사라졌다. 지중해는 그 마지막 잔재로 여겨진다. 즉 지구과학에서 "사라진 바다"의 이름이 되었다.' },
+      { icon: '🪐', title: '토성의 위성 〈테티스〉', text: '토성의 다섯 번째로 큰 위성. 1684년 카시니가 발견. 거의 순수한 얼음으로 이루어졌고, 표면에 거대한 분지 <strong>"오디세우스(Odysseus)"</strong>가 있다. 카시니 탐사선이 2015년 근접 촬영해 표면을 상세히 관찰했다.' },
+      { icon: '🐻', title: '큰곰자리는 왜 지지 않는가', text: '오비디우스 〈변신 이야기〉가 전하는 신화 — 헤라가 칼리스토(아르카스의 어머니)에게 한을 품고 그녀가 별이 되어서도 바다에서 쉴 수 없게 했다. 그래서 <strong>북극 주위를 도는 별자리(주극성)들이 절대 수평선 아래로 지지 않는 천문 현상</strong>의 신화적 설명이 되었다.' },
+      { icon: '🌊', title: '"바다"의 다른 얼굴', text: '폰토스·포세이돈이 바다의 "표면"이라면, 오케아노스는 바다의 "끝", 테티스는 바다의 "물 그 자체"다. 그리스 신화에서 바다는 이렇게 셋으로 나뉘어 있다. 영어 단어 <strong>tide(조수)</strong>가 그녀의 이름과 어원적 연관이 있다는 학설도 있다.' }
+    ]
   }
 };
 
@@ -4387,10 +4547,10 @@ function renderCatDetail(catId) {
   const container = document.getElementById('cat-detail-container');
   if (!container) return;
 
-  const godsHtml = cat.gods.map(name => {
+  // Render a single god card
+  function renderGodCard(name) {
     const g = gods[name];
     if (!g) {
-      // Render a placeholder for missing gods
       return `<button class="god-card" disabled style="opacity: 0.5;">
         <div style="padding: 30px 8px; color: #f8ebc8;">
           <div class="god-name-kr">${name}</div>
@@ -4413,7 +4573,32 @@ function renderCatDetail(catId) {
       <div class="god-roman">${g.roman}</div>
       <div class="god-domain">${g.domain.split(',')[0]}</div>
     </button>`;
-  }).join('');
+  }
+
+  // Sex-divider header HTML
+  function sexHeader(enLabel, krLabel) {
+    return `<div class="sex-divider">
+      <div class="sex-en">${enLabel}</div>
+      <div class="sex-title-row">
+        <div class="sex-line"></div>
+        <div class="sex-kr">${krLabel}</div>
+        <div class="sex-line"></div>
+      </div>
+    </div>`;
+  }
+
+  let godsHtml;
+  if (catId === 'titan') {
+    // Titans split by sex: first 6 = males (Titanes), last 6 = females (Titanides)
+    const males = cat.gods.slice(0, 6);
+    const females = cat.gods.slice(6);
+    godsHtml = sexHeader('TITANES', '남신 · 6')
+      + males.map(renderGodCard).join('')
+      + sexHeader('TITANIDES', '여신 · 6')
+      + females.map(renderGodCard).join('');
+  } else {
+    godsHtml = cat.gods.map(renderGodCard).join('');
+  }
 
   container.innerHTML = `
     <div class="cat-detail-intro">
