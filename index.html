@@ -1888,6 +1888,19 @@
   .artwork:hover .artwork-image img {
     transform: scale(1.05);
   }
+  /* When an artwork image fails to load, show a placeholder */
+  .artwork-image-failed::after {
+    content: '⚠ 이미지 준비중';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(244, 236, 216, 0.55);
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
 
   .artwork-info {
     padding: 12px 4px 4px;
@@ -4106,7 +4119,7 @@ function renderGallery(name) {
     <button class="artwork" onclick="openLightbox('${name}', ${idx})">
       <div class="artwork-image">
         <img src="${w.img}" alt="${w.title}" loading="lazy"
-             onerror="this.closest('.artwork').style.display='none'">
+             onerror="this.style.display='none'; this.parentElement.classList.add('artwork-image-failed');">
       </div>
       <div class="artwork-info">
         <div class="artwork-title">${w.title}</div>
