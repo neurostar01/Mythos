@@ -27,6 +27,7 @@
     --c-olympian-1: #7a2e1f;
     --c-olympian-2: #2d5645;
     --c-special: #8b4567;
+    --c-hero: #4a5d6b;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1280,6 +1281,7 @@
   .god-card[data-gen="olympian-1"] { --accent: var(--c-olympian-1); }
   .god-card[data-gen="olympian-2"] { --accent: var(--c-olympian-2); }
   .god-card[data-gen="special"] { --accent: var(--c-special); }
+  .god-card[data-gen="hero"] { --accent: var(--c-hero); }
 
   /* Filter dim only applies on home view (god grid), not in category pages */
   .app[data-view="home"][data-filter]:not([data-filter="all"]) .god-card { opacity: 0.25; }
@@ -1287,7 +1289,8 @@
   .app[data-view="home"][data-filter="titan"] .god-card[data-gen="titan"],
   .app[data-view="home"][data-filter="olympian-1"] .god-card[data-gen="olympian-1"],
   .app[data-view="home"][data-filter="olympian-2"] .god-card[data-gen="olympian-2"],
-  .app[data-view="home"][data-filter="special"] .god-card[data-gen="special"] {
+  .app[data-view="home"][data-filter="special"] .god-card[data-gen="special"],
+  .app[data-view="home"][data-filter="hero"] .god-card[data-gen="hero"] {
     opacity: 1;
   }
 
@@ -2398,6 +2401,7 @@
     <button class="filter-btn" data-filter="titan" onclick="setFilter('titan')">TITANS</button>
     <button class="filter-btn" data-filter="olympian-1" onclick="setFilter('olympian-1')">OLYMPIAN · I</button>
     <button class="filter-btn" data-filter="olympian-2" onclick="setFilter('olympian-2')">OLYMPIAN · II</button>
+    <button class="filter-btn" data-filter="hero" onclick="setFilter('hero')">HEROES</button>
   </nav>
 
   <div class="view-stack">
@@ -3726,13 +3730,19 @@ const gods = {
     ]
   },
   '아프로디테': {
-    gen: 'special', tier: '특수 출생',
+    gen: 'olympian-2', tier: '올림포스 2세대',
     nameEn: 'APHRODITE', greek: 'Ἀφροδίτη', roman: 'VENUS',
     domain: '미와 사랑, 욕망', symbol: '비둘기, 장미, 조개',
     epithet: '거품에서 태어난',
-    desc: '<strong>아프로디테</strong>는 우라노스가 거세될 때 바다에 떨어진 살의 거품(아프로스)에서 태어났다. 그녀는 다른 신들보다 한 세대 앞선 존재이지만, 미와 사랑의 화신으로 올림포스 12신에 든다.',
-    story: '키프로스 섬 해안의 거품에서 떠오른 그녀는 <strong>호라이</strong>(계절의 여신들)에게 환영받으며 올림포스로 인도되었다. 신들은 그녀의 아름다움에 매혹되어 다투었고, 제우스는 분쟁을 막기 위해 그녀를 가장 못생긴 신 <strong>헤파이스토스</strong>와 결혼시켰다. 그러나 그녀의 마음은 전쟁의 신 <strong>아레스</strong>에게 있었다. 한편 그녀가 사랑한 인간 <strong>아도니스</strong>는 사냥 중 멧돼지에 받혀 죽었고, 그가 흘린 피에서 아네모네 꽃이 피었다. <strong>황금 사과</strong> 사건에서 그녀는 헤라·아테나와 미모를 다투다 트로이의 왕자 파리스를 매수해 <strong>헬레네</strong>를 그에게 약속했고, 이것이 <strong>트로이 전쟁</strong>의 발단이 되었다.',
-    relations: { '근원': ['우라노스의 거품'], '배우자': ['헤파이스토스'], '연인': ['아레스', '아도니스'], '자식': ['에로스'] }
+    desc: '<strong>아프로디테</strong>는 미와 사랑, 욕망의 여신이자 올림포스 12신의 하나다. 출생에 대해서는 두 전승이 엇갈리는데, 헤시오도스는 우라노스가 거세될 때 바다에 떨어진 살의 거품(아프로스)에서 태어났다 하고, 호메로스는 제우스와 디오네의 딸이라 전한다.',
+    story: '<strong>헤시오도스 『신통기』</strong>는 크로노스가 우라노스를 거세할 때 바다에 던진 살에서 거품이 일고 그 속에서 아프로디테가 솟아났다고 노래한다. 이 전승대로라면 그녀는 제우스보다도 윗세대인 셈이다. 반면 <strong>호메로스 『일리아스』</strong>는 그녀를 제우스와 여신 디오네의 딸로 그린다 — 이 전승에서는 올림포스 2세대가 된다. 어느 쪽이든 키프로스 섬 해안의 거품에서 떠오른 그녀는 <strong>호라이</strong>(계절의 여신들)에게 환영받으며 올림포스로 인도되었다. 신들은 그녀의 아름다움에 매혹되어 다투었고, 제우스는 분쟁을 막기 위해 그녀를 가장 못생긴 신 <strong>헤파이스토스</strong>와 결혼시켰다. 그러나 그녀의 마음은 전쟁의 신 <strong>아레스</strong>에게 있었다. 한편 그녀가 사랑한 인간 <strong>아도니스</strong>는 사냥 중 멧돼지에 받혀 죽었고, 그가 흘린 피에서 아네모네 꽃이 피었다. <strong>황금 사과</strong> 사건에서 그녀는 헤라·아테나와 미모를 다투다 트로이의 왕자 파리스를 매수해 <strong>헬레네</strong>를 그에게 약속했고, 이것이 <strong>트로이 전쟁</strong>의 발단이 되었다.',
+    relations: { '출생(헤시오도스)': ['우라노스의 거품'], '부모(호메로스)': ['제우스', '디오네'], '배우자': ['헤파이스토스'], '연인': ['아레스', '아도니스'], '자식': ['에로스'] },
+    modern: [
+      { icon: '♀️', title: '금성과 여성 기호', text: '가장 밝게 빛나는 행성 <strong>금성(Venus)</strong>은 아프로디테의 로마 이름에서 왔다. 아름다움의 여신답게 가장 아름다운 별에 붙은 이름이다. 천문·생물학의 <strong>여성 기호(♀)</strong>도 본래 금성(비너스)을 나타내는 기호로, 거울을 형상화한 것이다.' },
+      { icon: '💘', title: '최음제 \"aphrodisiac\"', text: '성욕을 돋우는 것을 뜻하는 영어 <strong>aphrodisiac(최음제)</strong>이 그녀의 이름에서 직접 나왔다. 사랑과 욕망의 여신이라는 정체성이 그대로 단어가 된 경우다.' },
+      { icon: '🖼️', title: '서양 미술의 영원한 주제', text: '보티첼리의 〈비너스의 탄생〉, 〈밀로의 비너스〉 조각상 등 — 아프로디테(비너스)는 서양 미술에서 여성의 아름다움을 그리는 가장 오래되고 끝없는 주제다.' },
+      { icon: '🌹', title: '사랑의 상징들', text: '장미, 비둘기, 조개껍데기는 모두 아프로디테의 상징에서 사랑의 보편적 기호가 되었다. 발렌타인데이의 장미와 하트 문화의 먼 뿌리에 그녀가 있다.' }
+    ]
   },
 
   // ============= 카오스의 자식 =============
@@ -4078,10 +4088,111 @@ const gods = {
       { icon: '🐻', title: '큰곰자리는 왜 지지 않는가', text: '오비디우스 〈변신 이야기〉가 전하는 신화 — 헤라가 칼리스토(아르카스의 어머니)에게 한을 품고 그녀가 별이 되어서도 바다에서 쉴 수 없게 했다. 그래서 <strong>북극 주위를 도는 별자리(주극성)들이 절대 수평선 아래로 지지 않는 천문 현상</strong>의 신화적 설명이 되었다.' },
       { icon: '🌊', title: '"바다"의 다른 얼굴', text: '폰토스·포세이돈이 바다의 "표면"이라면, 오케아노스는 바다의 "끝", 테티스는 바다의 "물 그 자체"다. 그리스 신화에서 바다는 이렇게 셋으로 나뉘어 있다. 영어 단어 <strong>tide(조수)</strong>가 그녀의 이름과 어원적 연관이 있다는 학설도 있다.' }
     ]
+  },
+  '우레아': {
+    gen: 'primordial', tier: '가이아의 자식',
+    nameEn: 'OUREA', greek: 'Οὔρεα', roman: 'MONTES',
+    domain: '산', symbol: '솟아오른 산봉우리',
+    epithet: '대지가 솟아오른 자',
+    desc: '<strong>우레아</strong>는 가이아가 아버지 없이 홀로 낳은 <strong>산의 신들</strong>이다. 단수가 아니라 여러 산을 의인화한 신격의 무리로, 올림포스·아토스·헬리콘 등 그리스의 거대한 산들이 각각 하나의 우레아였다.',
+    story: '헤시오도스의 『신통기』는 가이아가 가장 먼저 하늘(우라노스)을 낳아 자신을 덮게 하고, 이어 <strong>"긴 산들(우레아), 여신 님프들이 깃들어 사는 아름다운 거처"</strong>를 낳았으며, 마지막으로 거친 파도의 바다(폰토스)를 낳았다고 전한다. 우레아는 우라노스·폰토스와 형제로, 모두 아버지 없이 대지에서 솟아났다. 각각의 산은 수염 난 노인의 모습으로, 그 산에 깃든 님프들과 함께 표현되곤 했다. 산 자체가 신이라는 관념은 자연의 거대함에 신성을 부여한 그리스인의 세계관을 보여준다.',
+    relations: { '어머니': ['가이아'], '형제': ['우라노스', '폰토스'] },
+    modern: [
+      { icon: '⛰️', title: '산을 신으로 본 세계관', text: '우레아는 산 하나하나가 독립된 신이라는 그리스적 발상을 보여준다. 올림포스산이 신들의 거처가 되고, 헬리콘산이 무사(뮤즈)들의 성지가 된 것도 산을 신성하게 여긴 전통의 연장이다.' },
+      { icon: '🏔️', title: '"오로지(orogeny)" — 조산운동', text: '지질학에서 산맥이 형성되는 과정을 <strong>orogeny(조산운동)</strong>라 하는데, 그리스어 <strong>oros(산)</strong>에서 왔다. 우레아의 어원과 같은 뿌리다. 산이 솟아오른다는 신화적 상상이 과학 용어로 이어진 셈이다.' },
+      { icon: '🧚', title: '산의 님프 오레아데스', text: '산에 깃들어 사는 님프 <strong>오레아데스(Oreads)</strong>도 같은 어원이다. 우레아가 산 그 자체라면, 오레아데스는 그 산 골짜기에 사는 정령들이었다.' }
+    ]
+  },
+  '폰토스': {
+    gen: 'primordial', tier: '가이아의 자식',
+    nameEn: 'PONTOS', greek: 'Πόντος', roman: 'PONTUS',
+    domain: '바다', symbol: '거친 깊은 바다',
+    epithet: '추수할 수 없는 깊음',
+    desc: '<strong>폰토스</strong>는 가이아가 홀로 낳은 <strong>바다 그 자체</strong>다. 올림포스의 바다신 포세이돈보다 훨씬 오래된 태초의 바다로, 수많은 바다 신과 괴물의 시조가 되었다.',
+    story: '가이아는 우라노스·우레아에 이어 <strong>"달콤한 사랑의 결합 없이"</strong> 거친 파도의 폰토스를 낳았다. 이후 가이아는 자신이 낳은 아들 폰토스와 결합해 바다의 일족을 낳았으니 — 바다의 노인 <strong>네레우스</strong>(아킬레우스의 어머니 테티스의 아버지), 경이의 신 <strong>타우마스</strong>, 바다 괴물의 아비 <strong>포르키스</strong>와 <strong>케토</strong>, 그리고 <strong>에우리비아</strong>다. 폰토스의 후손에서 바다 님프 네레이데스 50명, 무지개 여신 이리스, 괴물 메두사·스킬라까지 이어진다. 흉포한 바다 괴물들이 그의 핏줄인 것은, 올림포스 신족과 계보를 멀리 떼어놓으려는 의도였다.',
+    relations: { '어머니': ['가이아'], '배우자': ['가이아'], '자식': ['네레우스', '타우마스', '포르키스', '케토', '에우리비아'] },
+    modern: [
+      { icon: '🌊', title: '"바다"를 뜻하는 어원', text: '폰토스(Pontos)는 그리스어로 "바다" 자체다. <strong>흑해(Black Sea)</strong>를 그리스인들은 "폰토스 에욱세이노스(친절한 바다)"라 불렀고, 터키 북부 흑해 연안 지방의 이름 <strong>폰투스(Pontus)</strong>도 여기서 왔다.' },
+      { icon: '🌉', title: '"다리(pont)"와는 다른 뿌리', text: '프랑스어 pont, 영어 pontoon(배다리)의 "pont"는 라틴어 pons(다리)에서 왔다. 폰토스(바다)와 철자가 비슷하지만 어원은 다르다 — 헷갈리기 쉬운 우연이다.' },
+      { icon: '🐙', title: '바다 괴물의 조상', text: '메두사, 스킬라, 카리브디스 같은 그리스 신화의 바다 괴물들은 거의 모두 폰토스의 후손이다. 미지의 바다에 대한 고대인의 공포가 그의 핏줄로 형상화되었다.' }
+    ]
+  },
+  '헤라클레스': {
+    gen: 'hero', tier: '영웅 · 인간계',
+    nameEn: 'HERACLES', greek: 'Ἡρακλῆς', roman: 'HERCULES',
+    domain: '힘과 영웅, 12과업', symbol: '사자 가죽, 몽둥이',
+    epithet: '가장 위대한 영웅',
+    desc: '<strong>헤라클레스</strong>는 제우스와 인간 알크메네 사이에서 태어난 반신반인으로, 그리스 신화 최고의 영웅이다. 헤라의 평생에 걸친 박해를 견디며 <strong>12과업</strong>을 완수하고, 죽은 뒤 신의 반열에 올랐다.',
+    story: '제우스의 사생아였기에 <strong>헤라</strong>의 미움을 샀다. 헤라가 보낸 광기로 헤라클레스는 자기 아내와 자식들을 죽이고, 그 죗값을 치르기 위해 미케네 왕 에우리스테우스 밑에서 <strong>12가지 과업</strong>을 수행한다 — 네메아의 사자, 레르나의 히드라, 케리네이아의 암사슴, 에리만토스의 멧돼지, 아우게이아스의 외양간 청소, 스팀팔로스의 새, 크레타의 황소, 디오메데스의 말, 히폴리테의 허리띠, 게리온의 소, 헤스페리데스의 황금 사과, 그리고 마지막으로 저승의 개 <strong>케르베로스</strong>를 끌어올렸다. 그의 이름 "헤라클레스"는 역설적이게도 <strong>"헤라의 영광"</strong>이라는 뜻이다. 죽은 뒤 올림포스에 올라 헤라와 화해하고 청춘의 여신 헤베와 결혼했다.',
+    relations: { '아버지': ['제우스'], '어머니': ['알크메네 (인간)'], '숙적': ['헤라'] },
+    modern: [
+      { icon: '💪', title: '"헤라클레스적" 힘', text: '영어 <strong>herculean(헤라클레스 같은)</strong>은 엄청난 힘이나 노력이 필요한 일을 뜻한다. "a herculean task"는 거의 불가능에 가까운 과업이라는 의미로 지금도 쓰인다.' },
+      { icon: '🌌', title: '별자리 헤르쿨레스', text: '북반구 밤하늘의 <strong>헤르쿨레스자리</strong>는 그의 이름을 땄다. 그가 무릎 꿇은 자세로 그려지며, 안에 유명한 구상성단 M13이 있다.' },
+      { icon: '🎬', title: '대중문화의 단골', text: '디즈니 애니메이션부터 수많은 영화·게임까지, 헤라클레스(헤르쿨레스)는 "근육질 영웅"의 원형이다. 12과업 이야기는 영웅 서사의 기본 틀로 끝없이 변주된다.' },
+      { icon: '🏛️', title: '로마의 헤르쿨레스 숭배', text: '로마 황제들, 특히 코모두스는 자신을 헤르쿨레스와 동일시했다. 사자 가죽을 두른 황제 조각상이 남아 있을 정도로 권력의 상징이었다.' }
+    ]
+  },
+  '페르세우스': {
+    gen: 'hero', tier: '영웅 · 인간계',
+    nameEn: 'PERSEUS', greek: 'Περσεύς', roman: 'PERSEUS',
+    domain: '괴물 처치, 영웅', symbol: '메두사의 머리, 하르페',
+    epithet: '고르곤을 벤 자',
+    desc: '<strong>페르세우스</strong>는 제우스와 인간 다나에 사이에서 태어난 영웅으로, 괴물 <strong>메두사</strong>의 목을 베고 공주 안드로메다를 구한 것으로 유명하다. 헤라클레스의 증조부이기도 하다.',
+    story: '아르고스 왕 아크리시오스는 "딸의 아들이 자신을 죽이리라"는 신탁 때문에 딸 다나에를 청동 탑에 가뒀다. 하지만 제우스가 황금 비로 변해 스며들어 페르세우스가 태어났다. 자란 페르세우스는 메두사의 목을 베어오라는 명을 받고, <strong>아테나의 거울 방패와 헤르메스의 날개 신발</strong> 등 신들의 도움으로 거울에 비친 모습만 보며 메두사를 처치했다. 돌아오는 길에 바다 괴물의 제물이 될 뻔한 공주 <strong>안드로메다</strong>를 구해 아내로 삼았다. 훗날 원반던지기 시합에서 던진 원반이 빗나가 우연히 외할아버지 아크리시오스를 맞혀, 결국 신탁이 실현되고 만다.',
+    relations: { '아버지': ['제우스'], '어머니': ['다나에 (인간)'], '아내': ['안드로메다'] },
+    modern: [
+      { icon: '✨', title: '별자리가 된 가족', text: '페르세우스, 안드로메다, 그녀의 부모 케페우스·카시오페이아, 바다 괴물 케토스까지 — <strong>이 신화의 등장인물 거의 전부가 별자리</strong>가 되어 가을 밤하늘에 모여 있다.' },
+      { icon: '🌠', title: '페르세우스자리 유성우', text: '매년 8월 절정에 이르는 <strong>페르세우스자리 유성우</strong>는 가장 유명한 유성우 중 하나다. 복사점이 페르세우스자리에 있어 그 이름이 붙었다.' },
+      { icon: '🛰️', title: '메두사와 알골', text: '페르세우스가 든 메두사의 머리 위치에 있는 별 <strong>알골(Algol)</strong>은 밝기가 변하는 식변광성으로, 아랍어로 "악마의 머리"라는 뜻이다. 메두사의 사악한 눈에 빗댄 이름이다.' },
+      { icon: '🎬', title: '〈타이탄〉의 주인공', text: '영화 〈클래시 오브 타이탄〉(1981, 2010)의 주인공이 바로 페르세우스다. 메두사 처치와 안드로메다 구출 장면이 영화의 핵심이다.' }
+    ]
+  },
+  '테세우스': {
+    gen: 'hero', tier: '영웅 · 인간계',
+    nameEn: 'THESEUS', greek: 'Θησεύς', roman: 'THESEUS',
+    domain: '아테네 영웅', symbol: '미궁의 실타래, 검',
+    epithet: '미노타우로스를 벤 자',
+    desc: '<strong>테세우스</strong>는 아테네의 영웅으로, 크레타의 미궁에 갇힌 괴물 <strong>미노타우로스</strong>를 처치한 것으로 유명하다. 아테네인들에게는 도시를 통합한 건국 영웅으로 추앙받았다.',
+    story: '아테네 왕 아이게우스의 아들(혹은 바다신 포세이돈의 아들)로 태어났다. 당시 아테네는 크레타 왕 미노스에게 굴복해 해마다 젊은이들을 <strong>미노타우로스</strong>(반인반우 괴물)의 제물로 보내야 했다. 테세우스는 제물 행렬에 자원해 크레타로 갔고, 미노스의 딸 <strong>아리아드네</strong>가 사랑에 빠져 건네준 <strong>실타래</strong> 덕분에 미궁(라비린토스)에서 길을 잃지 않고 괴물을 죽인 뒤 빠져나왔다. 그러나 돌아오는 배에 "성공하면 흰 돛을 올리겠다"는 약속을 잊고 검은 돛을 단 채 돌아오는 바람에, 아들이 죽은 줄 안 아버지 아이게우스가 바다에 몸을 던졌다. 그 바다가 <strong>에게해(Aegean Sea)</strong>다.',
+    relations: { '아버지': ['아이게우스 (인간)', '포세이돈'], '어머니': ['아이트라 (인간)'], '연인': ['아리아드네'] },
+    modern: [
+      { icon: '🧵', title: '"아리아드네의 실"', text: '복잡한 문제를 풀어내는 결정적 단서를 <strong>"아리아드네의 실(Ariadne\'s thread)"</strong>이라 부른다. 미궁을 빠져나온 실타래에서 온 관용구로, 논리학·컴퓨터과학에서도 쓰인다.' },
+      { icon: '🌊', title: '에게해의 어원', text: '아들이 죽은 줄 알고 바다에 몸을 던진 아버지 <strong>아이게우스(Aegeus)</strong>의 이름에서 <strong>에게해(Aegean Sea)</strong>가 나왔다. 그리스와 터키 사이의 그 바다다.' },
+      { icon: '🏛️', title: '아테네의 건국 영웅', text: '테세우스는 흩어진 아티카 지역을 아테네 하나로 통합한 영웅으로 그려진다. 아테네인들은 그를 범그리스적 영웅 헤라클레스에 맞먹는 자기 도시의 영웅으로 내세웠다.' },
+      { icon: '🚢', title: '"테세우스의 배" 역설', text: '낡은 부품을 하나씩 갈아 끼운 배가 결국 원래의 배와 같은가? — 정체성을 묻는 유명한 철학적 사고실험 <strong>"테세우스의 배"</strong>가 그의 이름을 달고 있다.' }
+    ]
+  },
+  '아킬레우스': {
+    gen: 'hero', tier: '영웅 · 인간계',
+    nameEn: 'ACHILLES', greek: 'Ἀχιλλεύς', roman: 'ACHILLES',
+    domain: '트로이 전쟁 최강 전사', symbol: '창과 방패, 발뒤꿈치',
+    epithet: '발 빠른 자',
+    desc: '<strong>아킬레우스</strong>는 바다 여신 <strong>테티스</strong>와 인간 왕 펠레우스 사이에서 태어난 반신반인으로, 트로이 전쟁 그리스 진영 최강의 전사다. 호메로스의 『일리아스』가 그의 분노를 노래한다.',
+    story: '어머니 테티스는 갓난 아킬레우스를 불사의 몸으로 만들려고 저승의 강 <strong>스틱스</strong>에 담갔는데, 이때 손으로 잡았던 <strong>발뒤꿈치</strong>만 강물에 닿지 않아 유일한 약점으로 남았다. 트로이 전쟁에서 아킬레우스는 무적의 전사였으나, 총사령관 아가멤논과의 갈등으로 전투에서 물러나 있었다. 절친 <strong>파트로클로스</strong>가 트로이 왕자 헥토르에게 죽자, 분노한 아킬레우스가 다시 나서 헥토르를 죽여 복수한다. 그러나 결국 트로이 왕자 <strong>파리스</strong>가 아폴론의 인도로 쏜 화살이 그 발뒤꿈치에 명중해 죽고 만다.',
+    relations: { '아버지': ['펠레우스 (인간)'], '어머니': ['테티스 (바다 여신)'], '벗': ['파트로클로스'] },
+    modern: [
+      { icon: '🦵', title: '아킬레스건', text: '발뒤꿈치의 힘줄을 <strong>아킬레스건(Achilles tendon)</strong>이라 부른다. 그의 유일한 약점이 발뒤꿈치였던 데서 왔다. 끊어지면 걷지 못하는 중요한 힘줄이다.' },
+      { icon: '🎯', title: '"아킬레스건"이라는 약점', text: '치명적인 약점을 비유적으로 <strong>"아킬레스건(Achilles\' heel)"</strong>이라 한다. 아무리 강한 사람이나 조직에도 있는 단 하나의 결정적 취약점을 뜻한다.' },
+      { icon: '📖', title: '서양 문학의 출발점', text: '호메로스의 『일리아스』는 <strong>"아킬레우스의 분노"</strong>로 시작한다. 서양 문학 최초의 작품이 그의 감정에서 출발하는 셈이다. 분노·명예·죽음이라는 영웅 서사의 원형이다.' },
+      { icon: '🎬', title: '영화 〈트로이〉', text: '2004년 영화 〈트로이〉에서 브래드 피트가 아킬레우스를 연기했다. 헥토르와의 결투 장면이 영화의 백미로 꼽힌다.' }
+    ]
+  },
+  '오디세우스': {
+    gen: 'hero', tier: '영웅 · 인간계',
+    nameEn: 'ODYSSEUS', greek: 'Ὀδυσσεύς', roman: 'ULYSSES',
+    domain: '지략, 트로이 목마, 귀향', symbol: '활, 배',
+    epithet: '꾀 많은 자',
+    desc: '<strong>오디세우스</strong>는 이타카의 왕으로, 힘이 아닌 <strong>지략</strong>으로 이름난 영웅이다. 트로이 목마를 고안해 전쟁을 끝냈고, 이후 10년에 걸친 귀향 여정이 호메로스의 『오디세이아』다.',
+    story: '트로이 전쟁이 10년간 교착되자, 오디세우스는 거대한 <strong>목마</strong> 안에 병사를 숨겨 성에 들이는 계책으로 트로이를 함락시켰다. 그러나 귀향길에 바다신 포세이돈의 노여움을 사 <strong>10년간 표류</strong>한다 — 외눈 거인 <strong>키클롭스 폴리페모스</strong>의 동굴 탈출, 마녀 <strong>키르케</strong>, 노래로 뱃사람을 홀리는 <strong>세이렌</strong>, 괴물 스킬라와 카리브디스를 모두 지략으로 헤쳐나갔다. 고향 이타카에서는 정숙한 아내 <strong>페넬로페</strong>가 그를 죽은 줄 아는 구혼자들을 따돌리며 20년을 기다리고 있었다. 거지로 변장해 돌아온 오디세우스는 활쏘기 시합으로 정체를 드러내고 구혼자들을 물리쳐 가정을 되찾는다.',
+    relations: { '아버지': ['라에르테스 (인간)'], '아내': ['페넬로페'], '아들': ['텔레마코스'] },
+    modern: [
+      { icon: '📕', title: '"오디세이" — 대장정', text: '길고 모험 가득한 여정을 <strong>오디세이(odyssey)</strong>라 부른다. 영화 〈2001 스페이스 오디세이〉처럼, 험난한 여정을 뜻하는 보통명사가 되었다.' },
+      { icon: '📖', title: '제임스 조이스 〈율리시스〉', text: '20세기 문학의 기념비 제임스 조이스의 <strong>〈율리시스(Ulysses)〉</strong>는 오디세우스의 로마 이름이다. 더블린에서 보낸 하루를 오디세이아의 구조에 빗댄 작품이다.' },
+      { icon: '🐴', title: '"트로이 목마"', text: '겉으로는 선물이지만 안에 위협을 숨긴 것을 <strong>트로이 목마(Trojan horse)</strong>라 한다. 정상 프로그램으로 위장한 악성코드를 부르는 컴퓨터 보안 용어로도 굳어졌다.' },
+      { icon: '🚀', title: 'NASA 오디세이 탐사선', text: '화성 궤도를 도는 NASA의 탐사선 이름이 <strong>2001 마스 오디세이</strong>다. 영화 제목에서 따왔고, 그 뿌리는 결국 이 영웅의 대항해다.' }
+    ]
   }
 };
-
-// ============= TREE STRUCTURE =============
 const treeStructure = [
   {
     tier: '태초의 시작',
@@ -4155,7 +4266,8 @@ function renderTree() {
           'titan': '#f5d588',         // bright amber
           'olympian-1': '#ffd478',    // bright gold
           'olympian-2': '#d4f0dc',    // bright mint
-          'special': '#f0c4d8'        // bright pink
+          'special': '#f0c4d8',       // bright pink
+          'hero': '#a8c8e0'           // bright steel blue
         };
         const motherHtml = g.mother
           ? `<div class="god-mother">어머니 · ${g.mother}</div>`
@@ -4324,7 +4436,8 @@ function renderGodDetail(name) {
     'titan': 'var(--c-titan)',
     'olympian-1': 'var(--c-olympian-1)',
     'olympian-2': 'var(--c-olympian-2)',
-    'special': 'var(--c-special)'
+    'special': 'var(--c-special)',
+    'hero': 'var(--c-hero)'
   };
 
   let relationsHtml = '';
@@ -4522,32 +4635,32 @@ const categoryDefs = [
     name: '태초의 신',
     greek: 'Πρωτογενοί · Protogenoi',
     desc: '우주가 처음 분화될 때<br>자연 발생한 신들',
-    count: '5 DEITIES',
+    count: '4 DEITIES',
     accent: '#e0c8a0',
-    gods: ['카오스', '가이아', '타르타로스', '에로스', '우라노스'],
-    intro: '헤시오도스 『신통기』에 따르면, 가장 먼저 카오스가 생겨났고 그 뒤를 이어 가이아 · 타르타로스 · 에로스가 자연스럽게 솟아났으며, 가이아가 홀로 우라노스를 낳았다. 모든 신화의 시작점이다.'
+    gods: ['카오스', '가이아', '타르타로스', '에로스'],
+    intro: '헤시오도스 『신통기』에 따르면, 가장 먼저 카오스가 생겨났고 그 뒤를 이어 가이아 · 타르타로스 · 에로스가 자연스럽게 솟아났다. 모든 신화의 시작점이다.'
   },
   {
     id: 'chaos-children',
     roman: 'II.',
-    name: '카오스의 자식',
-    greek: 'Ἔρεβος · Νύξ',
-    desc: '어둠과 밤<br>모든 두려운 힘의 어머니',
-    count: '2 DEITIES',
+    name: '카오스 계열',
+    greek: 'Ἔρεβος · Νύξ · Αἰθήρ · Ἡμέρα',
+    desc: '어둠과 밤,<br>그리고 거기서 태어난 빛',
+    count: '4 DEITIES',
     accent: '#c0a0d8',
-    gods: ['에레보스', '닉스'],
-    intro: '카오스가 직접 낳은 두 자식. 어둠의 에레보스와 밤의 닉스. 호메로스의 『일리아스』는 제우스조차 닉스를 두려워한다고 전한다.'
+    gods: ['에레보스', '닉스', '아이테르', '헤메라'],
+    intro: '카오스가 직접 낳은 어둠(에레보스)과 밤(닉스), 그리고 그 둘이 결합해 태어난 천공의 빛(아이테르)과 낮(헤메라). 어둠에서 빛이 솟아난다는 그리스 우주론의 시적 발상이다.'
   },
   {
-    id: 'darkness-children',
+    id: 'gaia-children',
     roman: 'III.',
-    name: '어둠(에레보스) × 밤(닉스)의 자식',
-    greek: 'Αἰθήρ · Ἡμέρα',
-    desc: '빛과 낮<br>어둠에서 태어난 광채',
-    count: '2 DEITIES',
-    accent: '#f0d8a0',
-    gods: ['아이테르', '헤메라'],
-    intro: '어둠과 밤이 결합해 태어난 두 자식. 천공의 빛 아이테르와 낮의 여신 헤메라. 어둠에서 빛이 솟아난다는 그리스 우주론의 시적 발상이다.'
+    name: '가이아 계열',
+    greek: 'Οὐρανός · Οὔρεα · Πόντος',
+    desc: '대지가 홀로 낳은<br>하늘 · 산 · 바다',
+    count: '3 DEITIES',
+    accent: '#b89878',
+    gods: ['우라노스', '우레아', '폰토스'],
+    intro: '가이아가 짝 없이 홀로 낳은 세 자식 — 하늘(우라노스), 산(우레아), 바다(폰토스). 대지에서 솟아오른 이 셋이 세계의 골격을 이루었고, 가이아는 그중 우라노스와 다시 결합해 티탄들을 낳았다.'
   },
   {
     id: 'nyx-children',
@@ -4587,22 +4700,22 @@ const categoryDefs = [
     roman: 'VII.',
     name: '올림포스 2세대',
     greek: 'Ὀλύμπιοι β´',
-    desc: '제우스와 여러 어머니의<br>일곱 자식',
-    count: '7 DEITIES',
+    desc: '제우스 세대의<br>올림포스 여덟 신',
+    count: '8 DEITIES',
     accent: '#d4f0dc',
-    gods: ['아테나', '아폴론', '아르테미스', '아레스', '헤르메스', '헤파이스토스', '디오니소스'],
-    intro: '제우스와 여러 여신·인간의 자녀들. 헤라가 낳은 아레스와 헤파이스토스 외에 메티스, 레토, 마이아, 세멜레가 어머니다. 헤라의 분노와 질투가 그치지 않는 시기.'
+    gods: ['아테나', '아폴론', '아르테미스', '아레스', '헤르메스', '헤파이스토스', '디오니소스', '아프로디테'],
+    intro: '제우스와 여러 여신·인간의 자녀들. 헤라가 낳은 아레스와 헤파이스토스 외에 메티스·레토·마이아·세멜레가 어머니다. 아프로디테는 출생 전승이 둘로 갈리지만(우라노스의 거품 / 제우스와 디오네의 딸), 올림포스 12신의 하나로 여기 함께 둔다.'
   },
   {
-    id: 'special',
+    id: 'hero',
     roman: 'VIII.',
-    name: '특수 출생',
-    greek: 'Ἀναδυομένη',
-    desc: '바다의 거품에서<br>홀로 태어난 미의 여신',
-    count: '1 DEITY',
-    accent: '#f0c4d8',
-    gods: ['아프로디테'],
-    intro: '크로노스가 우라노스를 거세할 때 바다에 떨어진 살에서 솟아오른 거품에서 태어났다. 부모 없이 바다의 거품(아프로스)에서 솟아났기에 "아프로디테"라 불린다.'
+    name: '영웅 · 인간계',
+    greek: 'Ἥρωες · Heroes',
+    desc: '신과 인간 사이에서 태어난<br>반신반인과 전사들',
+    count: '5 HEROES',
+    accent: '#a8c8e0',
+    gods: ['헤라클레스', '페르세우스', '테세우스', '아킬레우스', '오디세우스'],
+    intro: '신과 인간 사이에서 태어났거나 신의 가호를 받은 영웅들. 괴물을 처치하고 전쟁을 누비며 인간의 한계에 도전했다. 신화가 하늘에서 땅으로 내려오는 지점이다.'
   }
 ];
 
@@ -4615,7 +4728,9 @@ const categoryIcons = {
   'titan': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><path d="M 14 12 Q 28 12 32 24 Q 30 32 22 34 L 18 32 L 16 28 L 14 24 Z" fill="currentColor" opacity="0.85"/>',
   'olympian-1': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><path d="M 28 10 L 19 26 L 25 26 L 17 38 L 30 22 L 24 22 L 30 10 Z" fill="currentColor"/>',
   'olympian-2': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><ellipse cx="24" cy="28" rx="11" ry="13" fill="currentColor" opacity="0.85"/><circle cx="19" cy="24" r="3" fill="#4d3a2a"/><circle cx="29" cy="24" r="3" fill="#4d3a2a"/>',
-  'special': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><path d="M 10 26 Q 14 18 24 18 Q 32 18 34 22 L 40 18 L 38 26 L 42 28 L 36 30 Q 32 36 24 36 Q 14 36 10 30 Q 8 28 10 26 Z" fill="currentColor"/>'
+  'special': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><path d="M 10 26 Q 14 18 24 18 Q 32 18 34 22 L 40 18 L 38 26 L 42 28 L 36 30 Q 32 36 24 36 Q 14 36 10 30 Q 8 28 10 26 Z" fill="currentColor"/>',
+  'gaia-children': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><path d="M 8 34 L 18 18 L 24 28 L 30 14 L 40 34 Z" fill="currentColor" opacity="0.85"/>',
+  'hero': '<circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="1.5"/><path d="M 24 8 L 26 28 L 24 34 L 22 28 Z" fill="currentColor"/><rect x="17" y="26" width="14" height="3" rx="1" fill="currentColor"/><path d="M 24 34 L 21 38 L 27 38 Z" fill="currentColor"/>'
 };
 
 function renderCategories() {
@@ -4656,7 +4771,8 @@ function renderCatDetail(catId) {
       'olympian-1': '#ffd478',
       'olympian-2': '#d4f0dc',
       'special': '#f0c4d8',
-      'minor': '#f0d8a0'
+      'minor': '#f0d8a0',
+      'hero': '#a8c8e0'
     };
     return `<button class="god-card" data-gen="${g.gen}" style="--accent: ${sealColorMap[g.gen] || sealColorMap.primordial}" onclick="showGod('${name}')">
       ${makeSeal(name, sealColorMap[g.gen] || sealColorMap.primordial)}
