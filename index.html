@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>MYTHOS — 그리스 신화 사전</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -762,9 +762,47 @@
   .cat-detail-intro .divider::after { right: -12px; }
 
   .cat-gods-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 16px;
+  }
+  .cat-gods-grid > .god-card {
+    width: 180px;
+    flex: 0 0 auto;
+  }
+
+  /* 카오스 단독 줄 — 중앙 정렬, 다음 줄과 간격 */
+  .cat-gods-grid.chaos-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .cat-gods-grid.chaos-row .god-card-chaos {
+    max-width: 320px;
+    width: 100%;
+  }
+  /* 카오스 특별 카드 — 보랏빛 성운 + 발광 */
+  .god-card-chaos {
+    background:
+      radial-gradient(ellipse at 50% 25%, rgba(120, 90, 180, 0.55), transparent 60%),
+      radial-gradient(ellipse at 70% 90%, rgba(40, 26, 60, 0.6), transparent 55%),
+      linear-gradient(135deg, #3a2f5a 0%, #1a1226 100%) !important;
+    border: 2px solid #8a6ac0 !important;
+    box-shadow: 0 0 24px rgba(138, 106, 192, 0.45), 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  }
+  .god-card-chaos .god-name-kr { color: #e8dcf8; }
+  .god-card-chaos .god-name-en,
+  .god-card-chaos .god-roman { color: #b8a4d8; }
+  .god-card-chaos .god-domain { color: #c8b8e0; }
+  .god-card-chaos:hover {
+    box-shadow: 0 0 32px rgba(138, 106, 192, 0.65), 0 6px 16px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* 티탄: 한 행에 3개씩 (남신 3+3, 여신 3+3) */
+  .cat-gods-grid.titan-grid {
+    max-width: 572px;
+    margin: 0 auto;
   }
 
   /* Sex-based divider for titans (남신/여신 grouping) */
@@ -772,6 +810,8 @@
     text-align: center;
     margin: 0 0 20px;
     grid-column: 1 / -1;
+    width: 100%;
+    flex: 0 0 100%;
   }
   .sex-divider:not(:first-child) {
     margin-top: 36px;
@@ -806,8 +846,10 @@
 
   /* Smaller cards for minor gods grid (Nyx's children etc.) */
   .cat-gods-grid.minor-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 12px;
+  }
+  .cat-gods-grid.minor-grid > .god-card {
+    width: 140px;
   }
   .cat-gods-grid.minor-grid .god-card {
     padding: 12px 6px 10px;
@@ -833,8 +875,10 @@
     margin-top: 4px !important;
   }
   @media (max-width: 600px) {
-    .cat-gods-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .cat-gods-grid.minor-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .cat-gods-grid { gap: 12px; }
+    .cat-gods-grid > .god-card { width: calc(50% - 6px); }
+    .cat-gods-grid.minor-grid { gap: 8px; }
+    .cat-gods-grid.minor-grid > .god-card { width: calc(33.333% - 6px); }
     .cat-detail-content { padding: 20px 12px 60px; }
     .cat-detail-intro h2 { font-size: 22px; }
   }
@@ -845,6 +889,7 @@
     inset: 0;
     overflow: hidden;
     cursor: grab;
+    touch-action: none;
   }
   .tree-canvas-wrap.grabbing { cursor: grabbing; }
 
@@ -852,8 +897,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 2000px;
-    height: 1100px;
+    width: 2200px;
+    height: 1800px;
     transform-origin: 0 0;
     transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
@@ -873,12 +918,74 @@
     gap: 2px;
     z-index: 2;
   }
+  .tree-node-mini {
+    width: 74px;
+    height: 74px;
+    padding: 6px;
+    border-radius: 50%;
+    cursor: default;
+    background: #2e3a38;
+    border: 1.5px dashed #6a8a80;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  }
+  .tree-node-mini .mini-name {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 11px;
+    color: #a8d0c4;
+    line-height: 1.05;
+    text-align: center;
+  }
+  .tree-node-mini .mini-domain {
+    font-size: 7.5px;
+    line-height: 1.1;
+    text-align: center;
+    margin-top: 2px;
+    color: #8ab0a4;
+  }
+  .tree-node-chaos {
+    position: absolute;
+    width: 124px;
+    height: 80px;
+    padding: 8px;
+    margin: 0;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    z-index: 3;
+    cursor: pointer;
+    background: radial-gradient(ellipse at 50% 30%, #3a2f5a, #1a1226);
+    border: 2px solid #8a6ac0;
+    box-shadow: 0 0 16px rgba(138, 106, 192, 0.5), 0 3px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s ease;
+  }
+  .tree-node-chaos:hover {
+    box-shadow: 0 0 24px rgba(138, 106, 192, 0.7), 0 4px 12px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+  }
+  .tree-node-chaos .symbol-icon { width: 26px; height: 26px; margin-bottom: 2px; }
+  .tree-node-chaos .chaos-name-kr {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #e0d0f8;
+    letter-spacing: 1px;
+  }
+  .tree-node-chaos .chaos-name-en {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    color: #b0a0d8;
+    letter-spacing: 1px;
+  }
   .tree-lines {
     position: absolute;
     top: 0;
     left: 0;
-    width: 2000px;
-    height: 1100px;
+    width: 2200px;
+    height: 1800px;
     z-index: 1;
     pointer-events: none;
     overflow: visible;
@@ -901,6 +1008,32 @@
     stroke-width: 1;
     stroke-dasharray: 2 4;
     opacity: 0.75;
+  }
+  .tree-lines .nyx-group-box {
+    fill: rgba(200, 176, 216, 0.05);
+    stroke: #8a6a90;
+    stroke-width: 1;
+    stroke-dasharray: 5 4;
+    opacity: 0.7;
+  }
+  .tree-lines .nyx-group-label {
+    fill: #b89cc8;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .tree-lines .titan-group-box {
+    fill: rgba(245, 213, 136, 0.05);
+    stroke: #9a7a4e;
+    stroke-width: 1;
+    stroke-dasharray: 5 4;
+    opacity: 0.7;
+  }
+  .tree-lines .titan-group-label {
+    fill: #d8b878;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    font-weight: 600;
   }
   .tree-node .symbol-icon { width: 22px; height: 22px; margin: 0 0 1px; }
   .tree-node .god-name-kr { font-size: 12px; line-height: 1.05; }
@@ -1367,16 +1500,16 @@
   }
   .god-card[data-sex="neuter"] {
     background:
-      radial-gradient(ellipse at 30% 20%, rgba(120, 150, 135, 0.5), transparent 55%),
-      radial-gradient(ellipse at 70% 85%, rgba(38, 50, 42, 0.55), transparent 50%),
-      linear-gradient(135deg, #46544b 0%, #272f29 100%);
+      radial-gradient(ellipse at 30% 20%, rgba(140, 142, 146, 0.5), transparent 55%),
+      radial-gradient(ellipse at 70% 85%, rgba(44, 46, 48, 0.55), transparent 50%),
+      linear-gradient(135deg, #54565a 0%, #2c2e30 100%);
   }
   .god-card[data-sex="male"] .god-domain { color: #aac4d4; }
   .god-card[data-sex="female"] .god-domain { color: #d4aac0; }
-  .god-card[data-sex="neuter"] .god-domain { color: #a8c8b0; }
+  .god-card[data-sex="neuter"] .god-domain { color: #c4c2be; }
   .god-card[data-sex="male"] .god-name-en { color: #9fc0d4; }
   .god-card[data-sex="female"] .god-name-en { color: #d8a8c0; }
-  .god-card[data-sex="neuter"] .god-name-en { color: #a4c4ac; }
+  .god-card[data-sex="neuter"] .god-name-en { color: #bcbab6; }
 
   /* Filter dim only applies on home view (god grid), not in category pages */
   .app[data-view="home"][data-filter]:not([data-filter="all"]) .god-card { opacity: 0.25; }
@@ -3615,7 +3748,7 @@ const galleries = {
 
 const gods = {
   '카오스': {
-    gen: 'primordial', tier: '태초의 신', sex: 'neuter',
+    gen: 'primordial', tier: '태초의 신', sex: 'neuter', special: true,
     nameEn: 'CHAOS', greek: 'Χάος', roman: 'CHAOS',
     domain: '태초의 심연', symbol: '공허, 벌어진 틈',
     epithet: '맨 처음에 생겨난 자',
@@ -4426,87 +4559,166 @@ const gods = {
       { icon: '🏹', title: '"사랑에 빠지다"', text: '큐피드의 화살에 맞아 사랑에 빠진다는 관념은 "struck by Cupid\'s arrow" 같은 표현으로 영어에 남았다. 사랑이 갑작스럽고 통제 불가능하다는 발상의 뿌리다.' },
       { icon: '👼', title: '미술 속 푸토', text: '르네상스·바로크 미술에 끝없이 등장하는 통통한 날개 아기 <strong>푸토(putto)</strong>는 큐피드 이미지에서 나왔다. 천장화와 제단화를 가득 채운 그 아기 천사들이다.' }
     ]
-  }
+  },
+  '티폰': {
+    gen: 'primordial', sex: 'male', mini: true, tier: '가이아 × 타르타로스',
+    nameEn: 'TYPHON', greek: 'Τυφῶν', roman: 'TYPHON',
+    domain: '태풍·괴물의 아버지', symbol: '', epithet: '괴물들의 아버지',
+    desc: '가이아와 타르타로스 사이에서 태어난 거대한 괴물. 신들조차 두려워한 태풍의 화신으로, 제우스와 우주의 패권을 두고 싸웠다.',
+    relations: { '부모': ['가이아', '타르타로스'] }, modern: []
+  },
+  '네레우스': {
+    gen: 'primordial', sex: 'male', mini: true, tier: '가이아 × 폰토스',
+    nameEn: 'NEREUS', greek: 'Νηρεύς', roman: 'NEREUS',
+    domain: '바다의 노인', symbol: '', epithet: '바다의 노인',
+    desc: '가이아와 폰토스의 맏아들. 정직하고 예언에 능한 \'바다의 노인\'으로, 바다 님프 네레이데스 50명의 아버지다.',
+    relations: { '부모': ['가이아', '폰토스'] }, modern: []
+  },
+  '타우마스': {
+    gen: 'primordial', sex: 'male', mini: true, tier: '가이아 × 폰토스',
+    nameEn: 'THAUMAS', greek: 'Θαύμας', roman: 'THAUMAS',
+    domain: '바다의 경이', symbol: '', epithet: '경이의 신',
+    desc: '가이아와 폰토스의 아들. 바다의 경이로움을 의인화한 신으로, 무지개 여신 이리스와 하르피이아이의 아버지다.',
+    relations: { '부모': ['가이아', '폰토스'] }, modern: []
+  },
+  '포르키스': {
+    gen: 'primordial', sex: 'male', mini: true, tier: '가이아 × 폰토스',
+    nameEn: 'PHORCYS', greek: 'Φόρκυς', roman: 'PHORCYS',
+    domain: '바다의 위험', symbol: '', epithet: '바다 괴물의 아비',
+    desc: '가이아와 폰토스의 아들. 누이 케토와 결합해 고르곤·그라이아이·스킬라 등 수많은 바다 괴물을 낳았다.',
+    relations: { '부모': ['가이아', '폰토스'], '배우자': ['케토'] }, modern: []
+  },
+  '케토': {
+    gen: 'primordial', sex: 'female', mini: true, tier: '가이아 × 폰토스',
+    nameEn: 'CETO', greek: 'Κητώ', roman: 'CETO',
+    domain: '바다 괴물', symbol: '', epithet: '바다 괴물의 어머니',
+    desc: '가이아와 폰토스의 딸. 바다 괴물을 의인화한 여신으로, 오라비 포르키스와 결합해 메두사 등 괴물들을 낳았다.',
+    relations: { '부모': ['가이아', '폰토스'], '배우자': ['포르키스'] }, modern: []
+  },
+  '에우리비아': {
+    gen: 'primordial', sex: 'female', mini: true, tier: '가이아 × 폰토스',
+    nameEn: 'EURYBIA', greek: 'Εὐρυβία', roman: 'EURYBIA',
+    domain: '바다의 힘', symbol: '', epithet: '강인한 여신',
+    desc: '가이아와 폰토스의 딸. 부싯돌 같은 마음을 지닌 강인한 여신으로, 티탄 크리오스와 결합했다.',
+    relations: { '부모': ['가이아', '폰토스'], '배우자': ['크리오스'] }, modern: []
+  },
+  '고르곤': {
+    gen: 'primordial', sex: 'female', mini: true, tier: '포르키스 × 케토',
+    nameEn: 'GORGONES', greek: 'Γοργόνες', roman: 'GORGONES',
+    domain: '메두사 세 자매', symbol: '', epithet: '',
+    desc: '포르키스와 케토의 딸들. 스테노·에우리알레·메두사 세 자매로, 보는 이를 돌로 만드는 괴물이다.',
+    relations: { '부모': ['포르키스', '케토'] }, modern: []
+  },
+  '그라이아이': {
+    gen: 'primordial', sex: 'female', mini: true, tier: '포르키스 × 케토',
+    nameEn: 'GRAEAE', greek: 'Γραῖαι', roman: 'GRAEAE',
+    domain: '잿빛 노파 자매', symbol: '', epithet: '',
+    desc: '포르키스와 케토의 딸들. 태어날 때부터 백발인 세 노파로, 눈 하나와 이빨 하나를 나눠 썼다.',
+    relations: { '부모': ['포르키스', '케토'] }, modern: []
+  },
+  '에키드나': {
+    gen: 'primordial', sex: 'female', mini: true, tier: '포르키스 × 케토',
+    nameEn: 'ECHIDNA', greek: 'Ἔχιδνα', roman: 'ECHIDNA',
+    domain: '괴물들의 어머니', symbol: '', epithet: '',
+    desc: '상반신은 여인, 하반신은 뱀인 괴물. 티폰과 결합해 케르베로스·히드라·키마이라 등 수많은 괴물을 낳았다.',
+    relations: { '부모': ['포르키스', '케토'] }, modern: []
+  },
+  '라돈': {
+    gen: 'primordial', sex: 'male', mini: true, tier: '포르키스 × 케토',
+    nameEn: 'LADON', greek: 'Λάδων', roman: 'LADON',
+    domain: '황금사과 용', symbol: '', epithet: '',
+    desc: '헤스페리데스의 황금사과를 지키는 용. 헤라클레스의 열한 번째 과업에서 쓰러졌다.',
+    relations: { '부모': ['포르키스', '케토'] }, modern: []
+  },
 };
 const treeNodes = {
-  '타르타로스': { x: 730, y: 40 },
-  '카오스': { x: 880, y: 40 },
-  '가이아': { x: 1030, y: 40 },
-  '에로스': { x: 1180, y: 40 },
-  '에레보스': { x: 655, y: 220 },
-  '닉스': { x: 805, y: 220 },
-  '우라노스': { x: 955, y: 220 },
-  '우레아': { x: 1105, y: 220 },
-  '폰토스': { x: 1255, y: 220 },
-  '아이테르': { x: 318, y: 400 },
-  '헤메라': { x: 416, y: 400 },
-  '크로노스': { x: 514, y: 400 },
-  '레아': { x: 612, y: 400 },
-  '오케아노스': { x: 710, y: 400 },
-  '히페리온': { x: 808, y: 400 },
-  '코이오스': { x: 906, y: 400 },
-  '크리오스': { x: 1004, y: 400 },
-  '이아페토스': { x: 1102, y: 400 },
-  '테이아': { x: 1200, y: 400 },
-  '테미스': { x: 1298, y: 400 },
-  '므네모시네': { x: 1396, y: 400 },
-  '포이베': { x: 1494, y: 400 },
-  '테티스': { x: 1592, y: 400 },
-  '모이라이': { x: 73, y: 580 },
-  '타나토스': { x: 171, y: 580 },
-  '힙노스': { x: 269, y: 580 },
-  '네메시스': { x: 367, y: 580 },
-  '에리스': { x: 465, y: 580 },
-  '헤스페리데스': { x: 563, y: 580 },
-  '모로스': { x: 661, y: 580 },
-  '케레스': { x: 759, y: 580 },
-  '오네이로이': { x: 857, y: 580 },
-  '모모스': { x: 955, y: 580 },
-  '아파테': { x: 1053, y: 580 },
-  '게라스': { x: 1151, y: 580 },
-  '필로테스': { x: 1249, y: 580 },
-  '제우스': { x: 1347, y: 580 },
-  '헤라': { x: 1445, y: 580 },
-  '포세이돈': { x: 1543, y: 580 },
-  '하데스': { x: 1641, y: 580 },
-  '데메테르': { x: 1739, y: 580 },
-  '헤스티아': { x: 1837, y: 580 },
-  '아테나': { x: 430, y: 760 },
-  '아폴론': { x: 580, y: 760 },
-  '아르테미스': { x: 730, y: 760 },
-  '아레스': { x: 880, y: 760 },
-  '헤르메스': { x: 1030, y: 760 },
-  '헤파이스토스': { x: 1180, y: 760 },
-  '디오니소스': { x: 1330, y: 760 },
-  '아프로디테': { x: 1480, y: 760 },
-  '헤라클레스': { x: 580, y: 940 },
-  '페르세우스': { x: 730, y: 940 },
-  '테세우스': { x: 880, y: 940 },
-  '아킬레우스': { x: 1030, y: 940 },
-  '오디세우스': { x: 1180, y: 940 },
-  '에로스 (큐피드)': { x: 1330, y: 940 },
+  '고르곤': { x: 1630, y: 540 },
+  '그라이아이': { x: 1750, y: 540 },
+  '에키드나': { x: 1870, y: 540 },
+  '라돈': { x: 1990, y: 540 },
+  '티폰': { x: 1350, y: 400 },
+  '네레우스': { x: 1560, y: 400 },
+  '타우마스': { x: 1660, y: 400 },
+  '포르키스': { x: 1770, y: 400 },
+  '케토': { x: 1880, y: 400 },
+  '에우리비아': { x: 2030, y: 400 },
+  '타르타로스': { x: 1060, y: 40 },
+  '카오스': { x: 760, y: 40 },
+  '가이아': { x: 910, y: 40 },
+  '에로스': { x: 1210, y: 40 },
+  '에레보스': { x: 560, y: 240 },
+  '닉스': { x: 400, y: 240 },
+  '우라노스': { x: 800, y: 240 },
+  '우레아': { x: 1150, y: 240 },
+  '폰토스': { x: 1300, y: 240 },
+  '아이테르': { x: 560, y: 480 },
+  '헤메라': { x: 680, y: 480 },
+  '크로노스': { x: 820, y: 700 },
+  '레아': { x: 920, y: 700 },
+  '오케아노스': { x: 1020, y: 700 },
+  '히페리온': { x: 1120, y: 700 },
+  '코이오스': { x: 1220, y: 700 },
+  '크리오스': { x: 1320, y: 700 },
+  '이아페토스': { x: 1420, y: 700 },
+  '테이아': { x: 1520, y: 700 },
+  '테미스': { x: 1620, y: 700 },
+  '므네모시네': { x: 1720, y: 700 },
+  '포이베': { x: 1820, y: 700 },
+  '테티스': { x: 1920, y: 700 },
+  '모이라이': { x: 60, y: 680 },
+  '타나토스': { x: 156, y: 680 },
+  '힙노스': { x: 252, y: 680 },
+  '네메시스': { x: 348, y: 680 },
+  '에리스': { x: 444, y: 680 },
+  '헤스페리데스': { x: 60, y: 766 },
+  '모로스': { x: 156, y: 766 },
+  '케레스': { x: 252, y: 766 },
+  '오네이로이': { x: 348, y: 766 },
+  '모모스': { x: 444, y: 766 },
+  '아파테': { x: 60, y: 852 },
+  '게라스': { x: 156, y: 852 },
+  '필로테스': { x: 252, y: 852 },
+  '제우스': { x: 900, y: 980 },
+  '헤라': { x: 1030, y: 980 },
+  '포세이돈': { x: 1160, y: 980 },
+  '하데스': { x: 1290, y: 980 },
+  '데메테르': { x: 1420, y: 980 },
+  '헤스티아': { x: 1550, y: 980 },
+  '아테나': { x: 700, y: 1180 },
+  '아폴론': { x: 850, y: 1180 },
+  '아르테미스': { x: 1000, y: 1180 },
+  '아레스': { x: 1150, y: 1180 },
+  '헤르메스': { x: 1300, y: 1180 },
+  '헤파이스토스': { x: 1450, y: 1180 },
+  '디오니소스': { x: 1600, y: 1180 },
+  '아프로디테': { x: 1750, y: 1180 },
+  '헤라클레스': { x: 760, y: 1380 },
+  '페르세우스': { x: 910, y: 1380 },
+  '테세우스': { x: 1060, y: 1380 },
+  '아킬레우스': { x: 1210, y: 1380 },
+  '오디세우스': { x: 1360, y: 1380 },
+  '에로스 (큐피드)': { x: 1510, y: 1380 },
 };
 const treeEdges = {
-  parent: [["우라노스","크로노스"],["가이아","크로노스"],["우라노스","레아"],["가이아","레아"],["우라노스","오케아노스"],["가이아","오케아노스"],["우라노스","히페리온"],["가이아","히페리온"],["크로노스","제우스"],["레아","제우스"],["크로노스","헤라"],["레아","헤라"],["크로노스","포세이돈"],["레아","포세이돈"],["크로노스","하데스"],["레아","하데스"],["크로노스","데메테르"],["레아","데메테르"],["크로노스","헤스티아"],["레아","헤스티아"],["제우스","아테나"],["제우스","아폴론"],["제우스","아르테미스"],["제우스","아레스"],["헤라","아레스"],["제우스","헤르메스"],["제우스","헤파이스토스"],["헤라","헤파이스토스"],["제우스","디오니소스"],["카오스","에레보스"],["카오스","닉스"],["에레보스","아이테르"],["닉스","아이테르"],["에레보스","헤메라"],["닉스","헤메라"],["닉스","모이라이"],["닉스","타나토스"],["닉스","힙노스"],["닉스","네메시스"],["닉스","에리스"],["닉스","헤스페리데스"],["닉스","모로스"],["닉스","케레스"],["닉스","오네이로이"],["닉스","모모스"],["닉스","아파테"],["닉스","게라스"],["닉스","필로테스"],["가이아","코이오스"],["우라노스","코이오스"],["가이아","크리오스"],["우라노스","크리오스"],["가이아","이아페토스"],["우라노스","이아페토스"],["가이아","테이아"],["우라노스","테이아"],["우라노스","테미스"],["가이아","테미스"],["우라노스","므네모시네"],["가이아","므네모시네"],["우라노스","포이베"],["가이아","포이베"],["가이아","테티스"],["우라노스","테티스"],["가이아","우레아"],["가이아","폰토스"],["제우스","헤라클레스"],["제우스","페르세우스"],["포세이돈","테세우스"],["테티스","아킬레우스"],["아프로디테","에로스 (큐피드)"],["아레스","에로스 (큐피드)"]],
-  spouse: [["우라노스","가이아"],["폰토스","가이아"],["가이아","타르타로스"],["레아","크로노스"],["테티스","오케아노스"],["테이아","히페리온"],["헤라","제우스"],["아프로디테","헤파이스토스"],["닉스","에레보스"],["헤메라","아이테르"],["포이베","코이오스"],["제우스","테미스"],["제우스","므네모시네"]],
+  parent: [["포르키스","고르곤"],["케토","고르곤"],["포르키스","그라이아이"],["케토","그라이아이"],["포르키스","에키드나"],["케토","에키드나"],["포르키스","라돈"],["케토","라돈"],["가이아","티폰"],["타르타로스","티폰"],["가이아","네레우스"],["폰토스","네레우스"],["가이아","타우마스"],["폰토스","타우마스"],["가이아","포르키스"],["폰토스","포르키스"],["가이아","케토"],["폰토스","케토"],["가이아","에우리비아"],["폰토스","에우리비아"],["우라노스","크로노스"],["가이아","크로노스"],["우라노스","레아"],["가이아","레아"],["우라노스","오케아노스"],["가이아","오케아노스"],["우라노스","히페리온"],["가이아","히페리온"],["크로노스","제우스"],["레아","제우스"],["크로노스","헤라"],["레아","헤라"],["크로노스","포세이돈"],["레아","포세이돈"],["크로노스","하데스"],["레아","하데스"],["크로노스","데메테르"],["레아","데메테르"],["크로노스","헤스티아"],["레아","헤스티아"],["제우스","아테나"],["제우스","아폴론"],["제우스","아르테미스"],["제우스","아레스"],["헤라","아레스"],["제우스","헤르메스"],["제우스","헤파이스토스"],["헤라","헤파이스토스"],["제우스","디오니소스"],["카오스","에레보스"],["카오스","닉스"],["에레보스","아이테르"],["닉스","아이테르"],["에레보스","헤메라"],["닉스","헤메라"],["닉스","모이라이"],["닉스","타나토스"],["닉스","힙노스"],["닉스","네메시스"],["닉스","에리스"],["닉스","헤스페리데스"],["닉스","모로스"],["닉스","케레스"],["닉스","오네이로이"],["닉스","모모스"],["닉스","아파테"],["닉스","게라스"],["닉스","필로테스"],["가이아","코이오스"],["우라노스","코이오스"],["가이아","크리오스"],["우라노스","크리오스"],["가이아","이아페토스"],["우라노스","이아페토스"],["가이아","테이아"],["우라노스","테이아"],["우라노스","테미스"],["가이아","테미스"],["우라노스","므네모시네"],["가이아","므네모시네"],["우라노스","포이베"],["가이아","포이베"],["가이아","테티스"],["우라노스","테티스"],["가이아","우레아"],["가이아","폰토스"],["제우스","헤라클레스"],["제우스","페르세우스"],["포세이돈","테세우스"],["테티스","아킬레우스"],["아프로디테","에로스 (큐피드)"],["아레스","에로스 (큐피드)"]],
+  spouse: [["포르키스","케토"],["우라노스","가이아"],["폰토스","가이아"],["가이아","타르타로스"],["레아","크로노스"],["테티스","오케아노스"],["테이아","히페리온"],["헤라","제우스"],["아프로디테","헤파이스토스"],["닉스","에레보스"],["헤메라","아이테르"],["포이베","코이오스"],["제우스","테미스"],["제우스","므네모시네"]],
   dashed: [["우라노스","아프로디테"],["제우스","아프로디테"]]
 };
 
 // ============= RENDER =============
 // 세대 구분선 라벨 (y좌표 기준)
 const treeRowLabels = [
-  { y: 12,  label: '태초의 신',        greek: 'Πρωτογενοί' },
-  { y: 192, label: '카오스 · 가이아 계열', greek: 'Χάος · Γαῖα' },
-  { y: 372, label: '티탄 12신',         greek: 'Τιτᾶνες' },
-  { y: 552, label: '닉스의 자식 · 올림포스 1세대', greek: 'Νύξ · Ὀλύμπιοι α´' },
-  { y: 732, label: '올림포스 2세대',     greek: 'Ὀλύμπιοι β´' },
-  { y: 912, label: '영웅 · 인간계',      greek: 'Ἥρωες' }
+  { y: 12,   label: '태초의 신',         greek: 'Πρωτογενοί' },
+  { y: 212,  label: '카오스 · 가이아 계열', greek: 'Χάος · Γαῖα' },
+  { y: 932,  label: '올림포스 1세대',      greek: 'Ὀλύμπιοι α´' },
+  { y: 1132, label: '올림포스 2세대',      greek: 'Ὀλύμπιοι β´' },
+  { y: 1332, label: '영웅 · 인간계',       greek: 'Ἥρωες' }
 ];
 
 function renderTree() {
   const canvas = document.getElementById('tree-canvas');
   if (!canvas) return;
-  const sexSealMap = { 'male': '#bcdcec', 'female': '#f0c4d8', 'neuter': '#bcd8c4' };
+  const sexSealMap = { 'male': '#bcdcec', 'female': '#f0c4d8', 'neuter': '#cacac6' };
   const sealColorMap = { 'primordial':'#e0c8a0','titan':'#f5d588','olympian-1':'#ffd478','olympian-2':'#d4f0dc','special':'#f0c4d8','minor':'#f0d8a0','hero':'#a8c8e0' };
 
   let html = '';
@@ -4517,15 +4729,147 @@ function renderTree() {
   const topY = n => treeNodes[n].y;
   const botY = n => treeNodes[n].y + NH;
   const midY = n => treeNodes[n].y + NH / 2;
-  let svg = '<svg class="tree-lines" viewBox="0 0 2000 1100" preserveAspectRatio="none">';
+  let svg = '<svg class="tree-lines" viewBox="0 0 2200 1800" preserveAspectRatio="none">';
 
-  // 부모 → 자식 (실선): 부모 하단 → 자식 상단, 중간 꺾임
+  // ===== line-hop: 수평 분배선 레지스트리 + 수직선 헬퍼 =====
+  // 수평선들을 먼저 모으고, 수직선이 이를 건널 때 작은 반원(호)으로 넘는다
+  const hBuses = []; // { y, x1, x2 }
+  const HOP = 5; // 호 반지름
+  function vLineHopping(x, ya, yb) {
+    // x에서 ya→yb 수직선. 도중에 만나는 수평선마다 호를 넣음
+    const y1 = Math.min(ya, yb), y2 = Math.max(ya, yb);
+    const crossings = hBuses
+      .filter(b => b.y > y1 + HOP && b.y < y2 - HOP && x > Math.min(b.x1,b.x2) + 2 && x < Math.max(b.x1,b.x2) - 2)
+      .map(b => b.y)
+      .sort((a,b) => a - b);
+    if (crossings.length === 0) {
+      return `<path class="edge-parent" d="M${x} ${ya} L${x} ${yb}"/>`;
+    }
+    // 위에서 아래로 그리며 각 교차점에 반원
+    let d = `M${x} ${y1}`;
+    crossings.forEach(cy => {
+      d += ` L${x} ${cy - HOP}`;
+      // 위로 볼록한 반원으로 수평선을 타고 넘음
+      d += ` A${HOP} ${HOP} 0 0 1 ${x} ${cy + HOP}`;
+    });
+    d += ` L${x} ${y2}`;
+    return `<path class="edge-parent" d="${d}"/>`;
+  }
+
+  // 닉스 자식 묶음 박스 영역
+  const NYX_KIDS = ['모이라이','타나토스','힙노스','네메시스','에리스','헤스페리데스','모로스','케레스','오네이로이','모모스','아파테','게라스','필로테스'];
+  const nyxKidSet = new Set(NYX_KIDS);
+  let nbx1=9999, nby1=9999, nbx2=0, nby2=0;
+  NYX_KIDS.forEach(n => {
+    if (!treeNodes[n]) return;
+    nbx1 = Math.min(nbx1, treeNodes[n].x); nby1 = Math.min(nby1, treeNodes[n].y);
+    nbx2 = Math.max(nbx2, treeNodes[n].x + NW); nby2 = Math.max(nby2, treeNodes[n].y + NH);
+  });
+  const NYX_PAD = 14;
+  const nyxBox = { x: nbx1 - NYX_PAD, y: nby1 - NYX_PAD, w: (nbx2-nbx1) + NYX_PAD*2, h: (nby2-nby1) + NYX_PAD*2 };
+
+  // 1) 자식을 "부모 그룹"으로 묶기
+  const groups = {}; // key: 정렬된 부모들 → { parents:[], children:[] }
+  // 자식별 부모 목록 만들기
+  const childParents = {};
   treeEdges.parent.forEach(([p, c]) => {
-    if (!treeNodes[p] || !treeNodes[c]) return;
-    const x1 = cx(p), y1 = botY(p), x2 = cx(c), y2 = topY(c);
+    if (!treeNodes[c]) return;
+    (childParents[c] = childParents[c] || []).push(p);
+  });
+  // 부모그룹 키로 자식 묶기
+  Object.keys(childParents).forEach(c => {
+    const parents = childParents[c].filter(p => treeNodes[p]).sort();
+    if (parents.length === 0) return;
+    const key = parents.join('|');
+    if (!groups[key]) groups[key] = { parents, children: [] };
+    groups[key].children.push(c);
+  });
+
+  // 2) 배우자(부부) 점선 — 먼저 그림
+  const spouseMid = {}; // key(정렬쌍) → {x,y} 중점
+  treeEdges.spouse.forEach(([a, b]) => {
+    if (!treeNodes[a] || !treeNodes[b]) return;
+    const key = [a,b].sort().join('|');
+    if (Math.abs(treeNodes[a].y - treeNodes[b].y) < 10) {
+      const ax = treeNodes[a].x, bx = treeNodes[b].x;
+      const [lx, rx] = ax < bx ? [ax + NW, bx] : [bx + NW, ax];
+      const y = midY(a);
+      svg += `<path class="edge-spouse" d="M${lx} ${y} L${rx} ${y}"/>`;
+      spouseMid[key] = { x: (lx + rx) / 2, y: y };
+    } else {
+      // 다른 행 부부: 두 노드 아래변 중앙끼리 잇는 점선. 자식 출발점을 점선 위에 정확히 맞춤
+      const upper = treeNodes[a].y < treeNodes[b].y ? a : b;
+      const lower = treeNodes[a].y < treeNodes[b].y ? b : a;
+      const ux = cx(upper), uy = botY(upper);
+      const lx2 = cx(lower), ly = botY(lower);
+      // 점선: 위 부모 하단 → 아래 부모 하단 (직선)
+      svg += `<path class="edge-spouse" d="M${ux} ${uy} L${lx2} ${ly}"/>`;
+      // 자식 출발점 = 점선의 중점 (정확히 선 위)
+      spouseMid[key] = { x: (ux + lx2) / 2, y: (uy + ly) / 2 };
+    }
+  });
+
+  // 3) 부모그룹 → 자식: 부부 중점(또는 단일부모 하단)에서 실선 하강 → 분배선 → 각 자식
+  // 1단계: 수평 분배선을 먼저 모두 그리고 hBuses에 등록
+  const groupDrawData = [];
+  Object.values(groups).forEach(grp => {
+    const { parents, children } = grp;
+    if (parents.length === 1 && parents[0] === '닉스') return;
+    let sx, sy;
+    if (parents.length >= 2) {
+      const key = parents.slice(0,2).sort().join('|');
+      if (spouseMid[key]) { sx = spouseMid[key].x; sy = spouseMid[key].y; }
+      else { sx = (cx(parents[0]) + cx(parents[1])) / 2; sy = (botY(parents[0]) + botY(parents[1])) / 2; }
+    } else {
+      sx = cx(parents[0]); sy = botY(parents[0]);
+    }
+    const kids = children.map(c => ({ name:c, x: cx(c), y: topY(c) }));
+    const kidsMinY = Math.min(...kids.map(k => k.y));
+    const busY = kidsMinY - 22;
+    // 자식 2명: 중점에서 양쪽으로 갈라지는 분배선만 (자식 사이 구간)
+    if (kids.length === 2) {
+      const lx = Math.min(kids[0].x, kids[1].x);
+      const rx = Math.max(kids[0].x, kids[1].x);
+      svg += `<path class="edge-parent" d="M${lx} ${busY} L${rx} ${busY}"/>`;
+      hBuses.push({ y: busY, x1: lx, x2: rx });
+    } else if (kids.length > 2) {
+      const minX = Math.min(sx, ...kids.map(k=>k.x));
+      const maxX = Math.max(sx, ...kids.map(k=>k.x));
+      svg += `<path class="edge-parent" d="M${minX} ${busY} L${maxX} ${busY}"/>`;
+      hBuses.push({ y: busY, x1: minX, x2: maxX });
+    }
+    groupDrawData.push({ sx, sy, kids, busY });
+  });
+  // 2단계: 수직선(하강선 + 자식 가지)을 line-hop으로 그림
+  groupDrawData.forEach(({ sx, sy, kids, busY }) => {
+    if (kids.length === 1) {
+      const k = kids[0];
+      svg += vLineHopping(sx, sy, busY);
+      svg += vLineHopping(sx, busY, (busY + k.y) / 2);
+      svg += `<path class="edge-parent" d="M${sx} ${(busY+k.y)/2} L${k.x} ${(busY+k.y)/2}"/>`;
+      svg += vLineHopping(k.x, (busY + k.y) / 2, k.y);
+    } else if (kids.length === 2) {
+      // 중점에서 분배선 중앙으로 내려온 뒤 양쪽으로 갈라짐 (V자)
+      const midX = (kids[0].x + kids[1].x) / 2;
+      svg += vLineHopping(sx, sy, busY);
+      if (Math.abs(sx - midX) > 1) {
+        svg += `<path class="edge-parent" d="M${sx} ${busY} L${midX} ${busY}"/>`;
+      }
+      kids.forEach(k => { svg += vLineHopping(k.x, busY, k.y); });
+    } else {
+      svg += vLineHopping(sx, sy, busY);
+      kids.forEach(k => { svg += vLineHopping(k.x, busY, k.y); });
+    }
+  });
+
+  // 닉스 → 묶음 박스 (선 하나)
+  if (treeNodes['닉스']) {
+    const x1 = cx('닉스'), y1 = botY('닉스');
+    const x2 = nyxBox.x + nyxBox.w/2, y2 = nyxBox.y;
     const my = (y1 + y2) / 2;
     svg += `<path class="edge-parent" d="M${x1} ${y1} C${x1} ${my} ${x2} ${my} ${x2} ${y2}"/>`;
-  });
+  }
+
   // 아프로디테 두 계보 (점선)
   treeEdges.dashed.forEach(([p, c]) => {
     if (!treeNodes[p] || !treeNodes[c]) return;
@@ -4533,20 +4877,23 @@ function renderTree() {
     const my = (y1 + y2) / 2;
     svg += `<path class="edge-dashed" d="M${x1} ${y1} C${x1} ${my} ${x2} ${my} ${x2} ${y2}"/>`;
   });
-  // 배우자 (점선): 같은 행이면 좌우 직선, 다른 행이면 곡선
-  treeEdges.spouse.forEach(([a, b]) => {
-    if (!treeNodes[a] || !treeNodes[b]) return;
-    if (Math.abs(treeNodes[a].y - treeNodes[b].y) < 10) {
-      // 같은 행: 가까운 옆면끼리
-      const ax = treeNodes[a].x, bx = treeNodes[b].x;
-      const [lx, rx] = ax < bx ? [ax + NW, bx] : [bx + NW, ax];
-      const y = midY(a);
-      svg += `<path class="edge-spouse" d="M${lx} ${y} L${rx} ${y}"/>`;
-    } else {
-      const x1 = cx(a), y1 = midY(a), x2 = cx(b), y2 = midY(b);
-      svg += `<path class="edge-spouse" d="M${x1} ${y1} Q${(x1 + x2) / 2} ${(y1 + y2) / 2 - 30} ${x2} ${y2}"/>`;
-    }
+
+  // 닉스 자식 묶음 박스 (점선 테두리 + 라벨)
+  svg += `<rect class="nyx-group-box" x="${nyxBox.x}" y="${nyxBox.y}" width="${nyxBox.w}" height="${nyxBox.h}" rx="10"/>`;
+  svg += `<text class="nyx-group-label" x="${nyxBox.x + 10}" y="${nyxBox.y - 6}">닉스의 자식들 · 13</text>`;
+
+  // 티탄 12신 묶음 박스
+  const TITANS = ['크로노스','레아','오케아노스','히페리온','코이오스','크리오스','이아페토스','테이아','테미스','므네모시네','포이베','테티스'];
+  let tbx1=9999, tby1=9999, tbx2=0, tby2=0;
+  TITANS.forEach(n => {
+    if (!treeNodes[n]) return;
+    tbx1 = Math.min(tbx1, treeNodes[n].x); tby1 = Math.min(tby1, treeNodes[n].y);
+    tbx2 = Math.max(tbx2, treeNodes[n].x + NW); tby2 = Math.max(tby2, treeNodes[n].y + NH);
   });
+  const TP = 14;
+  svg += `<rect class="titan-group-box" x="${tbx1-TP}" y="${tby1-TP}" width="${(tbx2-tbx1)+TP*2}" height="${(tby2-tby1)+TP*2}" rx="10"/>`;
+  svg += `<text class="titan-group-label" x="${tbx1-TP+10}" y="${tby1-TP-6}">티탄 12신 · Τιτᾶνες</text>`;
+
   svg += '</svg>';
   html += svg;
 
@@ -4564,12 +4911,29 @@ function renderTree() {
     if (!g) continue;
     const pos = treeNodes[name];
     const sealColor = sexSealMap[g.sex] || sealColorMap[g.gen] || sealColorMap.primordial;
-    html += `<button class="tree-node god-card" data-name="${name}" data-gen="${g.gen}" data-sex="${g.sex || ''}"
-      style="left:${pos.x}px; top:${pos.y}px; --accent:${sealColor}" onclick="showGod('${name}')">
-      ${makeSeal(name, sealColor)}
-      <div class="god-name-kr">${name}</div>
-      <div class="god-name-en">${g.nameEn}</div>
-    </button>`;
+    if (g.mini) {
+      // 간이 노드: 작은 정사각형, 심볼 없음, 클릭 없음, 이름 + (도메인)
+      html += `<div class="tree-node tree-node-mini" data-sex="${g.sex || ''}"
+        style="left:${pos.x}px; top:${pos.y}px;">
+        <div class="mini-name">${name}</div>
+        <div class="mini-domain">(${g.domain})</div>
+      </div>`;
+    } else if (g.special) {
+      // 카오스: 최초의 신 — 더 크고 특별한 카드
+      html += `<button class="tree-node tree-node-chaos" data-name="${name}"
+        style="left:${pos.x}px; top:${pos.y}px;" onclick="showGod('${name}')">
+        ${makeSeal(name, '#d0bce8')}
+        <div class="chaos-name-kr">${name}</div>
+        <div class="chaos-name-en">${g.nameEn}</div>
+      </button>`;
+    } else {
+      html += `<button class="tree-node god-card" data-name="${name}" data-gen="${g.gen}" data-sex="${g.sex || ''}"
+        style="left:${pos.x}px; top:${pos.y}px; --accent:${sealColor}" onclick="showGod('${name}')">
+        ${makeSeal(name, sealColor)}
+        <div class="god-name-kr">${name}</div>
+        <div class="god-name-en">${g.nameEn}</div>
+      </button>`;
+    }
   }
 
   canvas.innerHTML = html;
@@ -4599,10 +4963,10 @@ function treeFit() {
   const wrap = document.getElementById('tree-canvas-wrap');
   if (!wrap) return;
   // 캔버스(2000x1100)를 화면 폭에 맞춰 축소
-  const sx = (wrap.clientWidth - 40) / 2000;
-  const sy = (wrap.clientHeight - 40) / 1100;
+  const sx = (wrap.clientWidth - 40) / 2200;
+  const sy = (wrap.clientHeight - 40) / 1800;
   treeScale = Math.min(sx, sy, 0.6);
-  treeTx = (wrap.clientWidth - 2000 * treeScale) / 2;
+  treeTx = (wrap.clientWidth - 2200 * treeScale) / 2;
   treeTy = 20;
   treeApply(true);
 }
@@ -4624,17 +4988,53 @@ function initTreeCanvas() {
       treeApply(false);
     });
     window.addEventListener('mouseup', () => { drag = false; wrap.classList.remove('grabbing'); });
+
+    // ===== 터치: 한 손가락 = 이동(팬), 두 손가락 = 핀치 줌 =====
+    let pinching = false, pinchStartDist = 0, pinchStartScale = 1;
+    let pinchCx = 0, pinchCy = 0, pinchStartTx = 0, pinchStartTy = 0;
+    function dist(t1, t2) {
+      const dx = t1.clientX - t2.clientX, dy = t1.clientY - t2.clientY;
+      return Math.hypot(dx, dy);
+    }
     wrap.addEventListener('touchstart', e => {
-      const t = e.touches[0]; drag = true;
-      sx = t.clientX; sy = t.clientY; stx = treeTx; sty = treeTy;
+      if (e.touches.length === 2) {
+        pinching = true; drag = false;
+        pinchStartDist = dist(e.touches[0], e.touches[1]);
+        pinchStartScale = treeScale;
+        const r = wrap.getBoundingClientRect();
+        pinchCx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+        pinchCy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+        pinchStartTx = treeTx; pinchStartTy = treeTy;
+      } else {
+        const t = e.touches[0]; drag = true; pinching = false;
+        sx = t.clientX; sy = t.clientY; stx = treeTx; sty = treeTy;
+      }
     }, { passive: true });
     wrap.addEventListener('touchmove', e => {
-      if (!drag) return;
-      const t = e.touches[0];
-      treeTx = stx + (t.clientX - sx); treeTy = sty + (t.clientY - sy);
-      treeApply(false);
-    }, { passive: true });
-    wrap.addEventListener('touchend', () => { drag = false; });
+      if (pinching && e.touches.length === 2) {
+        e.preventDefault();
+        const d = dist(e.touches[0], e.touches[1]);
+        const ns = Math.min(1.5, Math.max(0.25, pinchStartScale * (d / pinchStartDist)));
+        // 핀치 중심점 고정하며 줌
+        treeTx = pinchCx - (pinchCx - pinchStartTx) * (ns / pinchStartScale);
+        treeTy = pinchCy - (pinchCy - pinchStartTy) * (ns / pinchStartScale);
+        treeScale = ns;
+        treeApply(false);
+      } else if (drag && e.touches.length === 1) {
+        const t = e.touches[0];
+        treeTx = stx + (t.clientX - sx); treeTy = sty + (t.clientY - sy);
+        treeApply(false);
+      }
+    }, { passive: false });
+    wrap.addEventListener('touchend', e => {
+      if (e.touches.length === 0) { drag = false; pinching = false; }
+      else if (e.touches.length === 1) {
+        // 핀치 끝나고 한 손가락 남으면 팬으로 전환
+        pinching = false; drag = true;
+        const t = e.touches[0];
+        sx = t.clientX; sy = t.clientY; stx = treeTx; sty = treeTy;
+      }
+    });
   }
   treeFit();
 }
@@ -4848,17 +5248,18 @@ function renderGodDetail(name) {
         <p class="detail-text">${g.desc}</p>
       </div>
 
+      ${g.story ? `
       <div class="detail-section">
         <div class="section-title"><span class="section-num">II.</span> 신화 — Mythos</div>
         <p class="detail-text">${g.story}</p>
-      </div>
+      </div>` : ''}
 
       <div class="detail-section">
         <div class="section-title"><span class="section-num">III.</span> 가족 관계 — Genealogia</div>
         <div class="relations">${relationsHtml}</div>
       </div>
 
-      ${g.modern ? `
+      ${g.modern && g.modern.length ? `
       <div class="detail-section modern-section">
         <div class="section-title"><span class="section-num">IV.</span> 오늘날의 흔적 — Vestigia Hodierna</div>
         <div class="modern-list">
@@ -5136,7 +5537,7 @@ function renderCatDetail(catId) {
     const sexSealMap = {
       'male': '#bcdcec',
       'female': '#f0c4d8',
-      'neuter': '#bcd8c4'
+      'neuter': '#cacac6'
     };
     const sealColor = sexSealMap[g.sex] || sealColorMap[g.gen] || sealColorMap.primordial;
     return `<button class="god-card" data-gen="${g.gen}" data-sex="${g.sex || ''}" style="--accent: ${sealColor}" onclick="showGod('${name}')">
@@ -5160,6 +5561,19 @@ function renderCatDetail(catId) {
     </div>`;
   }
 
+  // 카오스 특별 카드 (항목별 — 최초의 신)
+  function renderChaosCard(name) {
+    const g = gods[name];
+    if (!g) return '';
+    return `<button class="god-card god-card-chaos" data-gen="${g.gen}" onclick="showGod('${name}')">
+      ${makeSeal(name, '#d0bce8')}
+      <div class="god-name-kr">${name}</div>
+      <div class="god-name-en">${g.nameEn}</div>
+      <div class="god-roman">${g.roman}</div>
+      <div class="god-domain">${g.domain.split(',')[0]}</div>
+    </button>`;
+  }
+
   let godsHtml;
   if (catId === 'titan') {
     // Titans split by sex: first 6 = males (Titanes), last 6 = females (Titanides)
@@ -5169,6 +5583,23 @@ function renderCatDetail(catId) {
       + males.map(renderGodCard).join('')
       + sexHeader('TITANIDES', '여신 · 6')
       + females.map(renderGodCard).join('');
+  } else if (catId === 'primordial') {
+    // 카오스 단독 첫 줄 + 나머지(가이아·타르타로스·에로스) 둘째 줄
+    const rest = cat.gods.filter(n => n !== '카오스');
+    container.innerHTML = `
+      <div class="cat-detail-intro">
+        <div class="roman">${cat.roman}</div>
+        <h2>${cat.name}</h2>
+        <div class="greek-name">${cat.greek}</div>
+        <p>${cat.intro}</p>
+        <div class="divider"></div>
+      </div>
+      <div class="cat-gods-grid chaos-row">${renderChaosCard('카오스')}</div>
+      <div class="cat-gods-grid">${rest.map(renderGodCard).join('')}</div>
+    `;
+    const view = document.getElementById('cat-detail-view');
+    if (view) view.scrollTop = 0;
+    return;
   } else {
     godsHtml = cat.gods.map(renderGodCard).join('');
   }
@@ -5181,7 +5612,7 @@ function renderCatDetail(catId) {
       <p>${cat.intro}</p>
       <div class="divider"></div>
     </div>
-    <div class="cat-gods-grid${(catId === 'nyx-children') ? ' minor-grid' : ''}">${godsHtml}</div>
+    <div class="cat-gods-grid${(catId === 'nyx-children') ? ' minor-grid' : ''}${(catId === 'titan') ? ' titan-grid' : ''}">${godsHtml}</div>
   `;
 
   // Scroll to top
