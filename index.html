@@ -1533,14 +1533,19 @@
     opacity: 0.6;
   }
 
-  .detail-back {
+  .detail-nav {
     position: sticky;
     top: 0;
     z-index: 5;
     background: rgba(244, 236, 216, 0.95);
     backdrop-filter: blur(8px);
-    padding: 16px 24px;
     border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+  }
+  .detail-back, .detail-home {
+    padding: 16px 24px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1550,12 +1555,17 @@
     font-size: 11px;
     letter-spacing: 0.25em;
     color: var(--ink-soft);
+    background: none;
     border: none;
-    width: 100%;
-    text-align: left;
     text-transform: uppercase;
   }
-  .detail-back:hover { color: var(--ink); }
+  .detail-back { text-align: left; }
+  .detail-home {
+    text-align: right;
+    border-left: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  .detail-back:hover, .detail-home:hover { color: var(--ink); }
 
   .detail-hero {
     padding: 40px 28px 32px;
@@ -2540,7 +2550,10 @@
 
     <!-- ============== DETAIL VIEW ============== -->
     <section class="view view-detail" id="detail-view">
-      <button class="detail-back" id="detail-back" onclick="goBack()">← 돌아가기</button>
+      <div class="detail-nav">
+        <button class="detail-back" id="detail-back" onclick="goBack()">← 이전으로</button>
+        <button class="detail-home" onclick="goHome()">홈으로 ⌂</button>
+      </div>
       <div class="detail-content" id="detail-container"></div>
     </section>
 
@@ -2640,7 +2653,18 @@ const symbols = {
   '테미스': '<path d="M 14 24 L 34 24 M 24 14 L 24 34" stroke="currentColor" stroke-width="2.5"/><circle cx="24" cy="24" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M 12 16 L 16 16 M 32 16 L 36 16" stroke="currentColor" stroke-width="1.2"/>',
   '므네모시네': '<path d="M 14 18 Q 24 14 34 18 M 14 24 Q 24 20 34 24 M 14 30 Q 24 26 34 30" fill="none" stroke="currentColor" stroke-width="1.5"/>',
   '포이베': '<path d="M 14 28 Q 14 18 24 14 Q 34 18 34 28 L 34 32 L 14 32 Z" fill="currentColor"/><path d="M 24 14 L 24 8 M 18 16 L 14 12 M 30 16 L 34 12" stroke="currentColor" stroke-width="1.2"/>',
-  '테티스': '<path d="M 10 24 Q 14 16 24 16 Q 34 16 38 24 Q 34 32 24 32 Q 14 32 10 24 Z" fill="currentColor"/><path d="M 14 22 Q 24 26 34 22 M 14 26 Q 24 22 34 26" fill="none" stroke="#4d3a2a" stroke-width="1"/>'
+  '테티스': '<path d="M 10 24 Q 14 16 24 16 Q 34 16 38 24 Q 34 32 24 32 Q 14 32 10 24 Z" fill="currentColor"/><path d="M 14 22 Q 24 26 34 22 M 14 26 Q 24 22 34 26" fill="none" stroke="#4d3a2a" stroke-width="1"/>',
+  // ============= 가이아 계열 (신규) =============
+  '우레아': '<path d="M 8 36 L 18 18 L 24 28 L 30 14 L 40 36 Z" fill="currentColor"/><path d="M 16 22 L 14 25 L 18 25 Z M 29 19 L 27 23 L 31 23 Z" fill="#272f29"/>',
+  '폰토스': '<path d="M 8 18 Q 14 13 20 18 Q 26 23 32 18 Q 38 14 40 16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 8 26 Q 14 21 20 26 Q 26 31 32 26 Q 38 22 40 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 8 34 Q 14 29 20 34 Q 26 39 32 34 Q 38 30 40 32" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>',
+  // ============= 영웅 · 인간계 (신규) =============
+  '헤라클레스': '<path d="M 18 38 L 30 14 Q 31 11 34 11 Q 37 11 37 14 Q 37 17 34 17 L 22 40 Z" fill="currentColor"/><circle cx="33" cy="14" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M 30 11 L 28 9 M 36 9 L 38 11 M 33 7 L 33 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>',
+  '페르세우스': '<circle cx="24" cy="22" r="9" fill="currentColor"/><circle cx="20" cy="21" r="1.5" fill="#2e3a42"/><circle cx="28" cy="21" r="1.5" fill="#2e3a42"/><path d="M 18 28 Q 24 31 30 28" stroke="#2e3a42" stroke-width="1.2" fill="none"/><path d="M 16 14 Q 12 10 14 8 M 20 13 Q 18 8 21 7 M 28 13 Q 30 8 27 7 M 32 14 Q 36 10 34 8" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>',
+  '테세우스': '<path d="M 14 14 L 34 14 L 34 34 L 14 34 Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M 14 14 L 14 28 L 28 28 L 28 20 L 20 20 L 20 24" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M 34 14 L 34 20 L 24 20" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>',
+  '아킬레우스': '<path d="M 24 8 Q 32 8 32 18 L 32 24 L 16 24 L 16 18 Q 16 8 24 8 Z" fill="currentColor"/><path d="M 24 8 L 24 4 M 20 26 L 28 26 M 22 24 L 22 30 M 26 24 L 26 30" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M 18 32 L 30 32 L 28 40 L 20 40 Z" fill="currentColor" opacity="0.7"/>',
+  '오디세우스': '<path d="M 10 28 Q 24 34 38 28 L 34 36 Q 24 40 14 36 Z" fill="currentColor"/><path d="M 24 28 L 24 10" stroke="currentColor" stroke-width="1.5"/><path d="M 24 12 Q 32 14 32 20 Q 28 19 24 20 Z" fill="currentColor"/>',
+  // ============= 후대 에로스 (큐피드) =============
+  '에로스 (큐피드)': '<path d="M 12 16 Q 24 10 36 16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 14 14 L 34 30 M 30 28 L 34 30 L 32 26" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M 12 13 L 14 17 M 12 13 L 16 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>'
 };
 
 function makeSeal(name, colorVar) {
@@ -3399,7 +3423,7 @@ const galleries = {
       desc: '서양 미술사상 가장 유명한 작품 중 하나. 바다의 거품에서 태어난 비너스가 조개를 타고 키프로스 해안에 도착하는 장면.'
     },
     {
-      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/V%C3%A9nus_de_Milo_Louvre_Ma399_n4.jpg?width=800',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Venus_de_Milo_Louvre_Ma399.jpg?width=800',
       title: '밀로의 비너스', titleEn: 'Venus de Milo',
       meta: '기원전 2세기 · 루브르',
       desc: '두 팔이 없는 채로 발견된 헬레니즘 시대 걸작. 미의 여신의 영원한 상징이 되었다.'
@@ -3795,7 +3819,7 @@ const gods = {
     epithet: '밤의 여신',
     desc: '<strong>닉스</strong>는 카오스가 직접 낳은 두 자식 중 하나로, 밤 그 자체다. 호메로스의 『일리아스』에서 제우스조차 그녀의 노여움을 두려워한다고 묘사될 만큼 신비롭고 두려운 존재. 매일 밤 검은 베일을 끌고 하늘을 가로지른다.',
     story: '닉스는 오빠 에레보스와 결합해 아이테르(빛)와 헤메라(낮)를 낳았지만, 무엇보다 <strong>홀로 낳은 자식들의 명단</strong>이 그리스 신화 전체를 움직인다 — 모로스(파멸), 케레스(죽음의 운명), <strong>타나토스(죽음)</strong>, <strong>힙노스(잠)</strong>, 오네이로이(꿈들), 모모스(비난), 헤스페리데스(저녁의 자매들), <strong>모이라이(운명의 세 여신)</strong>, <strong>네메시스(응보)</strong>, 아파테(기만), 게라스(노년), 필로테스(애욕), <strong>에리스(불화)</strong>. 운명·죽음·잠·꿈·복수 — 인간 존재의 가장 근본적인 힘들이 모두 그녀의 자식이다.',
-    relations: { '부모': ['카오스'], '배우자': ['에레보스'], '자식': ['모이라이', '네메시스', '타나토스', '힙노스', '에리스', '헤스페리데스'] },
+    relations: { '부모': ['카오스'], '배우자': ['에레보스'], '자식': ['모이라이', '네메시스', '타나토스', '힙노스', '에리스', '헤스페리데스', '… 외 7명'] },
     modern: [
       { icon: '💄', title: '뷰티 브랜드 〈NYX〉', text: '미국 화장품 브랜드 <strong>NYX Professional Makeup</strong>은 1999년 닉스의 이름을 따 창립됐다. "밤처럼 신비롭고 강렬한 메이크업"이라는 브랜드 컨셉이 닉스의 이미지에서 왔다.' },
       { icon: '🌌', title: '명왕성의 위성 닉스', text: '명왕성 주변을 도는 위성 중 하나가 <strong>닉스(Nix)</strong>로 명명되었다. 2005년 발견, 명왕성(하데스의 별)에 어울리는 어두운 밤의 위성이라는 의미.' },
@@ -4578,74 +4602,87 @@ function renderGodDetail(name) {
 }
 
 // ============= ROUTER =============
-// Tracks where the user came from so detail back button knows where to return
+// Navigation stack: records visited screens so the detail back button
+// can return to the exact previous screen (incl. detail→detail chains).
+// Each entry: {view:'home'} | {view:'categories'} | {view:'cat-detail', cat} | {view:'tree'} | {view:'detail', god}
+let navStack = [{ view: 'home' }];
+// Legacy vars kept for compatibility with any other references
 let detailReturnView = 'home';
 let detailReturnCategory = null;
 
-function goHome() {
+function navApply(entry) {
+  // Render+show a screen WITHOUT pushing to the stack
   const app = document.getElementById('app');
-  app.dataset.view = 'home';
-  app.dataset.from = 'home';
-  if (typeof clearSearch === 'function') clearSearch();
+  if (entry.view === 'home') {
+    app.dataset.view = 'home';
+    app.dataset.from = 'home';
+    if (typeof clearSearch === 'function') clearSearch();
+  } else if (entry.view === 'categories') {
+    app.dataset.view = 'categories';
+    app.dataset.from = 'categories';
+    renderCategories();
+  } else if (entry.view === 'cat-detail') {
+    app.dataset.view = 'cat-detail';
+    app.dataset.from = 'cat-detail';
+    app.dataset.category = entry.cat;
+    renderCatDetail(entry.cat);
+  } else if (entry.view === 'tree') {
+    app.dataset.view = 'tree';
+    app.dataset.from = 'tree';
+    if (typeof initTreeCanvas === 'function') initTreeCanvas();
+  } else if (entry.view === 'detail') {
+    if (typeof renderGodDetail === 'function') renderGodDetail(entry.god);
+    app.dataset.view = 'detail';
+    const detailView = document.getElementById('detail-view');
+    if (detailView) detailView.scrollTop = 0;
+    updateDetailBackLabel();
+  }
+}
+
+function goHome() {
+  navStack = [{ view: 'home' }];
+  navApply({ view: 'home' });
 }
 
 function goCategories() {
-  const app = document.getElementById('app');
-  app.dataset.view = 'categories';
-  app.dataset.from = 'categories';
-  renderCategories();
+  navStack = [{ view: 'home' }, { view: 'categories' }];
+  navApply({ view: 'categories' });
 }
 
 function goCatDetail(catId) {
-  const app = document.getElementById('app');
-  app.dataset.view = 'cat-detail';
-  app.dataset.from = 'cat-detail';
-  app.dataset.category = catId;
-  renderCatDetail(catId);
+  navStack = [{ view: 'home' }, { view: 'categories' }, { view: 'cat-detail', cat: catId }];
+  navApply({ view: 'cat-detail', cat: catId });
 }
 
 function goTree() {
-  const app = document.getElementById('app');
-  app.dataset.view = 'tree';
-  app.dataset.from = 'tree';
-  // Initialize tree canvas if not yet
-  if (typeof initTreeCanvas === 'function') initTreeCanvas();
+  navStack = [{ view: 'home' }, { view: 'tree' }];
+  navApply({ view: 'tree' });
 }
 
 function showGod(name) {
-  // Remember where we came from
-  const app = document.getElementById('app');
-  const currentView = app.dataset.view;
-  if (currentView === 'tree') {
-    detailReturnView = 'tree';
-  } else if (currentView === 'cat-detail') {
-    detailReturnView = 'cat-detail';
-    detailReturnCategory = app.dataset.category;
-  } else if (currentView === 'categories') {
-    detailReturnView = 'categories';
-  } else {
-    detailReturnView = 'home';
-  }
-  // Update back button label
-  updateDetailBackLabel();
-  // Render and show
-  if (typeof renderGodDetail === 'function') renderGodDetail(name);
-  app.dataset.view = 'detail';
-  // Scroll detail view to top
-  const detailView = document.getElementById('detail-view');
-  if (detailView) detailView.scrollTop = 0;
+  // Push current detail onto stack so detail→detail chains are remembered
+  navStack.push({ view: 'detail', god: name });
+  // Keep legacy vars roughly in sync (used by label fallback)
+  const prev = navStack[navStack.length - 2] || { view: 'home' };
+  detailReturnView = prev.view;
+  detailReturnCategory = prev.cat || null;
+  navApply({ view: 'detail', god: name });
 }
 
 function updateDetailBackLabel() {
   const btn = document.getElementById('detail-back');
   if (!btn) return;
-  let label = '← 돌아가기';
-  if (detailReturnView === 'tree') {
-    label = '← 가계도로 돌아가기';
-  } else if (detailReturnView === 'cat-detail') {
-    label = '← 항목으로 돌아가기';
-  } else if (detailReturnView === 'categories') {
+  // The screen we'd return to = the entry just below the current one
+  const prev = navStack[navStack.length - 2] || { view: 'home' };
+  let label = '← 이전으로';
+  if (prev.view === 'tree') {
+    label = '← 가계도로';
+  } else if (prev.view === 'cat-detail') {
+    label = '← 항목으로';
+  } else if (prev.view === 'categories') {
     label = '← 항목별 보기';
+  } else if (prev.view === 'detail') {
+    label = '← ' + prev.god + '(으)로';
   } else {
     label = '← 홈으로';
   }
@@ -4653,17 +4690,12 @@ function updateDetailBackLabel() {
 }
 
 function goBack() {
-  const app = document.getElementById('app');
-  if (detailReturnView === 'tree') {
-    app.dataset.view = 'tree';
-  } else if (detailReturnView === 'cat-detail' && detailReturnCategory) {
-    app.dataset.view = 'cat-detail';
-    app.dataset.from = 'cat-detail';
-  } else if (detailReturnView === 'categories') {
-    app.dataset.view = 'categories';
-  } else {
-    app.dataset.view = 'home';
+  // Pop current screen; apply whatever is now on top
+  if (navStack.length > 1) {
+    navStack.pop();
   }
+  const target = navStack[navStack.length - 1] || { view: 'home' };
+  navApply(target);
 }
 
 function setFilter(filter) {
