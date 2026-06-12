@@ -956,6 +956,43 @@
   .tree-node-mini.mini-human .mini-domain {
     color: #d8b890;
   }
+  #mini-tip {
+    position: fixed;
+    z-index: 1000;
+    max-width: 260px;
+    background: #2a2018;
+    border: 1px solid #8a7048;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  #mini-tip.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  #mini-tip .mini-tip-name {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #f0d8b8;
+    margin-bottom: 2px;
+  }
+  #mini-tip .mini-tip-domain {
+    font-size: 11px;
+    color: #b89a6e;
+    margin-bottom: 7px;
+  }
+  #mini-tip .mini-tip-desc {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #d8c8b0;
+  }
   .tree-node-chaos {
     position: absolute;
     width: 124px;
@@ -1104,6 +1141,71 @@
     flex-direction: column;
     gap: 4px;
     z-index: 5;
+  }
+  .tree-search {
+    position: absolute;
+    top: 60px;
+    left: 16px;
+    z-index: 6;
+    width: 200px;
+  }
+  .tree-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: rgba(244, 236, 216, 0.97);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    outline: none;
+  }
+  .tree-search-input:focus { border-color: var(--gold); }
+  .tree-search-results {
+    margin-top: 4px;
+    background: rgba(244, 236, 216, 0.99);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    display: none;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  }
+  .tree-search-results.show { display: block; }
+  .tree-search-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    border-bottom: 1px solid rgba(184,137,61,0.15);
+  }
+  .tree-search-item:last-child { border-bottom: none; }
+  .tree-search-item:hover { background: rgba(184,137,61,0.12); }
+  .tree-search-item .tsi-name {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .tree-search-item .tsi-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    color: var(--ink-faded);
+  }
+  .tree-search-empty {
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--ink-faded);
+  }
+  .tree-node-flash {
+    animation: treeNodeFlash 1.6s ease-out;
+    z-index: 20 !important;
+  }
+  @keyframes treeNodeFlash {
+    0%, 100% { box-shadow: 0 2px 5px rgba(0,0,0,0.25); }
+    20%, 60% { box-shadow: 0 0 0 4px #f5d588, 0 0 24px 6px rgba(245,213,136,0.8); }
   }
   .tree-zoom-btn {
     width: 36px;
@@ -2813,6 +2915,12 @@
     <!-- ============== TREE VIEW (CANVAS) ============== -->
     <main class="view view-tree" id="tree-view">
       <button class="view-back tree-back" onclick="goHome()">← 홈으로</button>
+      <div class="tree-search">
+        <input type="text" id="tree-search-input" class="tree-search-input"
+          placeholder="신 이름 검색…" autocomplete="off"
+          oninput="treeSearch(this.value)" onkeydown="if(event.key==='Enter')treeSearchJump()">
+        <div class="tree-search-results" id="tree-search-results"></div>
+      </div>
       <div class="tree-zoom-controls">
         <button class="tree-zoom-btn" onclick="treeZoom(1.25)">+</button>
         <div class="tree-zoom-level" id="tree-zoom-level">40%</div>
@@ -5093,8 +5201,9 @@ function renderTree() {
     if (g.mini) {
       // 간이 노드: 괴물/비중 적은 신=작은 사각(청록), 인간 부모=원(테라코타)
       const miniClass = g.gen === 'hero' ? 'tree-node-mini mini-human' : 'tree-node-mini';
-      html += `<div class="tree-node ${miniClass}" data-sex="${g.sex || ''}"
-        style="left:${pos.x}px; top:${pos.y}px;">
+      html += `<div class="tree-node ${miniClass}" data-name="${name}" data-sex="${g.sex || ''}"
+        style="left:${pos.x}px; top:${pos.y}px; cursor:pointer;"
+        onclick="showMiniTip(event, '${name.replace(/'/g, "\\'")}')">
         <div class="mini-name">${name}</div>
         <div class="mini-domain">(${g.domain})</div>
       </div>`;
@@ -5120,7 +5229,7 @@ function renderTree() {
 }
 
 // ===== 가계도 줌 / 팬 =====
-let treeScale = 0.4, treeTx = 40, treeTy = 20, treeInited = false;
+let treeScale = 0.4, treeTx = 40, treeTy = 20, treeInited = false, treeViewedOnce = false;
 function treeApply(animate) {
   const c = document.getElementById('tree-canvas');
   const lvl = document.getElementById('tree-zoom-level');
@@ -5129,6 +5238,37 @@ function treeApply(animate) {
   c.style.transform = `translate(${treeTx}px, ${treeTy}px) scale(${treeScale})`;
   if (lvl) lvl.textContent = Math.round(treeScale * 100) + '%';
 }
+function showMiniTip(ev, name) {
+  ev.stopPropagation();
+  const g = gods[name];
+  if (!g) return;
+  let tip = document.getElementById('mini-tip');
+  if (!tip) {
+    tip = document.createElement('div');
+    tip.id = 'mini-tip';
+    document.body.appendChild(tip);
+    document.addEventListener('click', e => {
+      if (tip && !tip.contains(e.target) && !e.target.closest('.tree-node-mini')) {
+        tip.classList.remove('show');
+      }
+    });
+  }
+  tip.innerHTML = `<div class="mini-tip-name">${name}</div>
+    <div class="mini-tip-domain">${g.domain}</div>
+    <div class="mini-tip-desc">${g.desc || ''}</div>`;
+  // 노드 근처에 배치 (뷰포트 좌표)
+  const rect = ev.currentTarget.getBoundingClientRect();
+  tip.classList.add('show');
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  let left = rect.left + rect.width / 2 - tw / 2;
+  let top = rect.bottom + 8;
+  // 화면 밖으로 안 나가게 보정
+  left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+  if (top + th > window.innerHeight - 8) top = rect.top - th - 8;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+
 function treeZoom(factor) {
   const wrap = document.getElementById('tree-canvas-wrap');
   if (!wrap) return;
@@ -5150,6 +5290,74 @@ function treeFit() {
   treeTy = 20;
   treeApply(true);
 }
+
+// ===== 가계도 검색 =====
+function treeSearch(q) {
+  const box = document.getElementById('tree-search-results');
+  if (!box) return;
+  const query = (q || '').toLowerCase().trim();
+  if (!query) { box.innerHTML = ''; box.classList.remove('show'); return; }
+  // 이름(한글/영문/로마) 일치 노드 찾기
+  const matches = Object.keys(treeNodes).filter(name => {
+    const g = gods[name]; if (!g) return false;
+    return name.toLowerCase().includes(query)
+      || (g.nameEn || '').toLowerCase().includes(query)
+      || (g.roman || '').toLowerCase().includes(query);
+  }).slice(0, 8);
+  if (matches.length === 0) {
+    box.innerHTML = '<div class="tree-search-empty">결과 없음</div>';
+    box.classList.add('show');
+    return;
+  }
+  box.innerHTML = matches.map(name => {
+    const g = gods[name];
+    return `<div class="tree-search-item" onclick="treeFocusNode('${name.replace(/'/g, "\\'")}')">
+      <span class="tsi-name">${name}</span>
+      <span class="tsi-en">${g.nameEn || ''}</span>
+    </div>`;
+  }).join('');
+  box.classList.add('show');
+}
+
+function treeSearchJump() {
+  // 엔터: 첫 결과로 이동
+  const box = document.getElementById('tree-search-results');
+  if (!box) return;
+  const first = box.querySelector('.tree-search-item');
+  if (first) first.click();
+}
+
+function treeFocusNode(name) {
+  const node = treeNodes[name];
+  const wrap = document.getElementById('tree-canvas-wrap');
+  if (!node || !wrap) return;
+  const g = gods[name] || {};
+  // 노드 폭/높이
+  const w = g.special ? 124 : (g.mini ? 74 : 90);
+  const h = g.special ? 80 : (g.mini ? 74 : 58);
+  const ncx = node.x + w / 2, ncy = node.y + h / 2;
+  // 적당히 확대 (현재보다 작으면 0.7로)
+  const ns = Math.max(treeScale, 0.7);
+  // 노드가 화면 중앙에 오도록 팬 계산
+  treeScale = ns;
+  treeTx = wrap.clientWidth / 2 - ncx * ns;
+  treeTy = wrap.clientHeight / 2 - ncy * ns;
+  treeApply(true);
+  // 강조 효과
+  setTimeout(() => {
+    const el = document.querySelector(`.tree-node[data-name="${name}"]`);
+    if (el) {
+      el.classList.add('tree-node-flash');
+      setTimeout(() => el.classList.remove('tree-node-flash'), 1600);
+    }
+  }, 350);
+  // 검색 결과 닫기
+  const box = document.getElementById('tree-search-results');
+  if (box) box.classList.remove('show');
+  const input = document.getElementById('tree-search-input');
+  if (input) input.blur();
+}
+
 function initTreeCanvas() {
   renderTree();
   const wrap = document.getElementById('tree-canvas-wrap');
@@ -5215,8 +5423,32 @@ function initTreeCanvas() {
         sx = t.clientX; sy = t.clientY; stx = treeTx; sty = treeTy;
       }
     });
+    // 마우스 휠 줌 (커서 위치 중심)
+    wrap.addEventListener('wheel', e => {
+      e.preventDefault();
+      const r = wrap.getBoundingClientRect();
+      const cx = e.clientX - r.left, cy = e.clientY - r.top;
+      const factor = e.deltaY < 0 ? 1.12 : 0.89;
+      const ns = Math.min(1.5, Math.max(0.25, treeScale * factor));
+      if (ns === treeScale) return;
+      treeTx = cx - (cx - treeTx) * (ns / treeScale);
+      treeTy = cy - (cy - treeTy) * (ns / treeScale);
+      treeScale = ns;
+      treeApply(false);
+    }, { passive: false });
   }
-  treeFit();
+  // 첫 진입에만 전체 보기로 맞추고, 이후 재진입(상세 다녀오기 등)은 보던 위치·배율 그대로 복원
+  if (!treeViewedOnce) {
+    treeViewedOnce = true;
+    treeFit();
+  } else {
+    treeApply(false);
+  }
+  // 검색창 초기화
+  const tsi = document.getElementById('tree-search-input');
+  if (tsi) tsi.value = '';
+  const tsr = document.getElementById('tree-search-results');
+  if (tsr) { tsr.innerHTML = ''; tsr.classList.remove('show'); }
 }
 
 function handleImageError(img, nameEn) {
@@ -5471,6 +5703,25 @@ let navStack = [{ view: 'home' }];
 let detailReturnView = 'home';
 let detailReturnCategory = null;
 
+// ===== 브라우저 뒤로가기 연동 (History API) =====
+let suppressHistory = false; // popstate로 인한 이동일 때 pushState 방지
+function syncHistory() {
+  if (suppressHistory) return;
+  try {
+    history.pushState({ depth: navStack.length }, '', '');
+  } catch (e) {}
+}
+window.addEventListener('popstate', () => {
+  // 브라우저 뒤로가기 → 앱 내 이전 화면으로
+  if (navStack.length > 1) {
+    suppressHistory = true;
+    navStack.pop();
+    const target = navStack[navStack.length - 1] || { view: 'home' };
+    navApply(target);
+    suppressHistory = false;
+  }
+});
+
 function navApply(entry) {
   // Render+show a screen WITHOUT pushing to the stack
   const app = document.getElementById('app');
@@ -5508,16 +5759,19 @@ function goHome() {
 function goCategories() {
   navStack = [{ view: 'home' }, { view: 'categories' }];
   navApply({ view: 'categories' });
+  syncHistory();
 }
 
 function goCatDetail(catId) {
   navStack = [{ view: 'home' }, { view: 'categories' }, { view: 'cat-detail', cat: catId }];
   navApply({ view: 'cat-detail', cat: catId });
+  syncHistory();
 }
 
 function goTree() {
   navStack = [{ view: 'home' }, { view: 'tree' }];
   navApply({ view: 'tree' });
+  syncHistory();
 }
 
 function showGod(name) {
@@ -5528,6 +5782,7 @@ function showGod(name) {
   detailReturnView = prev.view;
   detailReturnCategory = prev.cat || null;
   navApply({ view: 'detail', god: name });
+  syncHistory();
 }
 
 function updateDetailBackLabel() {
@@ -5551,7 +5806,12 @@ function updateDetailBackLabel() {
 }
 
 function goBack() {
-  // Pop current screen; apply whatever is now on top
+  // 브라우저 history에 맡겨 popstate가 처리 (뒤로가기 일관성)
+  if (window.history.state && window.history.state.depth) {
+    history.back();
+    return;
+  }
+  // 폴백: history 엔트리가 없으면 직접 처리
   if (navStack.length > 1) {
     navStack.pop();
   }
