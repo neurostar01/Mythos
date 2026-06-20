@@ -4931,7 +4931,7 @@ const treeNodes = {
   '디오니소스': { x: 1370, y: 1180 },
   '아프로디테': { x: 1720, y: 1180 },
   '헤라클레스': { x: 755, y: 1520 },
-  '페르세우스': { x: 870, y: 1520 },
+  '페르세우스': { x: 915, y: 1520 },
   '테세우스': { x: 1015, y: 1520 },
   '아킬레우스': { x: 1780, y: 1520 },
   '오디세우스': { x: 1255, y: 1520 },
@@ -5062,11 +5062,11 @@ function renderTree() {
       const ux = cx(upper), uy = botY(upper);
       const lx2 = cx(lower), ly = botY(lower);
       // 특정 부부(포세이돈-아이트라처럼 세대차 크고 중간 노드 통과 위험)만 아래로 깊게 휨
-      const deepCurvePairs = ['아이트라|포세이돈', '테티스|펠레우스'];
+      const deepCurvePairs = ['아이트라|포세이돈', '테티스|펠레우스', '알크메네|제우스', '다나에|제우스'];
       let c1y, c2y;
       if (deepCurvePairs.includes(key)) {
-        c1y = ly + 40;
-        c2y = ly + 40;
+        c1y = ly + 90;
+        c2y = ly + 90;
       } else {
         const my = (uy + ly) / 2;
         c1y = my; c2y = my;
