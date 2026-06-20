@@ -3080,7 +3080,7 @@ const bouguereauSeries = [
     titleKo: '황혼',
     god: '헤스페로스',
     godStatus: 'pending',
-    img: 'https://commons.wikimedia.org/wiki/Special:FilePath/William-Adolphe_Bouguereau_(1825-1905)_-_Dusk_(1882).jpg?width=800',
+    img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Bouguereau-Evening_Mood_1882.jpg?width=800',
     location: '하바나 국립 미술관, 쿠바',
     desc: '해가 저문 후 별들이 떠오르는 시간. 4부작의 두 번째 작품. 그리스 신화의 저녁별의 신 <strong>헤스페로스(Hesperos)</strong>를 떠올리게 한다. 헤스페로스의 자매들 헤스페리데스가 황금 사과의 정원을 지킨다.'
   },
@@ -4865,7 +4865,7 @@ const treeNodes = {
   '무사이': { x: 1560, y: 980 },
   '디오네': { x: 1780, y: 1080 },
   '메티스': { x: 710, y: 1080 },
-  '레토': { x: 935, y: 1080 },
+  '레토': { x: 985, y: 1080 },
   '마이아': { x: 1290, y: 1080 },
   '세멜레': { x: 1450, y: 1080 },
   '알크메네': { x: 660, y: 1280 },
@@ -5049,7 +5049,9 @@ function renderTree() {
     const key = [a,b].sort().join('|');
     if (Math.abs(treeNodes[a].y - treeNodes[b].y) < 10) {
       const ax = treeNodes[a].x, bx = treeNodes[b].x;
-      const [lx, rx] = ax < bx ? [ax + NW, bx] : [bx + NW, ax];
+      const aw = gods[a] && gods[a].mini ? 74 : NW;
+      const bw = gods[b] && gods[b].mini ? 74 : NW;
+      const [lx, rx] = ax < bx ? [ax + aw, bx] : [bx + bw, ax];
       const y = midY(a);
       svg += `<path class="edge-spouse" d="M${lx} ${y} L${rx} ${y}"/>`;
       spouseMid[key] = { x: (lx + rx) / 2, y: y };
